@@ -1,0 +1,21 @@
+buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.0'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.0'
+        def nav_version = "2.4.2"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.38.1'
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
+    }
+}
+plugins {
+    id 'com.android.application' version '7.4.0' apply false
+    id 'com.android.library' version '7.4.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.21' apply false
+    id 'com.google.dagger.hilt.android' version '2.44' apply false
+}
+
+ext {
+    coroutines_core_version = "1.5.0"
+    coroutines_android_version = "1.5.0"
+}

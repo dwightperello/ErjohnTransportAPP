@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presenter.Activity.mainactivity.DispatchActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="LINES"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/s_line"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_line"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="DIRECTION"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:enabled="false"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="South Bound"
+                    android:textSize="@dimen/_15sdp"
+                    android:id="@+id/cb_south"/>
+
+                <CheckBox
+                    android:enabled="false"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="North Bound"
+                    android:textSize="@dimen/_15sdp"
+                    android:id="@+id/cb_north"/>
+
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg"
+               >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CONDUCTORS"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                   />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/s_conductor"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_conductor"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="DRIVERS"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/s_driver"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rv_driver"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="BUS"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <SearchView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/s_bus"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/rv_bus"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CONFIRM DISPATCH"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+               <TextView
+
+                   android:layout_marginTop="@dimen/_5sdp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textColor="@color/black"
+                   android:gravity="center"
+                   android:textSize="@dimen/_15sdp"
+                   android:maxLines="10"
+                   android:id="@+id/txt_Line"/>
+                <TextView
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    android:maxLines="10"
+                    android:id="@+id/txt_direction"/>
+                <TextView
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    android:maxLines="10"
+                    android:id="@+id/txt_conductor"/>
+                <TextView
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    android:maxLines="10"
+                    android:id="@+id/txt_driver"/>
+
+                <TextView
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    android:maxLines="10"
+                    android:id="@+id/txt_bus"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_30sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SAVE DISPATCH"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sdp"
+                android:background="@drawable/btn_blue_selector"
+                android:id="@+id/btn_save"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/posbg">-->
+<!--                <TextView-->
+<!--                    android:id="@+id/txtdispatcherName"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:gravity="center"-->
+<!--                    android:textSize="@dimen/_17sdp"/>-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical">-->
+<!--            -->
+<!--                <ScrollView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--               -->
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:orientation="vertical">-->
+<!--                    -->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:orientation="vertical">-->
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                               -->
+<!--                                android:background="@color/posbg">-->
+<!--                                <TextView-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="match_parent"-->
+<!--                                    android:text="CONDUCTOR NAME"-->
+<!--                                    android:textColor="@color/white"/>-->
+<!--                                -->
+<!--                            </LinearLayout>-->
+<!--                            -->
+<!--&lt;!&ndash;                            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_marginTop="@dimen/_5sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_marginStart="@dimen/_5sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:textSize="@dimen/_10sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:text="CHOSE CONDUCTOR"/>&ndash;&gt;-->
+
+
+
+<!--&lt;!&ndash;                            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                                android:orientation="vertical">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="@dimen/_5sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginStart="@dimen/_5sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:textSize="@dimen/_10sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:text="CHOSE DRIVER"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginTop="@dimen/_5sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_marginStart="@dimen/_5sdp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:layout_weight="9"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    android:id="@+id/rv_driver"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            </LinearLayout>&ndash;&gt;-->
+<!--                        </LinearLayout>-->
+<!--                    </LinearLayout>-->
+
+
+
+
+
+
+
+
+<!--                </ScrollView>-->
+<!--            </LinearLayout>-->
+
+
+<!--        </LinearLayout>-->
+
+
+
+</LinearLayout>

@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presenter.Activity.mainactivity.TIcketingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/posbg"
+            android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center">
+
+
+
+                        <TextView
+                            android:textSize="@dimen/_12sdp"
+                            android:gravity="center"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:text="ORTIGAS"
+                            android:textColor="@color/white"
+                            android:id="@+id/txtLine"/>
+
+                    <TextView
+                        android:textSize="@dimen/_12sdp"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="ORTIGAS"
+                        android:textColor="@color/white"
+                        android:id="@+id/txtbat"/>
+
+
+
+
+                </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+               >
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="REGULAR"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/cb_regular"/>
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="SENIOR"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/cb_senior"/>
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="STUDENT"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/cb_student"/>
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:id="@+id/rv_passTYpe"/>-->
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+           >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="BAGGAGE"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/cb_baggage"/>
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="0.0"
+                    android:gravity="center"
+                    android:enabled="false"
+                    android:inputType="number"
+                    android:id="@+id/etbaggaeamount"/>
+
+                <Button
+                    android:enabled="false"
+                    android:id="@+id/btnaddbaggage"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="ADD"
+                    android:textSize="@dimen/_15sdp"
+                    android:background="@drawable/buttondrawable"
+                    android:backgroundTint="@color/red_connectify"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".1">
+
+                <View
+                   android:layout_width="match_parent"
+                   android:layout_height="2dp"
+                   android:background="@color/black"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".3">
+
+
+                <TextView
+                    android:textSize="@dimen/_15sdp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:id="@+id/txtrem"/>
+
+                <TextView
+                    android:textSize="@dimen/_15sdp"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:id="@+id/txtticketcount"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                                <com.github.nikartm.button.FitButton
+                                    android:visibility="gone"
+                                    android:layout_gravity="center"
+                                    android:id="@+id/btn_originBack"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:enabled="true"
+                                    android:gravity="center_horizontal"
+                                    app:fb_cornerRadius="2dp"
+                                    app:fb_shape="rectangle"
+                                    app:fb_divColor="#fff"
+                                    app:fb_divWidth="2dp"
+                                    app:fb_divHeight="40dp"
+                                    app:fb_rippleColor="#FBE9E7"
+                                    app:fb_iconWidth="50dp"
+                                    app:fb_iconHeight="50dp"
+                                    app:fb_iconPosition="left"
+                                    app:fb_iconMarginStart="10dp"
+                                    app:fb_iconMarginEnd="10dp"
+                                    app:fb_icon="@drawable/baseline_arrow_back_ios_24"
+                                    app:fb_iconColor="#FFF"
+                                    app:fb_textPaddingStart="16dp"
+                                    app:fb_textPaddingEnd="10dp"
+                                    app:fb_textColor="#FFF"
+
+                                    app:fb_backgroundColor="@color/teal_200"/>
+
+                                <TextView
+                                    android:id="@+id/txtoriginKM"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="1"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_20sdp" />
+
+                                <com.github.nikartm.button.FitButton
+                                    android:layout_gravity="center"
+                                    android:id="@+id/btn_originForward"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:enabled="true"
+                                    android:gravity="center_vertical"
+                                    app:fb_cornerRadius="2dp"
+                                    app:fb_shape="rectangle"
+                                    app:fb_divColor="#fff"
+                                    app:fb_divWidth="2dp"
+                                    app:fb_divHeight="40dp"
+                                    app:fb_rippleColor="#FBE9E7"
+                                    app:fb_iconWidth="50dp"
+                                    app:fb_iconHeight="50dp"
+                                    app:fb_iconPosition="left"
+                                    app:fb_iconMarginStart="10dp"
+                                    app:fb_iconMarginEnd="10dp"
+                                    app:fb_icon="@drawable/baseline_arrow_forward_ios_24"
+                                    app:fb_iconColor="#FFF"
+                                    app:fb_textPaddingStart="16dp"
+                                    app:fb_textPaddingEnd="10dp"
+                                    app:fb_textColor="#FFF"
+
+                                    app:fb_backgroundColor="@color/teal_200"/>
+
+                                <com.github.nikartm.button.FitButton
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:layout_gravity="center"
+                                    android:id="@+id/btn_destinationBack"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:enabled="true"
+                                    android:gravity="center_vertical"
+                                    app:fb_cornerRadius="2dp"
+                                    app:fb_shape="rectangle"
+                                    app:fb_divColor="#fff"
+                                    app:fb_divWidth="2dp"
+                                    app:fb_divHeight="40dp"
+                                    app:fb_rippleColor="#FBE9E7"
+                                    app:fb_iconWidth="50dp"
+                                    app:fb_iconHeight="50dp"
+                                    app:fb_iconPosition="left"
+                                    app:fb_iconMarginStart="10dp"
+                                    app:fb_iconMarginEnd="10dp"
+                                    app:fb_icon="@drawable/baseline_arrow_back_ios_24"
+                                    app:fb_iconColor="#FFF"
+                                    app:fb_textPaddingStart="16dp"
+                                    app:fb_textPaddingEnd="10dp"
+                                    app:fb_textColor="#FFF"
+
+                                    app:fb_backgroundColor="@color/buttonbg"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:id="@+id/txtDestination"
+                                    android:text="1"
+                                    android:gravity="center"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"
+                                    android:layout_gravity="center"
+                                    android:textSize="@dimen/_20sdp"/>
+
+                                <com.github.nikartm.button.FitButton
+                                    android:layout_gravity="center"
+                                    android:id="@+id/btn_destinationForward"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:enabled="true"
+                                    android:gravity="center_vertical"
+                                    app:fb_cornerRadius="2dp"
+                                    app:fb_shape="rectangle"
+                                    app:fb_divColor="#fff"
+                                    app:fb_divWidth="2dp"
+                                    app:fb_divHeight="40dp"
+                                    app:fb_rippleColor="#FBE9E7"
+                                    app:fb_iconWidth="50dp"
+                                    app:fb_iconHeight="50dp"
+                                    app:fb_iconPosition="left"
+                                    app:fb_iconMarginStart="10dp"
+                                    app:fb_iconMarginEnd="10dp"
+                                    app:fb_icon="@drawable/baseline_arrow_forward_ios_24"
+                                    app:fb_iconColor="#FFF"
+                                    app:fb_textPaddingStart="16dp"
+                                    app:fb_textPaddingEnd="10dp"
+                                    app:fb_textColor="#FFF"
+
+                                    app:fb_backgroundColor="@color/buttonbg"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                                <com.github.nikartm.button.FitButton
+                                    android:visibility="gone"
+                                    android:layout_gravity="center"
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:enabled="true"
+                                    android:gravity="center_vertical"
+                                    app:fb_cornerRadius="2dp"
+                                    app:fb_shape="rectangle"
+                                    app:fb_divColor="#fff"
+                                    app:fb_divWidth="2dp"
+                                    app:fb_divHeight="40dp"
+                                    app:fb_rippleColor="#FBE9E7"
+                                    app:fb_iconWidth="28dp"
+                                    app:fb_iconHeight="28dp"
+                                    app:fb_iconPosition="left"
+                                    app:fb_iconMarginStart="10dp"
+                                    app:fb_iconMarginEnd="10dp"
+                                    app:fb_icon="@drawable/baseline_search_24"
+                                    app:fb_iconColor="#FFF"
+                                    app:fb_textPaddingStart="16dp"
+                                    app:fb_textPaddingEnd="10dp"
+                                    app:fb_textColor="#FFF"
+
+                                    app:fb_backgroundColor="@color/teal_200"/>
+
+                                <EditText
+                                    android:textColor="@color/black"
+                                    android:id="@+id/et_origin"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="origin"
+                                    android:inputType="number"
+                                    android:textSize="@dimen/_15sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:gravity="center"
+                    android:text="/"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold"/>
+
+                                <EditText
+
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textSize="@dimen/_15sdp"
+                                    android:id="@+id/et_destination"
+                                    android:text="destination"
+                                    android:inputType="number"
+                                    android:gravity="center"/>
+
+
+
+<!--                                <com.github.nikartm.button.FitButton-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:id="@+id/btn_destinationsearch"-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    android:enabled="true"-->
+<!--                                    android:gravity="center_vertical"-->
+<!--                                    app:fb_cornerRadius="2dp"-->
+<!--                                    app:fb_shape="rectangle"-->
+<!--                                    app:fb_divColor="#fff"-->
+<!--                                    app:fb_divWidth="2dp"-->
+<!--                                    app:fb_divHeight="40dp"-->
+<!--                                    app:fb_rippleColor="#FBE9E7"-->
+<!--                                    app:fb_iconWidth="40dp"-->
+<!--                                    app:fb_iconHeight="40dp"-->
+<!--                                    app:fb_iconPosition="left"-->
+<!--                                    app:fb_iconMarginStart="10dp"-->
+<!--                                    app:fb_iconMarginEnd="10dp"-->
+<!--                                    app:fb_icon="@drawable/baseline_search_24"-->
+<!--                                    app:fb_iconColor="#FFF"-->
+<!--                                    app:fb_textPaddingStart="16dp"-->
+<!--                                    app:fb_textPaddingEnd="10dp"-->
+<!--                                    app:fb_textColor="#FFF"-->
+
+<!--                                    app:fb_backgroundColor="@color/buttonbg"/>-->
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/buttondrawable"
+                    android:text="search"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18sdp"
+                    android:backgroundTint="@color/red_connectify"
+                    android:id="@+id/btn_originsearch"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".1"/>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/buttondrawable"
+                    android:text="search"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_18sdp"
+                    android:textColor="@color/white"
+                    android:id="@+id/btn_destinationsearch"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <Button
+                    android:enabled="false"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="SOUTH BOUND"
+                    android:background="@drawable/buttondrawable"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/btn_minusqty"/>
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".1"/>
+<!--                                <com.github.nikartm.button.FitButton-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:id="@+id/btn_minusqty"-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    android:enabled="true"-->
+<!--                                    android:gravity="center_vertical"-->
+<!--                                    app:fb_cornerRadius="2dp"-->
+<!--                                    app:fb_shape="rectangle"-->
+<!--                                    app:fb_divColor="#fff"-->
+<!--                                    app:fb_divWidth="2dp"-->
+<!--                                    app:fb_divHeight="40dp"-->
+<!--                                    app:fb_rippleColor="#FBE9E7"-->
+<!--                                    app:fb_iconWidth="40dp"-->
+<!--                                    app:fb_iconHeight="40dp"-->
+<!--                                    app:fb_iconPosition="left"-->
+<!--                                    app:fb_iconMarginStart="10dp"-->
+<!--                                    app:fb_iconMarginEnd="10dp"-->
+<!--                                    app:fb_icon="@drawable/baseline_file_download_24"-->
+<!--                                    app:fb_iconColor="#FFF"-->
+<!--                                    app:fb_textPaddingStart="16dp"-->
+<!--                                    app:fb_textPaddingEnd="10dp"-->
+<!--                                    app:fb_textColor="#FFF"-->
+<!--                                    app:fb_text="minus"-->
+<!--                                    app:fb_textSize="@dimen/_12sdp"-->
+<!--                                    app:fb_backgroundColor="@color/teal_200"/>-->
+
+                                <TextView
+                                    android:visibility="gone"
+                                    android:id="@+id/txtqty"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:layout_gravity="center_vertical"
+                                    android:text="origin"
+                                    android:textColor="@color/black"
+                                    android:inputType="number"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/_20sdp" />
+
+                <Button
+                    android:enabled="false"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/buttondrawable"
+                    android:text="NORTH BOUND"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:id="@+id/btn_addquantity"/>
+
+
+<!--                                <com.github.nikartm.button.FitButton-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:id="@+id/btn_addquantity"-->
+<!--                                    android:layout_width="0dp"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_weight="1"-->
+<!--                                    android:enabled="true"-->
+<!--                                    android:gravity="center_vertical"-->
+<!--                                    app:fb_cornerRadius="2dp"-->
+<!--                                    app:fb_shape="rectangle"-->
+<!--                                    app:fb_divColor="#fff"-->
+<!--                                    app:fb_divWidth="2dp"-->
+<!--                                    app:fb_divHeight="40dp"-->
+<!--                                    app:fb_rippleColor="#FBE9E7"-->
+<!--                                    app:fb_iconWidth="40dp"-->
+<!--                                    app:fb_iconHeight="40dp"-->
+<!--                                    app:fb_iconPosition="left"-->
+<!--                                    app:fb_iconMarginStart="10dp"-->
+<!--                                    app:fb_iconMarginEnd="10dp"-->
+<!--                                    app:fb_icon="@drawable/baseline_file_upload_24"-->
+<!--                                    app:fb_iconColor="#FFF"-->
+<!--                                    app:fb_textPaddingStart="16dp"-->
+<!--                                    app:fb_textPaddingEnd="10dp"-->
+<!--                                    app:fb_textColor="#FFF"-->
+<!--                                    app:fb_text="Add"-->
+<!--                                    app:fb_textSize="@dimen/_12sdp"-->
+<!--                                    app:fb_backgroundColor="@color/buttonbg"/>-->
+
+
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="0dp"
+                android:layout_weight=".5">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                   android:id="@+id/txtamount"
+                                    android:text="0.0"
+                                    android:textSize="@dimen/_20sdp"
+                                    android:gravity="right"
+                                    android:textColor="@color/black"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_20sdp"
+                    android:gravity="left"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:id="@+id/txtpesosign"
+                    android:text="sign"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="@color/black"
+                                />
+            </LinearLayout>
+"
+
+
+
+
+    </LinearLayout>
+
+        <LinearLayout
+
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_login"
+                android:textColor="@color/white"
+                android:text="PRINT TICKET"
+                android:textSize="@dimen/_12sdp"
+                android:id="@+id/btn_printticke"/>
+
+<!--            <com.github.nikartm.button.FitButton-->
+<!--                android:layout_gravity="center"-->
+<!--                android:id="@+id/btn_printticke"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:enabled="true"-->
+<!--                android:gravity="center_vertical"-->
+<!--                app:fb_cornerRadius="10dp"-->
+<!--                app:fb_shape="rectangle"-->
+<!--                app:fb_divColor="#fff"-->
+<!--                app:fb_divWidth="2dp"-->
+<!--                app:fb_divHeight="40dp"-->
+<!--                app:fb_rippleColor="#FBE9E7"-->
+<!--                app:fb_iconWidth="50dp"-->
+<!--                app:fb_iconHeight="50dp"-->
+<!--                app:fb_iconPosition="left"-->
+<!--                app:fb_iconMarginStart="10dp"-->
+<!--                app:fb_iconMarginEnd="10dp"-->
+<!--                app:fb_icon="@drawable/baseline_local_printshop_24"-->
+<!--                app:fb_iconColor="#FFF"-->
+<!--                app:fb_textPaddingStart="16dp"-->
+<!--                app:fb_textPaddingEnd="10dp"-->
+<!--                app:fb_textColor="#FFF"-->
+<!--                app:fb_text="PRINT TICKET"-->
+<!--                app:fb_textSize="@dimen/_15sdp"-->
+<!--                app:fb_backgroundColor="@color/teal_700"/>-->
+
+
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

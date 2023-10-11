@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.STATUS_BAR" />
+
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+
+
+
+    <queries>
+        <package android:name="net.nyx.printerservice"/>
+    </queries>
+
+    <application
+        android:name=".TransportApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ErjohnAndroid"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".presenter.Activity.mainactivity.SycnhLogin"
+            android:theme="@style/Theme.saving.nobar"
+            android:exported="false" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.WitholdingActivity"
+            android:exported="false"
+            android:theme="@style/CustomDialogthree" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.ExpensesActivity"
+            android:exported="false"
+            android:theme="@style/CustomDialogthree" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.ticketdetailsActivity"
+            android:exported="false"
+            android:theme="@style/CustomDialogtwo" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.SynchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.ReverseActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.PartialRemitActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.IngressoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.InspectionActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.TIcketingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.DispatchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.SharedLoginActivity"
+            android:exported="false"
+            android:theme="@style/CustomDialog" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.GetSynchingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.BasedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.saving.nobar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

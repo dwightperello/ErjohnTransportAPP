@@ -1,12 +1,20 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.IBinder
+import android.os.RemoteException
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.drawToBitmap
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
@@ -20,9 +28,15 @@ import com.example.erjohnandroid.presenter.adapter.ReverseAdapter
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
+import net.nyx.printerservice.print.IPrinterService
+import net.nyx.printerservice.print.PrintTextFormat
+import timber.log.Timber
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 import java.util.function.DoubleUnaryOperator
 
 @AndroidEntryPoint
@@ -30,7 +44,7 @@ class PartialRemitActivity : AppCompatActivity() {
     lateinit var _binding: ActivityPartialRemitBinding
     private val dbViewmodel: RoomViewModel by viewModels()
     private  lateinit var reverseAdapter: ReverseAdapter
-
+    var image:Bitmap?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding= ActivityPartialRemitBinding.inflate(layoutInflater)
@@ -42,6 +56,7 @@ class PartialRemitActivity : AppCompatActivity() {
         )
 
         dbViewmodel.getReverse()
+        bindService()
 
         _binding.btnSaveremit.setOnClickListener {
 
@@ -53,6 +68,7 @@ class PartialRemitActivity : AppCompatActivity() {
                 Toast(this).showCustomToast("Please sign",this)
                 return@setOnClickListener
             }
+            image=   _binding.inspectionsignature.drawToBitmap()
             if(text.isNullOrEmpty() || total.isNullOrEmpty()) {
                 Toast(this).showCustomToast("Enter amount", this)
                 return@setOnClickListener
@@ -74,11 +90,12 @@ class PartialRemitActivity : AppCompatActivity() {
                 Log.e("error",e.localizedMessage)
             }
 
+            printText("Erjohn & Almark Transit Corp ")
 
-            finish()
-            overridePendingTransition(
-                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-            );
+//            finish()
+//            overridePendingTransition(
+//                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+//            );
         }
     }
 
@@ -135,4 +152,162 @@ class PartialRemitActivity : AppCompatActivity() {
         val currentDate = Date()
         return dateFormat.format(currentDate)
     }
+
+
+    //region PRINTER
+    private val TAG: String? = "MainActivity"
+    var PRN_TEXT: String? = "THIS IS A TEsT PRINT"
+    var version = arrayOfNulls<String>(1)
+
+    private val singleThreadExecutor = Executors.newSingleThreadExecutor()
+    private val handler = Handler()
+
+    private fun bindService() {
+        try {
+            val intent = Intent()
+            intent.setPackage("net.nyx.printerservice")
+            intent.action = "net.nyx.printerservice.IPrinterService"
+            bindService(intent, connService, BIND_AUTO_CREATE)
+        }catch (e:Exception){
+            Log.e("ere",e.localizedMessage)
+        }
+
+    }
+
+    private var printerService: IPrinterService? = null
+
+    private val connService = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            //  showLog("printer service disconnected, try reconnect")
+            printerService = null
+            // 尝试重新bind
+            handler.postDelayed({ bindService() }, 5000)
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Timber.d("onServiceConnected: $name")
+            printerService = IPrinterService.Stub.asInterface(service)
+            getVersion()
+        }
+    }
+
+
+    private fun getVersion() {
+        singleThreadExecutor.submit(Runnable {
+            try {
+                val ret = printerService!!.getPrinterVersion(version)
+                //showLog("Version: " + msg(ret) + "  " + version.get(0))
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        })
+    }
+
+    private fun printText(text: String) {
+        singleThreadExecutor.submit {
+            try {
+                val textFormat = PrintTextFormat()
+                textFormat.textSize=26
+                // textFormat.setUnderline(true);
+                textFormat.ali=1
+                textFormat.style=1
+                try {
+                    var ret = printerService!!.printText(text, textFormat)
+                    textFormat.textSize=24
+                    ret = printerService!!.printText("PARTIAL REMIT",textFormat)
+                    ret = printerService!!.printText("Cashier: ${GlobalVariable.cashiername}",textFormat)
+                    ret = printerService!!.printText("Amount Remited: ${_binding.etCashremited.text}",textFormat)
+                    textFormat.style=0
+                    ret = printerService!!.printText("------------------------------",textFormat)
+//                    textFormat.textSize=22
+//                    textFormat.ali=0
+//                    textFormat.style=0
+//                    textFormat.topPadding=15
+//                    ret = printerService!!.printText("Km Check: ${_binding.etInspectiondestination.text.toString()}",textFormat)
+//                    textFormat.topPadding=0
+//
+//
+//                    ret = printerService!!.printText("Count: ${_binding.etActualcount.text}",textFormat)
+//                    ret = printerService!!.printText("Diff: ${_binding.txtinspectiondifference.text.toString()}",textFormat)
+
+                    ret = printerService!!.printBitmap(
+                        BitmapFactory.decodeStream(bitmapToInputStream(image!!)
+
+                        ), 1, 1
+                    )
+
+                    if (ret == 0) {
+                        paperOut()
+                    }
+
+
+
+                }catch (e:java.lang.Exception){
+                    Log.e("tae",e.localizedMessage)
+                }
+
+                // showLog("Print text: " + msg(ret))
+
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+
+    private fun paperOut() {
+        singleThreadExecutor.submit {
+            try {
+                printerService!!.paperOut(80)
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+//    fun printBitmap(bitmap: Bitmap, scaleWidth: Int, scaleHeight: Int) {
+//        singleThreadExecutor.submit {
+//            try {
+//                val ret = printerService!!.printBitmap(bitmap, scaleWidth, scaleHeight)
+//               // showLog("Print bitmap: " + msg(ret))
+//                if (ret == 0) {
+//                    paperOut()
+//                }
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+
+    private fun printBitmap(bitmap: Bitmap) {
+        singleThreadExecutor.submit {
+            try {
+                val ret = printerService!!.printBitmap(
+                    BitmapFactory.decodeStream(bitmapToInputStream(bitmap)
+
+                    ), 1, 1
+                )
+                // showLog("Print bitmap: " + msg(ret))
+
+
+                if (ret == 0) {
+                    paperOut()
+                }
+
+
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun bitmapToInputStream(bitmap: Bitmap): InputStream {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return outputStream.toByteArray().inputStream()
+    }
+
+
+    //endregion
 }

@@ -336,11 +336,8 @@ class InspectionActivity : AppCompatActivity() {
                     textFormat.topPadding=15
                     ret = printerService!!.printText("Km Check: ${_binding.etInspectiondestination.text.toString()}",textFormat)
                     textFormat.topPadding=0
-
-
                     ret = printerService!!.printText("Count: ${_binding.etActualcount.text}",textFormat)
                     ret = printerService!!.printText("Diff: ${_binding.txtinspectiondifference.text.toString()}",textFormat)
-
                     ret = printerService!!.printBitmap(
                         BitmapFactory.decodeStream(bitmapToInputStream(image!!)
 

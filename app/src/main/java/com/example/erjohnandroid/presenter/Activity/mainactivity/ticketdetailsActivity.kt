@@ -28,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.nyx.printerservice.print.IPrinterService
 import net.nyx.printerservice.print.PrintTextFormat
 import timber.log.Timber
+import java.text.DecimalFormat
 import java.util.concurrent.Executors
 
 @AndroidEntryPoint
@@ -36,6 +37,8 @@ class ticketdetailsActivity : AppCompatActivity() {
     private val dbViewmodel: RoomViewModel by viewModels()
     private  lateinit var TicketDetailsAdapter: TicketDetailsAdapter
     var tripticketTable: List<TripTicketTable> = arrayListOf()
+
+    var amount:Double=0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding= ActivityTicketdetailsBinding.inflate(layoutInflater)
@@ -83,9 +86,13 @@ class ticketdetailsActivity : AppCompatActivity() {
 
     private fun Processdetails(state: List<TripTicketTable>?){
         if(!state.isNullOrEmpty()){
-//            val gson = Gson()
-//            val jsonResult = gson.toJson(state)
+            var total:Double=0.0
             tripticketTable= state
+
+            tripticketTable.forEach {
+                total += it.amount!!
+            }
+            amount=total
 
             TicketDetailsAdapter = TicketDetailsAdapter(this)
             _binding.rvTicketdetails.adapter= TicketDetailsAdapter
@@ -145,8 +152,11 @@ class ticketdetailsActivity : AppCompatActivity() {
     }
 
     private fun printText(text: String) {
+        val decimalVat = DecimalFormat("#.00")
+        val ans = decimalVat.format(amount)
         singleThreadExecutor.submit {
             try {
+
                 val textFormat = PrintTextFormat()
                 textFormat.textSize=26
                 // textFormat.setUnderline(true);
@@ -156,6 +166,7 @@ class ticketdetailsActivity : AppCompatActivity() {
                     var ret = printerService!!.printText(text, textFormat)
                     textFormat.textSize=24
                     ret = printerService!!.printText("TICKET DETAILS",textFormat)
+                    ret = printerService!!.printText("Total Amount: ${ans}",textFormat)
                     textFormat.style=0
                     ret = printerService!!.printText("------------------------------",textFormat)
                     textFormat.ali=0
@@ -172,6 +183,7 @@ class ticketdetailsActivity : AppCompatActivity() {
 //                    ret = printerService!!.printText("Bus Conductor: ${GlobalVariable.conductor}",textFormat)
 //                    textFormat.topPadding=10
                     ret = printerService!!.printText("",textFormat)
+                    amount=0.0
                     if (ret == 0) {
                         paperOut()
                     }

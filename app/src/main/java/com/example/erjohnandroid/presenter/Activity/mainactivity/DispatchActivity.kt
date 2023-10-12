@@ -370,6 +370,8 @@ class DispatchActivity : AppCompatActivity() {
                     ret = printerService!!.printText("Bus Conductor: ${GlobalVariable.conductor}",textFormat)
                     textFormat.topPadding=10
                     ret = printerService!!.printText("",textFormat)
+                    ret = printerService!!.printText("",textFormat)
+                    ret = printerService!!.printText("",textFormat)
                     if (ret == 0) {
                         paperOut()
                     }

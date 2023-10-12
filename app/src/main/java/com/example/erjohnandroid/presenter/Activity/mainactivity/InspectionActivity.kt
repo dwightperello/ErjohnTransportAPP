@@ -140,7 +140,8 @@ class InspectionActivity : AppCompatActivity() {
             val stringcount = count.replace(" ", "")
             remint= stringWithoutSpaces.toInt()
             countint=stringcount.toInt()
-            ans= countint!!.minus(remint!!)
+          //  ans= countint!!.minus(remint!!)
+            ans=remint?.minus(countint!!)
             _binding.txtinspectiondifference.text=ans.toString()
             hideSoftKeyboard()
         }

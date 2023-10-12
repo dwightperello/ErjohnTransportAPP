@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.erjohnandroid.database.Model.*
-import com.example.erjohnandroid.database.Model.convertions.TicketTotal
-import com.example.erjohnandroid.database.Model.convertions.TripCostTotal
-import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
-import com.example.erjohnandroid.database.Model.convertions.WitholdingTotal
+import com.example.erjohnandroid.database.Model.convertions.*
 import com.example.erjohnandroid.database.repository.RoomRepository
 import com.example.erjohnandroid.domain.model.response.Employee
 import com.example.erjohnandroid.util.ResultState
@@ -118,6 +115,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
 
     private var _totalwithodling:MutableLiveData<WitholdingTotal> = MutableLiveData()
     val totalwithodling:LiveData<WitholdingTotal> = _totalwithodling
+
+    private var _tripamountperreverse:MutableLiveData<TripAmountPerReverse> = MutableLiveData()
+    val tripamountperreverse:LiveData<TripAmountPerReverse> = _tripamountperreverse
 
 
 
@@ -492,6 +492,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records = repository.get_synch_witholding()
             _synch_trip_witholdingt.value = records
+        }
+    }
+
+    fun getTripAmountPerReverse(reverse: Int){
+        viewModelScope.launch() {
+            val records = repository.getTripAmountPerReverse(reverse)
+            _tripamountperreverse.value = records
         }
     }
 

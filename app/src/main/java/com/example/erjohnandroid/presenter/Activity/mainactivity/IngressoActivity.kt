@@ -21,7 +21,6 @@ import com.example.erjohnandroid.databinding.ActivityIngressoBinding
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.GlobalVariable.bus
 import com.example.erjohnandroid.util.GlobalVariable.cashiername
-import com.example.erjohnandroid.util.GlobalVariable.cashonhand
 import com.example.erjohnandroid.util.GlobalVariable.conductor
 import com.example.erjohnandroid.util.GlobalVariable.destinationcounter
 import com.example.erjohnandroid.util.GlobalVariable.direction
@@ -612,7 +611,7 @@ class IngressoActivity : AppCompatActivity() {
         ticketcounter=1
         destinationcounter=1
         origincounter=0
-        cashonhand=0.0
+
 
     }
 

@@ -140,6 +140,7 @@
                     android:gravity="center"/>
 
                 <com.github.nikartm.button.FitButton
+                    app:fb_textSize="@dimen/_15sdp"
                     android:layout_gravity="center"
                     android:id="@+id/btn_inspectiondestinationsearch"
                     android:layout_width="0dp"
@@ -218,6 +219,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:inputType="number"
+                    android:gravity="center"
+                    android:hint="0"
                     android:textSize="@dimen/_20sdp"
                     android:background="@drawable/edittextbackground"
                     android:id="@+id/et_actualcount"/>
@@ -239,7 +242,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/_15sdp"
-                    android:text="Difference"
+                    android:text="0"
                     android:gravity="center"
                     android:id="@+id/txtinspectiondifference"/>
 
@@ -252,6 +255,7 @@
 <!--                    android:id="@+id/btngetdiff"/>-->
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:textSize="@dimen/_15sdp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -298,7 +302,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@drawable/ripple_login"
-                        android:text="CLEAR"
+                        android:text="CLEAR SIGNATURE"
+                        android:textSize="@dimen/_15sdp"
                         android:textColor="@color/white"
                         android:id="@+id/btn_clear"/>
 

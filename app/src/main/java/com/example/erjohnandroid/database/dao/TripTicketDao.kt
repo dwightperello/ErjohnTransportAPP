@@ -6,6 +6,7 @@ import androidx.room.Query
 import com.example.erjohnandroid.database.Model.TripCostTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TicketTotal
+import com.example.erjohnandroid.database.Model.convertions.TripAmountPerReverse
 import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
 
 
@@ -38,5 +39,8 @@ interface TripTicketDao {
 
     @Query("DELETE FROM TripTickets")
     fun truncateTripticket()
+
+    @Query("SELECT  COUNT(amount) AS ticket_count, sum(amount) as sumamount FROM TripTickets where tripReverse = :reverse")
+    fun getPerTripAmount(reverse:Int): TripAmountPerReverse
 
 }

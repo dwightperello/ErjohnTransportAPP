@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="POST ALL DATA AND SYNCH"
                 android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
                 android:background="@drawable/ripple_login"
                 android:id="@+id/btn_postsynch"/>
 
@@ -49,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:maxLines="30"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 android:background="@drawable/edittextbackground"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:id="@+id/txt_postsynching"/>

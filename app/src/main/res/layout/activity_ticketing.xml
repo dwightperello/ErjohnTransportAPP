@@ -66,7 +66,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="REGULAR"
+                    android:text="REG"
                     android:textSize="@dimen/_12sdp"
                     android:id="@+id/cb_regular"/>
 
@@ -74,9 +74,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="SENIOR"
+                    android:text="SR"
                     android:textSize="@dimen/_12sdp"
                     android:id="@+id/cb_senior"/>
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="PWD"
+                    android:textSize="@dimen/_12sdp"
+                    android:id="@+id/cb_pwd"/>
 
                 <CheckBox
                     android:layout_width="0dp"
@@ -644,13 +652,29 @@
             </LinearLayout>
 
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".5">
 
+                <TextView
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:id="@+id/txtticketcountperreverse"
+                    android:text="0"
+                    android:textSize="@dimen/_15sdp"
+                    android:gravity="left"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+
                             <View
+                                android:layout_marginTop="@dimen/_5sdp"
                                 android:layout_width="match_parent"
                                 android:layout_height="2dp"
                                 android:background="@color/black"

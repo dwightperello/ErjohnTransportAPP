@@ -24,6 +24,7 @@ import com.example.erjohnandroid.database.Model.LineSegmentTable
 import com.example.erjohnandroid.database.Model.PassengerTypeTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TicketConvertions
+import com.example.erjohnandroid.database.Model.convertions.TripAmountPerReverse
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.sd_viewmodel
 import com.example.erjohnandroid.databinding.ActivityTicketingBinding
@@ -131,6 +132,23 @@ class TIcketingActivity : AppCompatActivity() {
         dbViewmodel.remsouth.observe(this, Observer {
                 state -> processRemsouth(state)
         })
+
+        dbViewmodel.tripamountperreverse.observe(this,Observer{
+            state-> ProcessAmountPerReverse(state)
+        })
+    }
+
+    val ProcessAmountPerReverse:(state: TripAmountPerReverse?) ->Unit={
+
+        if(it?.sumamount!=null){
+            val decimalVat = DecimalFormat("#.00")
+            val ans = decimalVat.format(it.sumamount)
+           _binding.txtonhand.text = "CASH: ${ans}"
+            _binding.txtticketcountperreverse.text= "TICKET COUNT: ${it.ticket_count.toString()}"
+        }else{
+            _binding.txtonhand.text = "CASH: 0.0"
+            _binding.txtticketcountperreverse.text= " TICKET COUNT: 0"
+        }
     }
 
     val initView={
@@ -141,9 +159,10 @@ class TIcketingActivity : AppCompatActivity() {
 
     val initCheckbox:()->Unit={
         _binding.cbRegular.setOnClickListener {
-            if(_binding.cbSenior.isChecked || _binding.cbStudent.isChecked){
+            if(_binding.cbSenior.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked){
                 _binding.cbSenior.isChecked=false
                 _binding.cbStudent.isChecked=false
+                _binding.cbPwd.isChecked=false
             }
             _binding.cbRegular.isChecked=true
             passtype="Regular"
@@ -151,19 +170,32 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.cbSenior.setOnClickListener {
-            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked){
+            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked){
                 _binding.cbRegular.isChecked=false
                 _binding.cbStudent.isChecked=false
+                _binding.cbPwd.isChecked=false
             }
             _binding.cbSenior.isChecked=true
             passtype="Senior"
             computeAmount()
         }
 
+        _binding.cbPwd.setOnClickListener {
+            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked || _binding.cbSenior.isChecked){
+                _binding.cbRegular.isChecked=false
+                _binding.cbStudent.isChecked=false
+                _binding.cbSenior.isChecked=false
+            }
+            _binding.cbPwd.isChecked=true
+            passtype="PWD"
+            computeAmount()
+        }
+
         _binding.cbStudent.setOnClickListener {
-            if(_binding.cbRegular.isChecked || _binding.cbSenior.isChecked){
+            if(_binding.cbRegular.isChecked || _binding.cbSenior.isChecked || _binding.cbPwd.isChecked){
                 _binding.cbRegular.isChecked=false
                 _binding.cbSenior.isChecked=false
+                _binding.cbPwd.isChecked=false
             }
             _binding.cbStudent.isChecked=true
             passtype="Student"
@@ -446,7 +478,10 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.btnPrintticke.setOnClickListener {
-            if(destinationcounter== origincounter) return@setOnClickListener
+            if(destinationcounter== origincounter || _binding.txtamount.text.toString().equals("0.0")){
+                Toast(this).showCustomToast("AMOUNT IS 0, SELECT DESTINATION",this)
+                return@setOnClickListener
+            }
 
             if(!passtype.isNullOrEmpty()) {
                 ticketnumber +=1
@@ -459,13 +494,7 @@ class TIcketingActivity : AppCompatActivity() {
                 dbViewmodel.insertTripTicketBulk(postTripticket!!)
                 sdViewmodel.insertTripTicketBulk(postTripticket!!)
 
-                GlobalVariable.cashonhand += postTripticket?.amount!!
 
-                val decimalVat = DecimalFormat("#.00")
-                val ans = decimalVat.format(GlobalVariable.cashonhand)
-                _binding.txtonhand.text="CASH: ${ans}"
-
-              //  _binding.txtamount.text="0.0"
 
             }
             else{
@@ -480,7 +509,7 @@ class TIcketingActivity : AppCompatActivity() {
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
             }
 
-
+                dbViewmodel.getTripAmountPerReverse(GlobalVariable.tripreverse!!)
 
             printText("Erjohn & Almark Transit Corp")
 
@@ -499,7 +528,7 @@ class TIcketingActivity : AppCompatActivity() {
            // computeAmount()
 
 
-            if(passtype.equals("Student") || passtype.equals("Senior")) {
+            if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD")) {
                 //passengerTypeAdapter.clearSelection()
                 //passtype=null
                 resetCheckbox()
@@ -517,6 +546,7 @@ class TIcketingActivity : AppCompatActivity() {
        //  passtype="Regular"
         _binding.cbSenior.isChecked=false
         _binding.cbStudent.isChecked=false
+        _binding.cbPwd.isChecked=false
       //  computeAmount()
 
 
@@ -541,7 +571,7 @@ class TIcketingActivity : AppCompatActivity() {
 
         if(KMdiff > 5){
 
-            if(passtype.equals("Senior") || passtype.equals("Student")) {
+            if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
                 discount= fare.toDouble() *   discountamount
                 amountafterdiscount= fare - discount
                 getkmdiff = KMdiff - 5
@@ -557,7 +587,7 @@ class TIcketingActivity : AppCompatActivity() {
 
         }
         else{
-            if(passtype.equals("Senior") || passtype.equals("Student")){
+            if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                 discount= fare *  discountamount
                 amountafterdiscount= fare - discount
                 total= amountafterdiscount * qty
@@ -660,6 +690,7 @@ class TIcketingActivity : AppCompatActivity() {
             _binding.btnAddquantity.setBackgroundColor(Color.GREEN)
             _binding.btnMinusqty.setBackgroundColor(Color.DKGRAY)
         }
+        dbViewmodel.getTripAmountPerReverse(GlobalVariable.tripreverse!!)
 
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         registerReceiver(batteryReceiver, filter)
@@ -808,7 +839,7 @@ class TIcketingActivity : AppCompatActivity() {
                     _binding.txtqty.text="1"
                     qty=1
 
-                    if(passtype.equals("Student") || passtype.equals("Senior")) {
+                    if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD")) {
                         //passengerTypeAdapter.clearSelection()
                         //passtype=null
                         passtype="Regular"

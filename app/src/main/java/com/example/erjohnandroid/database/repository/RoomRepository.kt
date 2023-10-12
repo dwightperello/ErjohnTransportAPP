@@ -1,10 +1,7 @@
 package com.example.erjohnandroid.database.repository
 
 import com.example.erjohnandroid.database.Model.*
-import com.example.erjohnandroid.database.Model.convertions.TicketTotal
-import com.example.erjohnandroid.database.Model.convertions.TripCostTotal
-import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
-import com.example.erjohnandroid.database.Model.convertions.WitholdingTotal
+import com.example.erjohnandroid.database.Model.convertions.*
 import com.example.erjohnandroid.database.dao.*
 import javax.inject.Inject
 
@@ -263,6 +260,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun getTotalWItholding():WitholdingTotal {
         return tripWitholdingDao.getTotalAmountWitholdingcost()
+    }
+
+    fun getTripAmountPerReverse(reverse:Int): TripAmountPerReverse{
+        return tripTicketDao.getPerTripAmount(reverse)
     }
 
 }

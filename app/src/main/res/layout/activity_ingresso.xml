@@ -49,6 +49,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -58,6 +59,7 @@
                     android:text="TOTAL COLLECTION:"/>
 
               <TextView
+
                   android:gravity="center"
                   android:layout_gravity="center"
                   android:layout_width="0dp"
@@ -79,7 +81,7 @@
                 <TextView
                     android:gravity="center"
                     android:layout_gravity="center"
-
+                    android:textStyle="bold"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -95,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:inputType="numberDecimal"
                     android:hint="0.0"
                     android:background="@drawable/edittextbackground"
@@ -122,6 +124,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -137,7 +140,7 @@
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:inputType="numberDecimal"
@@ -166,6 +169,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -194,6 +198,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -225,6 +230,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -256,6 +262,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -284,6 +291,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -313,6 +321,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -342,6 +351,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -364,12 +374,75 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/viewdriverbonus"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="DRIVER BONUS:"/>
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="0.0:"
+                    android:textStyle="bold"
+                    android:id="@+id/txtdriverbonus"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/viewconductorbonus"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="CONDUCTOR BONUS:"/>
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="0.0:"
+                    android:textStyle="bold"
+                    android:id="@+id/txtconductorbonus"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -398,6 +471,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
@@ -415,7 +489,7 @@
                     android:background="@drawable/edittextbackground"
                     android:gravity="center"
                     android:hint="0.0"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_18sdp"
                     android:inputType="numberDecimal"
                     android:textStyle="bold" />
 
@@ -437,6 +511,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
                 <TextView
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_width="0dp"

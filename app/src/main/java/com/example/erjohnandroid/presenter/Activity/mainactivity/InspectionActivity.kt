@@ -98,7 +98,8 @@ class InspectionActivity : AppCompatActivity() {
             }
             when(index){
                 -1 ->{
-                    Toast.makeText(this,"NO LINESEGMENT FOUND", Toast.LENGTH_LONG).show()
+                   // Toast.makeText(this,"NO LINESEGMENT FOUND", Toast.LENGTH_LONG).show()
+                    Toast(this).showCustomToast("NO LINESEGMENT FOUND",this)
                     return@setOnClickListener
                 }
             }

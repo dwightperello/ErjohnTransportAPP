@@ -606,10 +606,22 @@
                 android:gravity="center"
                 android:layout_height="0dp"
                 android:layout_weight=".5">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/txtonhand"
+                    android:text="0.0"
+                    android:textSize="@dimen/_15sdp"
+                    android:gravity="left"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_weight=".5"
                                    android:id="@+id/txtamount"
                                     android:text="0.0"
                                     android:textSize="@dimen/_20sdp"
@@ -659,16 +671,27 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ripple_login"
-                android:textColor="@color/white"
-                android:text="PRINT TICKET"
-                android:textSize="@dimen/_12sdp"
-                android:id="@+id/btn_printticke"/>
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ripple_login"
+                    android:textColor="@color/white"
+                    android:text="PRINT TICKET"
+                    android:textSize="@dimen/_20sdp"
+                    android:id="@+id/btn_printticke"/>
+
+            </LinearLayout>
+
+
+
+
 
 <!--            <com.github.nikartm.button.FitButton-->
 <!--                android:layout_gravity="center"-->

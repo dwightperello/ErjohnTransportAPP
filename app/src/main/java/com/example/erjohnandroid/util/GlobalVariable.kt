@@ -42,5 +42,7 @@ object GlobalVariable {
     var destinationcounter:Int=1
     var origincounter:Int=0
 
+    var cashonhand:Double=0.0
+
 
 }

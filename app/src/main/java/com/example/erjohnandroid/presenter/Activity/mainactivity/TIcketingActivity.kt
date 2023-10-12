@@ -459,6 +459,12 @@ class TIcketingActivity : AppCompatActivity() {
                 dbViewmodel.insertTripTicketBulk(postTripticket!!)
                 sdViewmodel.insertTripTicketBulk(postTripticket!!)
 
+                GlobalVariable.cashonhand += postTripticket?.amount!!
+
+                val decimalVat = DecimalFormat("#.00")
+                val ans = decimalVat.format(GlobalVariable.cashonhand)
+                _binding.txtonhand.text="CASH: ${ans}"
+
               //  _binding.txtamount.text="0.0"
 
             }

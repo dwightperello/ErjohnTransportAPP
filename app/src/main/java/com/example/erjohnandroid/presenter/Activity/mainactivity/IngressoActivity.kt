@@ -21,6 +21,7 @@ import com.example.erjohnandroid.databinding.ActivityIngressoBinding
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.GlobalVariable.bus
 import com.example.erjohnandroid.util.GlobalVariable.cashiername
+import com.example.erjohnandroid.util.GlobalVariable.cashonhand
 import com.example.erjohnandroid.util.GlobalVariable.conductor
 import com.example.erjohnandroid.util.GlobalVariable.destinationcounter
 import com.example.erjohnandroid.util.GlobalVariable.direction
@@ -35,6 +36,7 @@ import com.example.erjohnandroid.util.GlobalVariable.remainingPass
 import com.example.erjohnandroid.util.GlobalVariable.ticketcounter
 import com.example.erjohnandroid.util.GlobalVariable.ticketnumber
 import com.example.erjohnandroid.util.GlobalVariable.tripreverse
+import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -56,7 +58,9 @@ class IngressoActivity : AppCompatActivity() {
     var infault:String?= null
     var totalTripcost:Double=0.0
     var totalwitholding:Double=0.0
-
+    var remit:Double=0.0
+    var bonus = 100.0
+    var totalSales = 0.0
 
 
     var EXPENSES_ACTIVITY=1
@@ -75,8 +79,9 @@ class IngressoActivity : AppCompatActivity() {
 
         _binding.btnigresso.isEnabled=true
 
-        dbViewmodel.getTotalAmountTrip()
         dbViewmodel.getPartialRemit()
+        dbViewmodel.getTotalAmountTrip()
+
 
         _binding.txtdrivername.text=GlobalVariable.driver
         _binding.txtconductorname.text=GlobalVariable.conductor
@@ -128,7 +133,7 @@ class IngressoActivity : AppCompatActivity() {
         _binding.btncomputefinalremit.setOnClickListener {
             var finalremit = _binding.etfinalremit.text.toString()
             if(finalremit.isNullOrEmpty()){
-                Toast.makeText(this,"Input amount",Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast("INPUT AMOUNT",this)
                 return@setOnClickListener
             }
 
@@ -138,15 +143,23 @@ class IngressoActivity : AppCompatActivity() {
             var partialremit= _binding.txtpartialremit.text.toString()
             if(partialremit.isNullOrEmpty()) partialremit="0.0"
 
-            var addamount= finalremit.toDouble() + partialremit.toDouble() + totalTripcost +totalwitholding
+          //  var addamount= finalremit.toDouble() + partialremit.toDouble() + totalTripcost +totalwitholding
+          //  var addamount= finalremit.toDouble()  + totalTripcost +totalwitholding
 
             var net= _binding.txtnetcollection.text.toString()
 
-            var compute= net.toDouble()- addamount.toDouble()
+            var compute= net.toDouble()- finalremit.toDouble()
             if(compute>0) _binding.viewshort.isVisible=true
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(compute)
             _binding.etshortover.text= ans.toString()
+
+            if(totalamount>=14000){
+                _binding.viewconductorbonus.isVisible=true
+                _binding.viewdriverbonus.isVisible=true
+                calculateBonus(totalamount)
+            }
+
         }
 
         _binding.cbshortdriver.setOnClickListener {
@@ -164,7 +177,7 @@ class IngressoActivity : AppCompatActivity() {
         _binding.btnigresso.setOnClickListener {
             _binding.btnigressoreprint.isEnabled=true
             if(_binding.etshortover.text.toString().isNullOrEmpty()) {
-                Toast.makeText(this,"NO COMPUTATION MADE",Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast("PLEASE COMPUTE FINAL REMIT",this)
                 return@setOnClickListener
             }
             val formattedDateTime = getCurrentDateInFormat()
@@ -344,7 +357,9 @@ class IngressoActivity : AppCompatActivity() {
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(partial)
             _binding.txtpartialremit.text="${ans}"
-
+            totalamount -=partial
+            val remit = decimalVat.format(totalamount)
+            _binding.txtnetcollection.text="${remit}"
         }
     }
 
@@ -375,19 +390,40 @@ class IngressoActivity : AppCompatActivity() {
                 withold += it.amount!!
             }
 
-            // totalamount -= expensesamount
+            totalamount -= withold
             val decimalVat = DecimalFormat("#.00")
             witholding = decimalVat.format(withold)
 
 
             // val expenses = decimalVat.format(expensesamount)
 
-            // _binding.txtnetcollection.text="${ans}"
+             _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
             _binding.btnWitholding.text="ENTER / " +"${witholding}"
             // _binding.txttotalgross.text="${ans}"
         }
     }
     //endregion
+
+
+    fun calculateBonus(sales: Double) {
+       // totalSales += sales
+        var total=sales
+
+        if (total >= 14000) {
+
+            val bonusIncreaseCount = (total - 14000) / 1000
+            bonus += bonusIncreaseCount * 100
+
+            val decimalVat = DecimalFormat("#.00")
+            var ans = decimalVat.format(bonus)
+
+            _binding.txtdriverbonus.text= "${ans}"
+            _binding.txtconductorbonus.text= "${ans}"
+
+//            // Update the total sales to the next threshold
+//            totalSales = 14000 + (totalSales - 14000) % 1000
+        }
+    }
 
     //region SYNCHING
     private var triptickets:ArrayList<Sycn_TripticketTable> = arrayListOf()
@@ -576,7 +612,7 @@ class IngressoActivity : AppCompatActivity() {
         ticketcounter=1
         destinationcounter=1
         origincounter=0
-
+        cashonhand=0.0
 
     }
 

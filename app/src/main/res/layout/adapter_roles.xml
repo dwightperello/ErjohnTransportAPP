@@ -19,6 +19,8 @@
         android:padding="8dp"/>
 
     <TextView
+        android:textStyle="bold"
+        android:textColor="@color/black"
         android:textSize="@dimen/_15sdp"
         android:id="@+id/txtrolename"
         android:text="sample"

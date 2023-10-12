@@ -21,6 +21,7 @@ import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityMainBinding
 import com.example.erjohnandroid.databinding.ActivitySharedLoginBinding
 import com.example.erjohnandroid.util.GlobalVariable
+import com.example.erjohnandroid.util.showCustomToast
 import com.example.erjohnandroid.util.startActivityWithAnimation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -76,7 +77,8 @@ class SharedLoginActivity : AppCompatActivity() {
                 }
                 else if(state.companyRolesId==3){
                     if(!GlobalVariable.isDispatched){
-                        Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                       // Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                        Toast(this).showCustomToast("PLEASE DISPATCH",this)
                         return
                     }
                     if (activity!!.equals(9)){
@@ -88,7 +90,8 @@ class SharedLoginActivity : AppCompatActivity() {
                 }
                 else if(state.companyRolesId==5){
                     if(!GlobalVariable.isDispatched){
-                        Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                        Toast(this).showCustomToast("PLEASE DISPATCH",this)
                         return
                     }
 
@@ -114,8 +117,8 @@ class SharedLoginActivity : AppCompatActivity() {
                 }
 
 
-                else Toast.makeText(this,"LOGIN USING CORRECT PIN",Toast.LENGTH_LONG).show()
-
+                else
+                Toast(this).showCustomToast("CHECK PIN",this)
             }else{
 
                 if(pin.equals("30300")){
@@ -123,12 +126,14 @@ class SharedLoginActivity : AppCompatActivity() {
                     finish()
                 }else{
                     _binding.etPin.setText("")
-                    Toast.makeText(this,"NO DATA FOUND", Toast.LENGTH_LONG).show()
+                   // Toast.makeText(this,"NO DATA FOUND", Toast.LENGTH_LONG).show()
+                    Toast(this).showCustomToast("NO DATA FOUND",this)
                 }
 
             }
         }catch (e:java.lang.Exception){
-            Toast.makeText(this,"NO EMPLOYEE",Toast.LENGTH_LONG).show()
+            //Toast.makeText(this,"NO EMPLOYEE",Toast.LENGTH_LONG).show()
+            Toast(this).showCustomToast("NO EMPLOYEE FOUND",this)
         }
 
     }

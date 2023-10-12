@@ -70,7 +70,8 @@ class DispatchActivity : AppCompatActivity() {
         _binding.btnSave.setOnClickListener {
 
             if(GlobalVariable.bus.isNullOrEmpty() ||GlobalVariable.conductor.isNullOrEmpty() ||GlobalVariable.employeeName.isNullOrEmpty() ||GlobalVariable.driver.isNullOrEmpty() ||GlobalVariable.direction.isNullOrEmpty() ||GlobalVariable.line.isNullOrEmpty() ){
-                Toast.makeText(this ,"PLEASE CHECK ENTRY",Toast.LENGTH_LONG).show()
+               // Toast.makeText(this ,"PLEASE CHECK ENTRY",Toast.LENGTH_LONG).show()
+                Toast(this).showCustomToast("PLEASE CHECK ENTRY",this)
                 return@setOnClickListener
             }
             var dispatch:ArrayList<mPadAssignmentsTable>?= ArrayList<mPadAssignmentsTable>()

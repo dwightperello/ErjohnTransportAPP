@@ -21,6 +21,7 @@ import com.example.erjohnandroid.presenter.adapter.BusAdapter
 import com.example.erjohnandroid.presenter.adapter.ExpensesAdapter
 import com.example.erjohnandroid.presenter.adapter.LineAdapter
 import com.example.erjohnandroid.util.GlobalVariable
+import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,7 +52,8 @@ class ExpensesActivity : AppCompatActivity() {
         _binding.btnsaveexpenses.setOnClickListener {
             var withold=_binding.etExpensesamount.text.toString()
             if(!TextUtils.isDigitsOnly(withold) || withold.isNullOrEmpty() || expensestype.isNullOrEmpty()) {
-                Toast.makeText(this,"NO AMOUNT", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this,"NO AMOUNT", Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast("NO AMOUNT",this)
                 return@setOnClickListener
             }
             val formattedDateTime = getCurrentDateInFormat()

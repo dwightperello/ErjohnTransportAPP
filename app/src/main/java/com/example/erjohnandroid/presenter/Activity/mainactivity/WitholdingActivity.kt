@@ -20,6 +20,7 @@ import com.example.erjohnandroid.databinding.ActivityWitholdingBinding
 import com.example.erjohnandroid.presenter.adapter.ExpensesAdapter
 import com.example.erjohnandroid.presenter.adapter.WitholdingAdapter
 import com.example.erjohnandroid.util.GlobalVariable
+import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,7 +51,8 @@ class WitholdingActivity : AppCompatActivity() {
 
             var withold=_binding.etWitholdingamount.text.toString()
             if(!TextUtils.isDigitsOnly(withold) || withold.isNullOrEmpty()|| witholdingtype.isNullOrEmpty()){
-                Toast.makeText(this,"NO AMOUNT",Toast.LENGTH_SHORT).show()
+               // Toast.makeText(this,"NO AMOUNT",Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast("NO AMOUNT",this)
                 return@setOnClickListener
             }
             val formattedDateTime = getCurrentDateInFormat()

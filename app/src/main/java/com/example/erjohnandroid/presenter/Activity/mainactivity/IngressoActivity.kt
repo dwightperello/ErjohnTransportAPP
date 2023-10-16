@@ -1,10 +1,15 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.IBinder
+import android.os.RemoteException
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
@@ -37,15 +42,21 @@ import com.example.erjohnandroid.util.GlobalVariable.ticketnumber
 import com.example.erjohnandroid.util.GlobalVariable.tripreverse
 import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
+import net.nyx.printerservice.print.IPrinterService
+import net.nyx.printerservice.print.PrintTextFormat
+import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class IngressoActivity : AppCompatActivity() {
     lateinit var _binding:ActivityIngressoBinding
     private val dbViewmodel: RoomViewModel by viewModels()
+
+    var alltickets:kotlin.collections.List<TripTicketTable> = arrayListOf()
 
     var totalamount:Double=0.0
     var manualticket:Double=0.0
@@ -59,7 +70,7 @@ class IngressoActivity : AppCompatActivity() {
     var totalwitholding:Double=0.0
     var remit:Double=0.0
     var bonus = 100.0
-    var totalSales = 0.0
+
 
 
     var EXPENSES_ACTIVITY=1
@@ -75,7 +86,7 @@ class IngressoActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-
+        bindService()
         _binding.btnigresso.isEnabled=true
 
         dbViewmodel.getPartialRemit()
@@ -269,6 +280,7 @@ class IngressoActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        resetALl()
         val resultIntent = Intent()
         setResult(Activity.RESULT_OK, resultIntent)
 
@@ -434,6 +446,7 @@ class IngressoActivity : AppCompatActivity() {
 
     val ProcessTriptickets:(state: List<TripTicketTable>) ->Unit={
         if(it!=null) {
+            alltickets=it
            it.forEach {
                var method= Sycn_TripticketTable(
                    amount = it.amount,
@@ -560,7 +573,7 @@ class IngressoActivity : AppCompatActivity() {
 
         }
     }
-
+    var gross:String?= null
     val Processtripwitholding:(state: List<TripWitholdingTable>) ->Unit={
         if(it!=null) {
             it.forEach {
@@ -575,9 +588,14 @@ class IngressoActivity : AppCompatActivity() {
                 withodling.add(method)
             }
             try {
+                 var a=_binding.txttotalcollection.text.toString()
+                val decimalVat = DecimalFormat("#.00")
+                val ans = decimalVat.format(a.toDouble())
+                gross=ans
+                printText("Erjohn & Almark Transit Corp")
                dbViewmodel.insert_synch_witholding(withodling)
                dbViewmodel.truncatetables()
-                resetALl()
+               // resetALl()
                 _binding.btnigresso.isEnabled=false
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
@@ -613,6 +631,168 @@ class IngressoActivity : AppCompatActivity() {
         origincounter=0
 
 
+    }
+
+    //endregion
+
+
+    //region PRINTER
+    private val TAG: String? = "MainActivity"
+    var PRN_TEXT: String? = "THIS IS A TEsT PRINT"
+    var version = arrayOfNulls<String>(1)
+
+    private val singleThreadExecutor = Executors.newSingleThreadExecutor()
+    private val handler = Handler()
+
+    private fun bindService() {
+        try {
+            val intent = Intent()
+            intent.setPackage("net.nyx.printerservice")
+            intent.action = "net.nyx.printerservice.IPrinterService"
+            bindService(intent, connService, BIND_AUTO_CREATE)
+        }catch (e:Exception){
+            Log.e("ere",e.localizedMessage)
+        }
+
+    }
+
+    private var printerService: IPrinterService? = null
+
+    private val connService = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            //  showLog("printer service disconnected, try reconnect")
+            printerService = null
+            // 尝试重新bind
+            handler.postDelayed({ bindService() }, 5000)
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            Timber.d("onServiceConnected: $name")
+            printerService = IPrinterService.Stub.asInterface(service)
+            getVersion()
+        }
+    }
+
+
+    private fun getVersion() {
+        singleThreadExecutor.submit(Runnable {
+            try {
+                val ret = printerService!!.getPrinterVersion(version)
+                //showLog("Version: " + msg(ret) + "  " + version.get(0))
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        })
+    }
+
+    private fun printText(text: String) {
+
+        singleThreadExecutor.submit {
+            try {
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                val currentDate = Date()
+                val formattedDate = dateFormat.format(currentDate)
+
+
+                val textFormat = PrintTextFormat()
+                textFormat.textSize=26
+                // textFormat.setUnderline(true);
+                textFormat.ali=1
+                textFormat.style=1
+                try {
+                    var ret = printerService!!.printText(text, textFormat)
+                    textFormat.textSize=24
+                    ret = printerService!!.printText("INGRESSO",textFormat)
+                    ret = printerService!!.printText("Line:  ${GlobalVariable.line}",textFormat)
+                    ret = printerService!!.printText("Bus #:  ${GlobalVariable.bus}",textFormat)
+                    ret = printerService!!.printText("mPad #:  ${GlobalVariable.deviceName}",textFormat)
+                    ret = printerService!!.printText("Dispatcher:  ${GlobalVariable.employeeName}",textFormat)
+                    ret = printerService!!.printText("Driver:  ${GlobalVariable.driver}",textFormat)
+                    ret = printerService!!.printText("Conductor:  ${GlobalVariable.conductor}",textFormat)
+                    ret = printerService!!.printText("Date:  ${formattedDate}",textFormat)
+                    textFormat.style=0
+                    textFormat.ali=1
+                    ret = printerService!!.printText("------------------------------",textFormat)
+                    textFormat.topPadding=10
+
+                    ret = printerService!!.printText("SALES"   ,textFormat)
+                    textFormat.ali=0
+                    textFormat.topPadding=10
+                    ret = printerService!!.printText("GROSS: ${gross}"   ,textFormat)
+                    ret = printerService!!.printText("Net: ${_binding.txtnetcollection.text}",textFormat)
+                    ret = printerService!!.printText("Partial Remit:  ${_binding.txtpartialremit.text}",textFormat)
+                    ret = printerService!!.printText("Expenses: ${expenses}",textFormat)
+                    ret = printerService!!.printText("Witholding: ${witholding}",textFormat)
+                    textFormat.ali=1
+                    ret = printerService!!.printText("------------------------------",textFormat)
+                    textFormat.topPadding=10
+                    ret = printerService!!.printText("BENEFITS",textFormat)
+                    textFormat.ali=0
+                    textFormat.topPadding=10
+                    ret = printerService!!.printText("Total Commission: ${_binding.txttotalcommision.text}",textFormat)
+                    ret = printerService!!.printText("Driver Commission: ${_binding.txtdrivercommision.text}",textFormat)
+                    ret = printerService!!.printText("Conductor Commission: ${_binding.txtconductorcommision.text}",textFormat)
+                    ret = printerService!!.printText("Driver Bonus: ${_binding.txtdriverbonus.text}",textFormat)
+                    ret = printerService!!.printText("Conductor Bonus: ${_binding.txtconductorbonus.text}",textFormat)
+                    textFormat.ali=1
+                    ret = printerService!!.printText("------------------------------",textFormat)
+                    textFormat.topPadding=10
+                    ret = printerService!!.printText("INSPECTION REPORT",textFormat)
+                    textFormat.ali=0
+                    textFormat.topPadding=10
+                    inspectionreport.forEach {
+                        ret = printerService!!.printText("Inspector: ${it.inspectorName}",textFormat)
+                        ret = printerService!!.printText("Count: ${it.actualPassengerCount}"+"--"+"Discrepancy: ${it.difference}",textFormat)
+                        ret = printerService!!.printText("Segment: ${it.lineSegment}",textFormat)
+                        ret = printerService!!.printText("mPad: ${it.mPadUnit}",textFormat)
+                        textFormat.topPadding=10
+                    }
+
+
+
+                    textFormat.ali=1
+                    ret = printerService!!.printText("------------------------------",textFormat)
+                    textFormat.topPadding=10
+                    ret = printerService!!.printText("TRIP TICKETS",textFormat)
+                    textFormat.topPadding=10
+                    textFormat.ali=0
+                    textFormat.topPadding=10
+                    alltickets.forEach {
+                        ret = printerService!!.printText("Segment: ${it.origin}"+"--"+"${it.destination}",textFormat)
+                        ret = printerService!!.printText("Amount: ${it.amount}"+"--"+"${it.passengerType}",textFormat)
+                    }
+
+
+                    ret = printerService!!.printText("",textFormat)
+                    ret = printerService!!.printText("",textFormat)
+
+                    if (ret == 0) {
+                        paperOut()
+                    }
+
+                }catch (e:java.lang.Exception){
+                    Log.e("tae",e.localizedMessage)
+                }
+
+                // showLog("Print text: " + msg(ret))
+
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+
+    private fun paperOut() {
+        singleThreadExecutor.submit {
+            try {
+                printerService!!.paperOut(80)
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
     }
 
     //endregion

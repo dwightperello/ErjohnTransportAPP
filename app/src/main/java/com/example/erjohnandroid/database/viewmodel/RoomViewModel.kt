@@ -1,5 +1,6 @@
 package com.example.erjohnandroid.database.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -511,7 +512,12 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
 
     fun truncatetables(){
         viewModelScope.launch() {
-            val records=  repository.truncatetables()
+            try {
+                val records=  repository.truncatetables()
+            }catch (e:java.lang.Exception){
+                Log.e("erwithold",e.localizedMessage)
+            }
+
 
         }
     }

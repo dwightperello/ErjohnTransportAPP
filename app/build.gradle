@@ -110,4 +110,6 @@ dependencies {
     // 日志打印框架：https://github.com/JakeWharton/timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
+    implementation 'com.google.zxing:core:3.4.0'
+
 }

@@ -827,10 +827,14 @@ class TIcketingActivity : AppCompatActivity() {
                     ret = printerService!!.printText("Bus Number: ${GlobalVariable.bus}",textFormat)
                     ret = printerService!!.printText("Origin: ${_binding.etOrigin.text.toString()}",textFormat)
                     ret = printerService!!.printText("Destination: ${_binding.etDestination.text.toString()}",textFormat)
-
+//                    textFormat.topPadding=10
+//                    ret = printerService!!.printBarcode("${_binding.etOrigin.text} - ${_binding.etDestination.text}",300,160,1,1 )
                     textFormat.topPadding=10
-                    textFormat.textSize=15
-                    ret = printerService!!.printText("Powered by mPad in partnetship with A2Z Solutions",textFormat)
+                    ret = printerService!!.printQrCode("${_binding.etOrigin.text} - ${_binding.etDestination.text}",300,160,1 )
+                    textFormat.topPadding=10
+                    textFormat.textSize=18
+                    textFormat.ali=1
+                    ret = printerService!!.printText("Powered by mPad Solutions",textFormat)
 
 
                     if (ret == 0) {

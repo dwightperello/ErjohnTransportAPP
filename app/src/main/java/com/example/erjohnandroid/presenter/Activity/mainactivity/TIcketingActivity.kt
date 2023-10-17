@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.RemoteException
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -158,11 +160,19 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     val initCheckbox:()->Unit={
+
         _binding.cbRegular.setOnClickListener {
-            if(_binding.cbSenior.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked){
+            if(_binding.cbSenior.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked || _binding.cbBaggage.isChecked){
                 _binding.cbSenior.isChecked=false
                 _binding.cbStudent.isChecked=false
                 _binding.cbPwd.isChecked=false
+
+
+                _binding.etbaggaeamount.isEnabled=false
+                _binding.btnaddbaggage.isEnabled=false
+                _binding.cbBaggage.isChecked=false
+                _binding.etbaggaeamount.setText("")
+
             }
             _binding.cbRegular.isChecked=true
             passtype="Regular"
@@ -170,10 +180,14 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.cbSenior.setOnClickListener {
-            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked){
+            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked || _binding.cbBaggage.isChecked){
                 _binding.cbRegular.isChecked=false
                 _binding.cbStudent.isChecked=false
                 _binding.cbPwd.isChecked=false
+                _binding.etbaggaeamount.isEnabled=false
+                _binding.btnaddbaggage.isEnabled=false
+                _binding.cbBaggage.isChecked=false
+                _binding.etbaggaeamount.setText("")
             }
             _binding.cbSenior.isChecked=true
             passtype="Senior"
@@ -181,10 +195,14 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.cbPwd.setOnClickListener {
-            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked || _binding.cbSenior.isChecked){
+            if(_binding.cbRegular.isChecked || _binding.cbStudent.isChecked || _binding.cbSenior.isChecked || _binding.cbBaggage.isChecked){
                 _binding.cbRegular.isChecked=false
                 _binding.cbStudent.isChecked=false
                 _binding.cbSenior.isChecked=false
+                _binding.etbaggaeamount.isEnabled=false
+                _binding.btnaddbaggage.isEnabled=false
+                _binding.cbBaggage.isChecked=false
+                _binding.etbaggaeamount.setText("")
             }
             _binding.cbPwd.isChecked=true
             passtype="PWD"
@@ -192,10 +210,14 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.cbStudent.setOnClickListener {
-            if(_binding.cbRegular.isChecked || _binding.cbSenior.isChecked || _binding.cbPwd.isChecked){
+            if(_binding.cbRegular.isChecked || _binding.cbSenior.isChecked || _binding.cbPwd.isChecked|| _binding.cbBaggage.isChecked){
                 _binding.cbRegular.isChecked=false
                 _binding.cbSenior.isChecked=false
                 _binding.cbPwd.isChecked=false
+                _binding.etbaggaeamount.isEnabled=false
+                _binding.btnaddbaggage.isEnabled=false
+                _binding.cbBaggage.isChecked=false
+                _binding.etbaggaeamount.setText("")
             }
             _binding.cbStudent.isChecked=true
             passtype="Student"
@@ -206,15 +228,34 @@ class TIcketingActivity : AppCompatActivity() {
             if(_binding.cbBaggage.isChecked){
                 _binding.etbaggaeamount.isEnabled=true
                 _binding.btnaddbaggage.isEnabled=true
+                _binding.cbRegular.isChecked=false
+                _binding.cbPwd.isChecked=false
+                _binding.cbStudent.isChecked=false
+                _binding.cbSenior.isChecked=false
+                _binding.txtamount.text="0.0"
+                passtype="Baggage"
+               // computeAmount()
+
             }else{
+                _binding.cbRegular.isChecked=true
+                _binding.cbPwd.isChecked=false
+                _binding.cbStudent.isChecked=false
+                _binding.cbSenior.isChecked=false
+                passtype="Regular"
                 _binding.etbaggaeamount.isEnabled=false
                 _binding.btnaddbaggage.isEnabled=false
+                _binding.cbBaggage.isChecked=false
+                _binding.etbaggaeamount.setText("")
                 computeAmount()
             }
         }
 
         _binding.btnaddbaggage.setOnClickListener {
+            //computeAmount()
+            _binding.txtamount.text = _binding.etbaggaeamount.text.toString()
+            hideSoftKeyboard()
             computeAmount()
+
         }
     }
 
@@ -478,9 +519,33 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.btnPrintticke.setOnClickListener {
-            if(destinationcounter== origincounter || _binding.txtamount.text.toString().equals("0.0")){
+
+            var o= _binding.txtoriginKM.text.toString()
+            var d = _binding.txtDestination.text.toString()
+
+
+            if(destinationcounter == origincounter || _binding.txtamount.text.toString().equals("0.0") || _binding.txtDestination.text.toString()==_binding.txtoriginKM.text.toString()){
                 Toast(this).showCustomToast("AMOUNT IS 0, SELECT DESTINATION",this)
+                _binding.txtamount.text ="0.0"
                 return@setOnClickListener
+            }
+
+            if(GlobalVariable.direction.equals("South")){
+
+                if(o.toInt()>= d.toInt() ){
+                    Toast(this).showCustomToast("SOUTH BOUND, PLEASE CHECK KM",this)
+                    _binding.txtamount.text ="0.0"
+                    return@setOnClickListener
+                }
+            }else if(GlobalVariable.direction.equals("North"))
+            {
+//                var s= _binding.txtoriginKM.text.toString()
+//                var d = _binding.txtDestination.text.toString()
+                if(d.toInt()>= o.toInt() ){
+                    Toast(this).showCustomToast("North BOUND, PLEASE CHECK KM",this)
+                    _binding.txtamount.text ="0.0"
+                    return@setOnClickListener
+                }
             }
 
             if(!passtype.isNullOrEmpty()) {
@@ -528,7 +593,7 @@ class TIcketingActivity : AppCompatActivity() {
            // computeAmount()
 
 
-            if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD")) {
+            if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD") || passtype.equals("Baggage")) {
                 //passengerTypeAdapter.clearSelection()
                 //passtype=null
                 resetCheckbox()
@@ -537,17 +602,21 @@ class TIcketingActivity : AppCompatActivity() {
 
         }
 
+
+
     }
 
 
 
     val resetCheckbox={
         _binding.cbRegular.isChecked=true
-       //  passtype="Regular"
+        // passtype="Regular"
         _binding.cbSenior.isChecked=false
         _binding.cbStudent.isChecked=false
         _binding.cbPwd.isChecked=false
-      //  computeAmount()
+        _binding.cbBaggage.isChecked=false
+        _binding.etbaggaeamount.setText("")
+        //computeAmount()
 
 
     }
@@ -566,42 +635,64 @@ class TIcketingActivity : AppCompatActivity() {
         var z= _binding.txtqty.text.toString()
         qty= z.toInt()
 
-        if(GlobalVariable.direction.equals("South")) KMdiff= destination?.kmPoint!! - origin?.kmPoint!!
-        else KMdiff= origin?.kmPoint!! - destination?.kmPoint!!
+      try {
+          if(passtype.equals("Baggage")){
+              if(_binding.cbBaggage.isChecked){
+                  var bag= _binding.etbaggaeamount.text.toString()
+                  if(bag.isNullOrEmpty()){
+                      bag="0.0"
+                      baggageamount = bag.toDouble()
+                      total = baggageamount
+                  }else{
+                      baggageamount = bag.toDouble()
+                      total = baggageamount
+                  }
 
-        if(KMdiff > 5){
+              }
+          }
+          else{
+              if(GlobalVariable.direction.equals("South")) KMdiff= destination?.kmPoint!! - origin?.kmPoint!!
+              else KMdiff= origin?.kmPoint!! - destination?.kmPoint!!
 
-            if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
-                discount= fare.toDouble() *   discountamount
-                amountafterdiscount= fare - discount
-                getkmdiff = KMdiff - 5
-                getExceedAmount = getkmdiff * 2.12
-                total = getExceedAmount + amountafterdiscount
-                total = total * qty
-            }else{
-                getkmdiff = KMdiff -5
-                getExceedAmount= getkmdiff * 2.65
-                total = getExceedAmount + fare
-                total= total * qty
-            }
+              if(KMdiff > 5){
 
-        }
-        else{
-            if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
-                discount= fare *  discountamount
-                amountafterdiscount= fare - discount
-                total= amountafterdiscount * qty
-            }else{
-                total= fare.toDouble() * qty
-            }
+                  if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
+                      discount= fare.toDouble() *   discountamount
+                      amountafterdiscount= fare - discount
+                      getkmdiff = KMdiff - 5
+                      getExceedAmount = getkmdiff * 2.12
+                      total = getExceedAmount + amountafterdiscount
+                      total = total * qty
+                  }else{
+                      getkmdiff = KMdiff -5
+                      getExceedAmount= getkmdiff * 2.65
+                      total = getExceedAmount + fare
+                      total= total * qty
+                  }
 
-        }
-        if(_binding.cbBaggage.isChecked){
-            var bag= _binding.etbaggaeamount.text.toString()
-            if(bag.isNullOrEmpty()) bag="0.0"
-            baggageamount += bag.toDouble()
-            total += baggageamount
-        }
+              }
+              else{
+                  if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
+                      discount= fare *  discountamount
+                      amountafterdiscount= fare - discount
+                      total= amountafterdiscount * qty
+                  }else{
+                      total= fare.toDouble() * qty
+                  }
+
+              }
+//        if(_binding.cbBaggage.isChecked){
+//            var bag= _binding.etbaggaeamount.text.toString()
+//            if(bag.isNullOrEmpty()) bag="0.0"
+//            baggageamount += bag.toDouble()
+//            total += baggageamount
+//        }
+
+
+          }
+      }catch (e:Exception){
+          Toast(this).showCustomToast("ERROR on fare Computation: ${e.message}",this)
+      }
 
         val decimalVat = DecimalFormat("#.00")
         val ans = decimalVat.format(total)
@@ -609,8 +700,9 @@ class TIcketingActivity : AppCompatActivity() {
         _binding.txtamount.text=amount
 
 
+
         try {
-            postTripticket=TicketConvertions.convertTripTickets(amount.toDouble(),GlobalVariable.conductor!!,destination?.name!!,GlobalVariable.driver!!,
+            postTripticket=TicketConvertions.convertTripTickets(amount!!.toDouble(),GlobalVariable.conductor!!,destination?.name!!,GlobalVariable.driver!!,
                 GlobalVariable.line!!,GlobalVariable.deviceName!!,origin?.name!!,passtype!!,ticketnumber.toString(),GlobalVariable.tripreverse!!,destination?.kmPoint!!,origin?.kmPoint!!,qty)
 
             totalfare=postTripticket?.amount!!
@@ -623,7 +715,7 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
 
-        amount
+        amount!!
 
     }
 
@@ -740,7 +832,7 @@ class TIcketingActivity : AppCompatActivity() {
     var PRN_TEXT: String? = "THIS IS A TEsT PRINT"
     var version = arrayOfNulls<String>(1)
 
-    private val singleThreadExecutor = Executors.newSingleThreadExecutor()
+  //  private val singleThreadExecutor = Executors.newSingleThreadExecutor()
     private val handler = Handler()
 
     private fun bindService() {
@@ -774,12 +866,16 @@ class TIcketingActivity : AppCompatActivity() {
 
 
     private fun getVersion() {
+        val singleThreadExecutor = Executors.newSingleThreadExecutor()
         singleThreadExecutor.submit(Runnable {
             try {
                 val ret = printerService!!.getPrinterVersion(version)
                 //showLog("Version: " + msg(ret) + "  " + version.get(0))
             } catch (e: RemoteException) {
                 e.printStackTrace()
+            }
+            finally {
+                singleThreadExecutor.shutdown()
             }
         })
     }
@@ -790,6 +886,7 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     private fun printText(text: String) {
+        val singleThreadExecutor = Executors.newSingleThreadExecutor()
         singleThreadExecutor.submit {
             try {
                 val textFormat = PrintTextFormat()
@@ -840,26 +937,34 @@ class TIcketingActivity : AppCompatActivity() {
                     if (ret == 0) {
                         paperOut()
                     }
-                    _binding.txtqty.text="1"
-                    qty=1
 
-                    if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD")) {
-                        //passengerTypeAdapter.clearSelection()
-                        //passtype=null
-                        passtype="Regular"
-                    }
-
-                    computeAmount()
 
                 }catch (e:java.lang.Exception){
                     Log.e("tae",e.localizedMessage)
                 }
+                finally {
+                    singleThreadExecutor.shutdown()
+                    passtype="Regular"
+                    _binding.txtqty.text="1"
+                    qty=1
+                    computeAmount()
+                }
 
-                // showLog("Print text: " + msg(ret))
+//                _binding.txtqty.text="1"
+//                qty=1
+//
+//
+//                if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD") || passtype.equals("Baggage")) {
+//                    passtype="Regular"
+//                }
+//
+//                computeAmount()
 
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
+
+
         }
     }
 
@@ -867,11 +972,16 @@ class TIcketingActivity : AppCompatActivity() {
 
 
     private fun paperOut() {
+        val singleThreadExecutor = Executors.newSingleThreadExecutor()
+
         singleThreadExecutor.submit {
             try {
                 printerService!!.paperOut(80)
             } catch (e: RemoteException) {
                 e.printStackTrace()
+            }
+            finally {
+                singleThreadExecutor.shutdown()
             }
         }
     }

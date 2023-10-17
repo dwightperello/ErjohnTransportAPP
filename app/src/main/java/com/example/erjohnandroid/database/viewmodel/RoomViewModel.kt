@@ -121,6 +121,10 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     val tripamountperreverse:LiveData<TripAmountPerReverse> = _tripamountperreverse
 
 
+    private var _tripticketafterinspection:MutableLiveData<List<TripTicketTable>> = MutableLiveData()
+    val tripticketafterinspection:LiveData<List<TripTicketTable>> = _tripticketafterinspection
+
+
 
     //region OTHER METHODS
 
@@ -392,6 +396,20 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.insertPartialRemit(entity)
 
+        }
+    }
+
+    fun getTripTicketafterInspection(searchkm:Int,reverse: Int){
+        viewModelScope.launch() {
+            val records=  repository.getTripticketafterInspection(searchkm,reverse)
+            _tripticketafterinspection.value=records
+        }
+    }
+
+    fun getTripTicketafterInspectionNorth(searchkm:Int,reverse: Int){
+        viewModelScope.launch() {
+            val records=  repository.getTripticketafterInspectionNorth(searchkm,reverse)
+            _tripticketafterinspection.value=records
         }
     }
 

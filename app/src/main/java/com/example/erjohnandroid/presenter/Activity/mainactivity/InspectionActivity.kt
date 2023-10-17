@@ -50,6 +50,8 @@ class InspectionActivity : AppCompatActivity() {
     var ans:Int?=null
     var image:Bitmap?=null
 
+    var tripticket:kotlin.collections.List< TripTicketTable>?= null
+
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,10 +112,14 @@ class InspectionActivity : AppCompatActivity() {
 
             if(GlobalVariable.direction.equals("South")){
                 dbViewmodel.getRemSouth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
+                dbViewmodel.getTripTicketafterInspection(originss.toInt(),GlobalVariable.tripreverse!!)
             }
             else{
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
+                dbViewmodel.getTripTicketafterInspectionNorth(originss.toInt(),GlobalVariable.tripreverse!!)
             }
+
+
             hideSoftKeyboard()
         }
 
@@ -246,6 +252,21 @@ class InspectionActivity : AppCompatActivity() {
         dbViewmodel.remsouth.observe(this, Observer {
                 state -> processRemsouth(state)
         })
+
+        dbViewmodel.tripticketafterinspection.observe(this, Observer{
+            state-> ProcessTicketsAfterInspection(state)
+        })
+    }
+    val ProcessTicketsAfterInspection:(state: List<TripTicketTable>?) ->Unit={
+
+        if(it?.size!=null){
+            tripticket=it
+
+        }else{
+
+            Toast(this).showCustomToast("NO TICKET YET",this)
+        }
+
     }
 
     override fun onBackPressed() {
@@ -338,6 +359,11 @@ class InspectionActivity : AppCompatActivity() {
                     textFormat.topPadding=0
                     ret = printerService!!.printText("Count: ${_binding.etActualcount.text}",textFormat)
                     ret = printerService!!.printText("Diff: ${_binding.txtinspectiondifference.text.toString()}",textFormat)
+                    textFormat.topPadding=5
+                    tripticket?.forEach {
+                        ret=   printerService!!.printText("From: ${it.KMOrigin}" +" "+"To: ${it.KmDestination}" + " " + "Amount: ${it.amount}",textFormat)
+                    }
+                    textFormat.topPadding=5
                     ret = printerService!!.printBitmap(
                         BitmapFactory.decodeStream(bitmapToInputStream(image!!)
 

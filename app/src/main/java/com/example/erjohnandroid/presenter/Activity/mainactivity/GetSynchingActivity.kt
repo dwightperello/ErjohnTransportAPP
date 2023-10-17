@@ -377,10 +377,14 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertExpensestypeBulk(dbExpensestype!!)
             dbViewmodel.insertPassengerTypeBUlk(dbPassengertype!!)
             dbViewmodel.insertWitholdingtypebulk(dbWitholdingtype!!)
+            finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+
         }catch (e:java.lang.Exception){
             Log.e("erro",e.localizedMessage)
         }
+
+
 
     }
 }

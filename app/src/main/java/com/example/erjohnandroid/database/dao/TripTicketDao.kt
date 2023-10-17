@@ -22,10 +22,10 @@ interface TripTicketDao {
     @Insert
     fun inserTripticketBulktwo(entity:List<TripTicketTable>)
 
-    @Query("select * from TripTickets where KmDestination <= :kmorigin AND tripReverse = :reverse")
+    @Query("select * from TripTickets where KmDestination <= :kmorigin AND tripReverse = :reverse and passengerType != 'Baggage'" )
     fun getRemNort(kmorigin:Int,reverse:Int):List<TripTicketTable>
 
-    @Query("Select * from TripTickets where KmDestination >= :kmorigin AND tripReverse = :reverse")
+    @Query("Select * from TripTickets where KmDestination >= :kmorigin AND tripReverse = :reverse and passengerType != 'Baggage'")
     fun getRemSouth(kmorigin:Int,reverse:Int):List<TripTicketTable>
 
     @Query("SELECT tripReverse, COUNT(*) AS group_count, sum(amount) as sumamount FROM TripTickets GROUP BY tripReverse")

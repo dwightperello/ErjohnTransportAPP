@@ -17,7 +17,7 @@ data class CompanyRolesItem(
 data class Employee(
     val companyRolesId: Int,
     val id: Int,
-    val lastName: String,
+    val lastName: String?,
     val name: String,
     val pin: Int
 ):Parcelable

@@ -753,14 +753,15 @@ class IngressoActivity : AppCompatActivity() {
                     textFormat.ali=1
                     ret = printerService!!.printText("------------------------------",textFormat)
                     textFormat.topPadding=10
-                    ret = printerService!!.printText("TRIP TICKETS",textFormat)
+                    ret = printerService!!.printText("Thank You",textFormat)
                     textFormat.topPadding=10
                     textFormat.ali=0
                     textFormat.topPadding=10
-                    alltickets.forEach {
-                        ret = printerService!!.printText("Segment: ${it.origin}"+"--"+"${it.destination}",textFormat)
-                        ret = printerService!!.printText("Amount: ${it.amount}"+"--"+"${it.passengerType}",textFormat)
-                    }
+
+//                    alltickets.forEach {
+//                        ret = printerService!!.printText("Segment: ${it.origin}"+"--"+"${it.destination}",textFormat)
+//                        ret = printerService!!.printText("Amount: ${it.amount}"+"--"+"${it.passengerType}",textFormat)
+//                    }
 
 
                     ret = printerService!!.printText("",textFormat)

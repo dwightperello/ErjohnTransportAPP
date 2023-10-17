@@ -703,15 +703,18 @@
                 android:layout_weight="1">
 
                 <Button
+                    android:layout_marginStart="@dimen/_45sdp"
+                    android:layout_marginEnd="@dimen/_45sdp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/ripple_login"
                     android:textColor="@color/white"
-                    android:text="PRINT TICKET"
+                    android:text="PRINT"
                     android:textSize="@dimen/_20sdp"
                     android:id="@+id/btn_printticke"/>
 
             </LinearLayout>
+
 
 
 

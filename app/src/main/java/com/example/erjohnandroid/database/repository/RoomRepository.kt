@@ -266,4 +266,13 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return tripTicketDao.getPerTripAmount(reverse)
     }
 
+    fun getTripticketafterInspection(searchkm:Int, reverse:Int): List<TripTicketTable>{
+        return inspectionReportDao.getTripticketsAfterInspection(searchkm, reverse)
+    }
+
+    fun getTripticketafterInspectionNorth(searchkm:Int,reverse: Int): List<TripTicketTable>{
+        return inspectionReportDao.getTripticketsAfterInspectionNorth(searchkm,reverse)
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -279,17 +280,8 @@ class IngressoActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        resetALl()
-        val resultIntent = Intent()
-        setResult(Activity.RESULT_OK, resultIntent)
+       showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
 
-        finish()
-
-
-        overridePendingTransition(
-            R.anim.screenslideleft, R.anim.screen_slide_out_right,
-        );
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -797,5 +789,39 @@ class IngressoActivity : AppCompatActivity() {
     }
 
     //endregion
+
+    fun showSimpleDialog(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+
+        // Set the alert dialog title
+        builder.setTitle(title)
+
+        // Set the alert dialog message
+        builder.setMessage(message)
+
+        // Display a neutral button on alert dialog
+        builder.setNeutralButton("OK") { dialog, which ->
+            super.onBackPressed()
+            resetALl()
+            val resultIntent = Intent()
+            setResult(Activity.RESULT_OK, resultIntent)
+
+            finish()
+
+
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+        }
+
+        builder.setNegativeButton("CANCEL") { dialog, which ->
+
+            dialog.dismiss()
+        }
+
+        // Create and show the alert dialog
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,8 +12,10 @@ import android.os.IBinder
 import android.os.RemoteException
 import android.util.Log
 import android.view.WindowManager
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
@@ -23,6 +26,7 @@ import com.example.erjohnandroid.database.viewmodel.sd_viewmodel
 import com.example.erjohnandroid.databinding.ActivityMainBinding
 import com.example.erjohnandroid.presenter.viewmodel.networkViewModel
 import com.example.erjohnandroid.util.GlobalVariable
+
 import com.example.erjohnandroid.util.startActivityWithAnimation
 import dagger.hilt.android.AndroidEntryPoint
 import net.nyx.printerservice.print.IPrinterService
@@ -72,6 +76,10 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         GlobalVariable.ticketnumber = sharedPrefs.getInt("ticketnumber", 0)
+
+
+
+
 
     }
 
@@ -152,12 +160,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         _binding!!.btnIngresso.setOnClickListener {
-            val intent = Intent(this, SharedLoginActivity::class.java)
-            intent.putExtra("activity", INGRESSO_ACTIVITY)
-            startActivity(intent)
-            overridePendingTransition(
-                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-            );
+           showSimpleDialog(this,"INGRESSO ALERT!", " ARE YOU SURE YOU WAN TO PROCEED TO INGRESSO?, YOU WONT BE ABLE TO CONTINUE TICKETING")
         }
 
         _binding!!.btnPartialremit.setOnClickListener {
@@ -361,6 +364,38 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
 
     }
+
+    fun showSimpleDialog(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+
+        // Set the alert dialog title
+        builder.setTitle(title)
+
+        // Set the alert dialog message
+        builder.setMessage(message)
+
+        // Display a neutral button on alert dialog
+        builder.setNeutralButton("OK") { dialog, which ->
+            val intent = Intent(this, SharedLoginActivity::class.java)
+            intent.putExtra("activity", INGRESSO_ACTIVITY)
+            startActivity(intent)
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("CANCEL") { dialog, which ->
+            // Do something when the negative button is clicked
+            dialog.dismiss()
+        }
+
+        // Create and show the alert dialog
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+
 
 //    override fun onPause() {
 //        super.onPause()

@@ -344,7 +344,7 @@ class TIcketingActivity : AppCompatActivity() {
             else{
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
             }
-
+            clearAllSearchFields()
             computeAmount()
         }
 
@@ -377,6 +377,7 @@ class TIcketingActivity : AppCompatActivity() {
             else{
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
             }
+            clearAllSearchFields()
             computeAmount()
         }
 
@@ -391,7 +392,7 @@ class TIcketingActivity : AppCompatActivity() {
                 destination=linesegment?.get(destinationcounter)
                 _binding.txtDestination.text= destination?.kmPoint.toString()
                 _binding.etDestination.setText(destination?.name)
-
+            clearAllSearchFields()
             computeAmount()
         }
 
@@ -405,6 +406,7 @@ class TIcketingActivity : AppCompatActivity() {
             destination=linesegment?.get(destinationcounter)
             _binding.txtDestination.text= destination?.kmPoint.toString()
             _binding.etDestination.setText(destination?.name)
+            clearAllSearchFields()
             computeAmount()
         }
 
@@ -423,6 +425,54 @@ class TIcketingActivity : AppCompatActivity() {
                     _binding.etDestination.text.clear()
                 }
                 return false // Return false to allow other touch events to be handled
+            }
+        })
+
+      _binding.etOriginsearch.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                var originss= _binding.etOriginsearch.text.toString()
+                if(!TextUtils.isDigitsOnly(originss) || originss.isNullOrEmpty()){
+                    //Toast(this@TIcketingActivity).showCustomToast("Search field should only contain numeric or field is empty",this@TIcketingActivity)
+                    return
+                }
+
+                var s_origin=  linesegment?.find {
+                    it.kmPoint== originss.toInt()
+                }
+
+                val index=  if(s_origin!= null){
+                    linesegment?.indexOf(s_origin)!!
+                } else {
+                    -1
+
+                }
+                when(index){
+                    -1 ->{
+                        Toast(this@TIcketingActivity).showCustomToast("Route not found",this@TIcketingActivity)
+                        return
+                    }
+                }
+
+
+                origin= linesegment?.get(index)
+                _binding.txtoriginKM.text= origin?.kmPoint.toString()
+                _binding.etOrigin.setText(origin?.name)
+
+                computeAmount()
+                if(GlobalVariable.direction.equals("South")){
+                    dbViewmodel.getRemSouth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
+                }
+                else{
+                    dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
+                }
             }
         })
 
@@ -464,6 +514,54 @@ class TIcketingActivity : AppCompatActivity() {
 
             hideSoftKeyboard()
         }
+
+       _binding.etDestinationsearch.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                var destinationss= _binding.etDestinationsearch.text.toString()
+                if(!TextUtils.isDigitsOnly(destinationss)||destinationss.isNullOrEmpty()){
+                   // Toast(this@TIcketingActivity).showCustomToast("Search field should only contain numeric or field is empty",this@TIcketingActivity)
+                    return
+                }
+
+                var s_desitnation=  linesegment?.find {
+                    it.kmPoint== destinationss.toInt()
+                }
+
+                val index= if(s_desitnation!= null){
+                    linesegment?.indexOf(s_desitnation)!!
+
+                } else {
+                    -1
+
+                }
+                when(index){
+                    -1 ->{
+                        Toast(this@TIcketingActivity).showCustomToast("No route found",this@TIcketingActivity)
+                        return
+                    }
+                }
+
+                destination=linesegment?.get(index)
+                _binding.txtDestination.text= destination?.kmPoint.toString()
+                _binding.etDestination.setText(destination?.name)
+
+                computeAmount()
+//            _binding.txtDestination.text= s_desitnation?.kmPoint.toString()
+//            _binding.etDestination.setText(s_desitnation?.name)
+               // hideSoftKeyboard()
+            }
+        })
+
 
         _binding.btnDestinationsearch.setOnClickListener {
             var destinationss= _binding.etDestination.text.toString()
@@ -519,7 +617,7 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
         _binding.btnPrintticke.setOnClickListener {
-
+            clearAllSearchFields()
             var o= _binding.txtoriginKM.text.toString()
             var d = _binding.txtDestination.text.toString()
 
@@ -824,6 +922,13 @@ class TIcketingActivity : AppCompatActivity() {
         // Create and show the dialog
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+
+    val clearAllSearchFields={
+        _binding.etDestinationsearch.setText("")
+        _binding.etOriginsearch.setText("")
+        _binding.etDestinationsearch.clearFocus()
+        _binding.etOriginsearch.clearFocus()
     }
 
 

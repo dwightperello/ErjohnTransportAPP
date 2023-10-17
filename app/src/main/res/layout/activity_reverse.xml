@@ -16,30 +16,14 @@
             android:layout_height="0dp"
             android:background="@color/posbg"
             android:layout_weight=".3">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-
-
-
-
-
-                <Button
-                    android:layout_marginStart="@dimen/_25sdp"
-                    android:layout_marginEnd="@dimen/_25sdp"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_login"
-                    android:id="@+id/btn_reverse"
-                    android:text="REVERSE"/>
-
-
-
-            </LinearLayout>
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="REVERSE"
+               android:textColor="@color/white"
+               android:textSize="@dimen/_15sdp"
+               android:layout_gravity="center"
+               android:gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -55,6 +39,24 @@
 
 
 
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".3">
+            <Button
+                android:layout_marginStart="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_25sdp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_login"
+                android:id="@+id/btn_reverse"
+                android:text="REVERSE"/>
 
 
         </LinearLayout>

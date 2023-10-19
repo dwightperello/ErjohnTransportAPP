@@ -292,6 +292,8 @@ class InspectionActivity : AppCompatActivity() {
     }
 
 
+
+
     //region PRINTER
     private val TAG: String? = "MainActivity"
     var PRN_TEXT: String? = "THIS IS A TEsT PRINT"

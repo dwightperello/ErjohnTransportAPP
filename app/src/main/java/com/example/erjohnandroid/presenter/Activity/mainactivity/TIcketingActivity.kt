@@ -1242,7 +1242,7 @@ class TIcketingActivity : AppCompatActivity() {
 //                    callback
 //                )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 32, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 
 
 //                mIPosPrinterService!!.printSpecifiedTypeText("这是一行16号字体\n", "ST", 16, callback)

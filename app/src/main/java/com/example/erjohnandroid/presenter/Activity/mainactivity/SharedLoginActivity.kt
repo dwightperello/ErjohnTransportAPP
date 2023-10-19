@@ -66,7 +66,7 @@ class SharedLoginActivity : AppCompatActivity() {
             if( state!=null){
                 if(state.companyRolesId==4){
                     if(GlobalVariable.isDispatched)return
-                    GlobalVariable.employeeName= state.name +" "+ state.lastName
+                    GlobalVariable.employeeName= state.name
                    // startActivityWithAnimation<DispatchActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                     val intent = Intent(this, DispatchActivity::class.java)
                     startActivityForResult(intent,DISPATCH_ACTIVITY)
@@ -82,7 +82,7 @@ class SharedLoginActivity : AppCompatActivity() {
                         return
                     }
                     if (activity!!.equals(9)){
-                        GlobalVariable.inspectorname=state.name + " " +state.lastName
+                        GlobalVariable.inspectorname=state.name
                         startActivityWithAnimation<InspectionActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                         finish()
                     }
@@ -96,7 +96,7 @@ class SharedLoginActivity : AppCompatActivity() {
                     }
 
                    if(activity!!.equals(4)){
-                       GlobalVariable.cashiername=state.name + " " +state.lastName
+                       GlobalVariable.cashiername=state.name
                        val intent = Intent(this, IngressoActivity::class.java)
                        startActivityForResult(intent,3)
                        activity=null
@@ -108,7 +108,7 @@ class SharedLoginActivity : AppCompatActivity() {
 
                    }else if(activity!!.equals(5))
                    {
-                       GlobalVariable.cashiername=state.name + " " +state.lastName
+                       GlobalVariable.cashiername=state.name
                        startActivityWithAnimation<PartialRemitActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                        finish()
                    }

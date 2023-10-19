@@ -5,6 +5,7 @@ import android.content.*
 import android.graphics.BitmapFactory
 import android.os.*
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.SearchView
 import android.widget.TextView
@@ -55,6 +56,17 @@ class DispatchActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+        val window = window
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
+
+
        // _binding.txtdispatcherName.text ="Welcome "+ GlobalVariable.employeeName
       //  bindService()
         initPrinter()
@@ -109,6 +121,10 @@ class DispatchActivity : AppCompatActivity() {
 
            // printText(headerprint)
 
+        }
+
+        _binding.btnclose.setOnClickListener {
+            finish()
         }
     }
 

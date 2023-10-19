@@ -15,9 +15,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/posbg"
+            android:orientation="horizontal"
             android:layout_weight=".3">
+            <Button
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:textColor="@color/white"
+                android:text="X"
+                android:background="@drawable/ripple_login"
+                android:id="@+id/btnclose"/>
+
            <TextView
-               android:layout_width="match_parent"
+               android:layout_width="0dp"
+               android:layout_weight="3"
                android:layout_height="wrap_content"
                android:text="REVERSE"
                android:textColor="@color/white"

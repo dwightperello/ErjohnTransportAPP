@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
@@ -54,6 +55,15 @@ class PartialRemitActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+        val window = window
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
 
         dbViewmodel.getReverse()
        // bindService()
@@ -96,6 +106,14 @@ class PartialRemitActivity : AppCompatActivity() {
 //            overridePendingTransition(
 //                R.anim.screenslideleft, R.anim.screen_slide_out_right,
 //            );
+        }
+
+        _binding.btnclose.setOnClickListener {
+            super.onBackPressed()
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+            finish()
         }
     }
 

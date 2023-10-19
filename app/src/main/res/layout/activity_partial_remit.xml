@@ -15,9 +15,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/posbg"
-            android:layout_weight=".5">
+            android:layout_weight=".5"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:textColor="@color/white"
+                android:text="X"
+                android:layout_gravity="center"
+                android:background="@drawable/ripple_login"
+                android:id="@+id/btnclose"/>
+
           <TextView
-              android:layout_width="match_parent"
+              android:layout_width="0dp"
+              android:layout_weight="2"
               android:layout_height="wrap_content"
               android:text="PARTIAL REMIT"
               android:textColor="@color/white"

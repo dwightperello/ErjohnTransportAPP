@@ -81,6 +81,16 @@ class TIcketingActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
+        val window = window
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
+
         batteryReceiver = BatteryReceiver { batteryLevel ->
            if(batteryLevel<5) showAlertDialog()
 
@@ -103,7 +113,12 @@ class TIcketingActivity : AppCompatActivity() {
 
         _binding.txtpesosign.text= pesoSign.toString()
 
-
+        _binding.btnclose.setOnClickListener {
+            super.onBackPressed()
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+        }
 
 
 

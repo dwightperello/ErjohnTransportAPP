@@ -21,7 +21,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center">
-
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textColor="@color/white"
+                    android:text="X"
+                    android:background="@drawable/ripple_login"
+                    android:id="@+id/btnclose"/>
 
 
                 <TextView

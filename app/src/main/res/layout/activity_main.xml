@@ -214,13 +214,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:background="@drawable/baseline_settings_24"/>
+                    android:background="@drawable/baseline_sd_card_24"/>
 
                 <TextView
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SETTINGS/REPAIR"
+                    android:text="SD CARD"
                     android:textSize="@dimen/_12sdp"
                     android:gravity="center"/>
 

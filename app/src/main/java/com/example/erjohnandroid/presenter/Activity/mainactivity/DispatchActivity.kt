@@ -2,7 +2,6 @@ package com.example.erjohnandroid.presenter.Activity.mainactivity
 
 import android.app.Activity
 import android.content.*
-import android.graphics.BitmapFactory
 import android.os.*
 import android.util.Log
 import android.view.View
@@ -14,7 +13,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.BusInfoTableItem
 import com.example.erjohnandroid.database.Model.EmployeesTable
 import com.example.erjohnandroid.database.Model.LinesTable
@@ -25,9 +23,7 @@ import com.example.erjohnandroid.presenter.adapter.BusAdapter
 import com.example.erjohnandroid.presenter.adapter.DriverAdapter
 import com.example.erjohnandroid.presenter.adapter.LineAdapter
 import com.example.erjohnandroid.presenter.adapter.RoleAdapter
-import com.example.erjohnandroid.printer.MemInfo.bitmapRecycle
 import com.example.erjohnandroid.printer.ThreadPoolManager
-import com.example.erjohnandroid.printer.printerUtils.BytesUtil
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
@@ -46,6 +42,7 @@ class DispatchActivity : AppCompatActivity() {
     private  lateinit var driverAdapter: DriverAdapter
     private  lateinit var busAdapter: BusAdapter
     private  lateinit var lineAdapter: LineAdapter
+    private  var isNorthAllowed:Boolean=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -229,12 +226,14 @@ class DispatchActivity : AppCompatActivity() {
         GlobalVariable.line= role.name
         GlobalVariable.lineid= role.id
         if(role.remarks.equals("SB")){
-            _binding.cbNorth.isEnabled=false
+            _binding.cbNorth.isEnabled=true
             _binding.cbSouth.isEnabled=true
+            isNorthAllowed=false
         }
         else{
+            isNorthAllowed=true
             _binding.cbNorth.isEnabled=true
-            _binding.cbSouth.isEnabled=false
+            _binding.cbSouth.isEnabled=true
         }
         _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
         Toast(this).showCustomToast("${GlobalVariable.line}",this)
@@ -301,6 +300,12 @@ class DispatchActivity : AppCompatActivity() {
 
     val initCheckbox={
         _binding.cbNorth.setOnClickListener {
+
+            if(!isNorthAllowed){
+                Toast(this).showCustomToast("North Bound is not allowed",this)
+                _binding.cbNorth.isChecked=false
+                return@setOnClickListener
+            }
             if(_binding.cbSouth.isChecked) _binding.cbSouth.isChecked=false
             GlobalVariable.direction="North"
             _binding!!.txtDirection.text=("\nDIRECTION: ${GlobalVariable.direction}")
@@ -660,14 +665,17 @@ class DispatchActivity : AppCompatActivity() {
 //        }
 //    }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(IPosPrinterStatusListener)
+        unbindService(connectService)
+        handler!!.removeCallbacksAndMessages(null)
+    }
 
     //endregion
 
 
 
-//
-//
 //region PRINTER
 //    private val TAG: String? = "MainActivity"
 //    var PRN_TEXT: String? = "THIS IS A TEsT PRINT"

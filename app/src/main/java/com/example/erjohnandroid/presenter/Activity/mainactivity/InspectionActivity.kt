@@ -384,7 +384,7 @@ class InspectionActivity : AppCompatActivity() {
                 }
                 MSG_IS_BUSY -> Toast.makeText(
                     this@InspectionActivity,
-                    "BUSY",
+                    "PRINTING PLEASE WAIT",
                     Toast.LENGTH_SHORT
                 ).show()
                 MSG_PAPER_LESS -> {

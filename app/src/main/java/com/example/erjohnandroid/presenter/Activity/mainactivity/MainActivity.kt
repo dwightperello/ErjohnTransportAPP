@@ -5,9 +5,12 @@ import android.app.AlertDialog
 import android.content.*
 import android.graphics.Bitmap
 import android.os.*
+import android.text.InputType
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     val INSPECTION=9
     val PARTIAL_ACTIVITY=5
     val SETTINGS_ACTIVITY=10
+    val TRIP_REPORT_ACTIVITY=11
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -188,7 +192,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         _binding!!.btnReverse.setOnClickListener {
-            startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+//            startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+            showReverseDialog()
         }
 
         _binding!!.btnSynch.setOnClickListener {
@@ -205,10 +210,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         _binding!!.btnTripreport.setOnClickListener {
-            roomviewmodel.getTripticket()
-            roomviewmodel.tripticket.observe(this, Observer {
-                    state->ProcessTriptickets(state)
-            })
+            showTripTicketDialog()
+
+//            roomviewmodel.getTripticket()
+//            roomviewmodel.tripticket.observe(this, Observer {
+//                    state->ProcessTriptickets(state)
+//            })
         }
     }
 
@@ -411,7 +418,60 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
+  fun showTripTicketDialog(){
+      val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+      builder.setTitle("Enter Pin")
 
+// Set up the input
+      val input = EditText(this)
+      input.inputType = InputType.TYPE_CLASS_NUMBER
+      input.gravity = Gravity.CENTER
+      builder.setView(input)
+
+// Set up the buttons
+      builder.setPositiveButton("OK") { dialog, which ->
+          val text = input.text.toString()
+          if(text=="99999"){
+              roomviewmodel.getTripticket()
+              roomviewmodel.tripticket.observe(this, Observer {
+                      state->ProcessTriptickets(state)
+              })
+          }else{
+              Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
+          }
+      }
+
+      builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+      builder.show()
+
+  }
+
+    fun showReverseDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Enter Pin")
+
+// Set up the input
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.gravity = Gravity.CENTER
+        builder.setView(input)
+
+// Set up the buttons
+        builder.setPositiveButton("OK") { dialog, which ->
+            val text = input.text.toString()
+            if(text=="88888"){
+                startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+            }else{
+                Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+
+    }
 
 //    override fun onPause() {
 //        super.onPause()

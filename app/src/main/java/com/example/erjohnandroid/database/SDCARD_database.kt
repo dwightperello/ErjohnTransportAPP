@@ -6,7 +6,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.erjohnandroid.database.Model.TripTicketTable
-import com.example.erjohnandroid.database.dao.TripTicketDao
 import com.example.erjohnandroid.database.sdcard_dao.sd_TripticketDao
 import java.io.File
 
@@ -17,7 +16,11 @@ abstract class SDCARD_database:RoomDatabase() {
 
     companion object{
         private  var dbInstance:SDCARD_database?= null
-       val dbPath = File("/data/data/com.example.erjohnandroid/files", "CopyErjohnDB.db")
+        var sd = Environment.getExternalStorageDirectory()
+//       val dbPath = File("/data/data/com.example.erjohnandroid/files", "CopyErjohnDB.db")
+         val dbPath = File("/sdcard/Documents/files","CopyErjohnDB.db")
+
+
       //  val dbPath = File("/sdcard", "CopyErjohnDB.db")
         fun getAppDB(context: Context):SDCARD_database{
             if(dbInstance==null){

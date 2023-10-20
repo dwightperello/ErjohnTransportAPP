@@ -73,6 +73,14 @@ class ReverseActivity : AppCompatActivity() {
             }
 
         }
+
+        _binding.btnclose.setOnClickListener {
+            super.onBackPressed()
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+            finish()
+        }
     }
 
     override fun onStart() {

@@ -628,6 +628,7 @@ class TIcketingActivity : AppCompatActivity() {
 
         _binding.btnPrintticke.setOnClickListener {
             clearAllSearchFields()
+            _binding.btnPrintticke.isEnabled=false
             var o= _binding.txtoriginKM.text.toString()
             var d = _binding.txtDestination.text.toString()
 
@@ -1304,6 +1305,7 @@ class TIcketingActivity : AppCompatActivity() {
                     passtype = "Regular"
                     _binding.txtqty.text = "1"
                     qty = 1
+                    _binding.btnPrintticke.isEnabled=true
                     computeAmount()
                 }
             } catch (e: RemoteException) {
@@ -1314,6 +1316,7 @@ class TIcketingActivity : AppCompatActivity() {
                     passtype = "Regular"
                     _binding.txtqty.text = "1"
                     qty = 1
+                    _binding.btnPrintticke.isEnabled=true
                     computeAmount()
                 }
             }

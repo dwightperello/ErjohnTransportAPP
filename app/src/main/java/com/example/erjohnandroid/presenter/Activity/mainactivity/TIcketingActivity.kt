@@ -636,6 +636,7 @@ class TIcketingActivity : AppCompatActivity() {
             if(destinationcounter == origincounter || _binding.txtamount.text.toString().equals("0.0") || _binding.txtDestination.text.toString()==_binding.txtoriginKM.text.toString()){
                 Toast(this).showCustomToast("AMOUNT IS 0, SELECT DESTINATION",this)
                 _binding.txtamount.text ="0.0"
+                _binding.btnPrintticke.isEnabled=true
                 return@setOnClickListener
             }
 
@@ -644,6 +645,7 @@ class TIcketingActivity : AppCompatActivity() {
                 if(o.toInt()>= d.toInt() ){
                     Toast(this).showCustomToast("SOUTH BOUND, PLEASE CHECK KM",this)
                     _binding.txtamount.text ="0.0"
+                    _binding.btnPrintticke.isEnabled=true
                     return@setOnClickListener
                 }
             }else if(GlobalVariable.direction.equals("North"))
@@ -653,6 +655,7 @@ class TIcketingActivity : AppCompatActivity() {
                 if(d.toInt()>= o.toInt() ){
                     Toast(this).showCustomToast("North BOUND, PLEASE CHECK KM",this)
                     _binding.txtamount.text ="0.0"
+                    _binding.btnPrintticke.isEnabled=true
                     return@setOnClickListener
                 }
             }
@@ -1196,7 +1199,9 @@ class TIcketingActivity : AppCompatActivity() {
                 val formattedDateTime = getCurrentDateInFormat()
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("TIN # 207 904 409 000\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Tickets\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Machine #: 00000\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Permit #: 00000\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Serial #: 00000\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -1215,6 +1220,7 @@ class TIcketingActivity : AppCompatActivity() {
                 )
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver: ${GlobalVariable.driver}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Device: ${GlobalVariable.deviceName}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -1224,7 +1230,7 @@ class TIcketingActivity : AppCompatActivity() {
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
 
-                mIPosPrinterService!!.PrintSpecFormatText("FARE: ${totalfare.toString()}${pesoSign}\n", "ST", 32, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("FARE: ${totalfare.toString()} ${pesoSign}\n", "ST", 32, 1,callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
@@ -1247,16 +1253,19 @@ class TIcketingActivity : AppCompatActivity() {
                     24,
                     callback
                 )
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
+                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
 
 //                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
 //
-//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText(
-//                    "********************************\n",
-//                    "ST",
-//                    24,
-//                    callback
-//                )
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText(
+                    "********************************\n",
+                    "ST",
+                    24,
+                    callback
+                )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 

@@ -2,12 +2,15 @@ package com.example.erjohnandroid.presenter.Activity.mainactivity
 
 import android.annotation.SuppressLint
 import android.content.*
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.*
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -31,14 +34,9 @@ import com.example.erjohnandroid.util.showCustomToast
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
-import net.nyx.printerservice.print.IPrinterService
-import net.nyx.printerservice.print.PrintTextFormat
-import timber.log.Timber
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.Executors
 
 @AndroidEntryPoint
 class InspectionActivity : AppCompatActivity() {
@@ -49,6 +47,11 @@ class InspectionActivity : AppCompatActivity() {
     var remint:Int?=null
     var ans:Int?=null
     var image:Bitmap?=null
+    var bitmap:Bitmap?= null
+    var senior:Int=0
+    var pwd:Int=0
+    var student:Int=0
+    var regular:Int=0
 
     var tripticket:kotlin.collections.List< TripTicketTable>?= null
 
@@ -172,7 +175,7 @@ class InspectionActivity : AppCompatActivity() {
             val signatureBitmap = _binding.inspectionsignature.isSignaturePresent()
             val formattedDateTime = getdate()
 
-        image=   _binding.inspectionsignature.drawToBitmap()
+            image=   _binding.inspectionsignature.drawToBitmap()
 
             if(!signatureBitmap){
                 Toast(this).showCustomToast("Please sign",this)
@@ -182,6 +185,19 @@ class InspectionActivity : AppCompatActivity() {
                 Toast(this).showCustomToast("Please compute difference",this)
                 return@setOnClickListener
             }
+
+//            val signatureview:SignatureView= _binding.inspectionsignature
+//            bitmap = getBitmapFromView(signatureview)
+//            val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "signature_image.jpg")
+//
+//            try {
+//                val fileOutputStream: OutputStream = FileOutputStream(file)
+//                bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+//                fileOutputStream.close()
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+
 
             var method =  InspectionReportTable(
                 actualPassengerCount = countint,
@@ -278,6 +294,14 @@ class InspectionActivity : AppCompatActivity() {
         if(it?.size!=null){
             tripticket=it
 
+            var sr= tripticket!!.filter { it.passengerType.equals("Senior") }
+            senior= sr.size
+            var pd= tripticket!!.filter { it.passengerType.equals("PWD") }
+            pwd= pd.size
+            var std= tripticket!!.filter { it.passengerType.equals("Student") }
+            student=std.size
+            var reg=tripticket!!.filter { it.passengerType.equals("Regular") }
+            regular=reg.size
         }else{
 
             Toast(this).showCustomToast("NO TICKET YET",this)
@@ -560,16 +584,26 @@ class InspectionActivity : AppCompatActivity() {
         val currentDate = Date()
         return dateFormat.format(currentDate)
     }
+    fun bitmapToDrawable(bitmap: Bitmap): Drawable {
+        return BitmapDrawable(Resources.getSystem(), bitmap)
+    }
 
+    fun drawableToInt(drawable: Drawable): Int {
+        if (drawable is ColorDrawable) {
+            return drawable.color
+        }
+        return 0 // Or you can return any default color if the Drawable is not a ColorDrawable
+    }
     fun printText() {
         ThreadPoolManager.getInstance().executeTask {
-            val mBitmap: Bitmap = BitmapFactory.decodeStream(bitmapToInputStream(image!!))
+
             try {
                 val formattedDateTime = getCurrentDateInFormat()
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Inspection Report\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Inspector: ${GlobalVariable.inspectorname}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Route: ${GlobalVariable.line}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -584,6 +618,10 @@ class InspectionActivity : AppCompatActivity() {
                     24,
                     callback
                 )
+                mIPosPrinterService!!.printSpecifiedTypeText("Regular: ${regular}\n", "ST", 24,  callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Senior: ${senior}\n", "ST", 24,  callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Pwd: ${pwd}\n", "ST", 24,  callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Student: ${student}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver: ${GlobalVariable.driver}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Count: ${_binding.etActualcount.text}\n", "ST", 24, callback)
@@ -607,10 +645,11 @@ class InspectionActivity : AppCompatActivity() {
                     callback
                 )
 
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.printBitmap(0, 4, mBitmap, callback)
 
-                        mIPosPrinterService!!.printerPerformPrint(160, callback)
+
+
+
+                mIPosPrinterService!!.printerPerformPrint(160, callback)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -637,7 +676,12 @@ class InspectionActivity : AppCompatActivity() {
 
 
 
-
+    fun getBitmapFromView(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
 
 
 

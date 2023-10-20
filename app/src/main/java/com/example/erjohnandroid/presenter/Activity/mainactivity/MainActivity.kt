@@ -473,13 +473,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onPause() {
-//        super.onPause()
-//        val activityManager = applicationContext
-//            .getSystemService(ACTIVITY_SERVICE) as ActivityManager
-//        activityManager.moveTaskToFront(taskId, 0)
-//    }
-
 
 
     //region PRINTER TWO

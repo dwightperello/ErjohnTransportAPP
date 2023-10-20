@@ -1,12 +1,17 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.marginStart
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
@@ -20,6 +25,7 @@ import com.example.erjohnandroid.presenter.adapter.RoleAdapter
 import com.example.erjohnandroid.presenter.adapter.TicketDetailsAdapter
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
+import com.example.erjohnandroid.util.startActivityWithAnimation
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -81,6 +87,10 @@ class ReverseActivity : AppCompatActivity() {
             );
             finish()
         }
+
+        _binding.btnChangeroute.setOnClickListener {
+            showchangeroutedialog()
+        }
     }
 
     override fun onStart() {
@@ -115,5 +125,38 @@ class ReverseActivity : AppCompatActivity() {
             R.anim.screenslideleft, R.anim.screen_slide_out_right,
         );
         finish()
+    }
+
+    fun showchangeroutedialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("ARE YOU SURE YOU WANT TO CHANGE ROUTE?")
+
+// Set up the input
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.gravity = Gravity.CENTER
+        input.textSize= 30f
+        builder.setView(input)
+
+// Set up the buttons
+        builder.setPositiveButton("OK") { dialog, which ->
+            val text = input.text.toString()
+            if(text=="77777"){
+                startActivityWithAnimation<ChangeRouteActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                finish()
+            }else{
+                Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 }

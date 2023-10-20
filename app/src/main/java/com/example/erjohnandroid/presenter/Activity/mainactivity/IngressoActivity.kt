@@ -113,11 +113,13 @@ class IngressoActivity : AppCompatActivity() {
 
         _binding.btnAddmanual.setOnClickListener {
             var manual= _binding.etmanualticket.text.toString()
+
             if(manual.isEmpty()) return@setOnClickListener
+
             val stringWithoutSpaces = manual.replace(" ", "")
-            val stringcount = stringWithoutSpaces.replace(" ", "")
-            manualticket += stringcount.toDouble()
-            totalamount +=manualticket
+            manual= stringWithoutSpaces.replace(" ", "")
+
+            totalamount +=manual.toDouble()
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
             _binding.txttotalgross.text="${ans}"
@@ -127,12 +129,15 @@ class IngressoActivity : AppCompatActivity() {
 
         _binding.btnCancelledticket.setOnClickListener {
             var manual= _binding.etCancelledticket.text.toString()
+
+
             if(manual.isEmpty()) return@setOnClickListener
             val stringWithoutSpaces = manual.replace(" ", "")
-            val stringcount = stringWithoutSpaces.replace(" ", "")
-            if(totalamount<=stringcount.toDouble()) return@setOnClickListener
-            cancelticket += stringcount.toDouble()
-            totalamount -= cancelticket
+            manual = stringWithoutSpaces.replace(" ", "")
+
+            if(totalamount<=manual.toDouble()) return@setOnClickListener
+//            cancelticket += manual.toDouble()
+            totalamount -= manual.toDouble()
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
             _binding.txtnetcollection.text="${ans}"
@@ -344,6 +349,7 @@ class IngressoActivity : AppCompatActivity() {
             totalamount=it.total
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
+
             _binding.txttotalcollection.text="${ans}"
             _binding.txttotalgross.text="${ans}"
             _binding.txtnetcollection.text="${ans}"
@@ -414,7 +420,7 @@ class IngressoActivity : AppCompatActivity() {
 
             // val expenses = decimalVat.format(expensesamount)
 
-             _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
+            _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
             _binding.btnWitholding.text="ENTER / " +"${witholding}"
             // _binding.txttotalgross.text="${ans}"
         }
@@ -1110,8 +1116,8 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("SALES\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${gross}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Expenses: ${expenses}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Witholding: ${witholding}\n", "ST", 24, callback)
 

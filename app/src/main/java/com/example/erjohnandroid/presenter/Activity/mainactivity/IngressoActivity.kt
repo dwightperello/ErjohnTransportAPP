@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.TicketTotal
@@ -62,23 +63,36 @@ class IngressoActivity : AppCompatActivity() {
 
     var alltickets:kotlin.collections.List<TripTicketTable> = arrayListOf()
 
+    var AllTripCost:ArrayList<TripCostTable> = arrayListOf()
+    var AllWitholding:ArrayList<TripWitholdingTable> = arrayListOf()
+    var AllPartialRemit:ArrayList<PartialRemitTable> = arrayListOf()
+
+    var manualticket:ArrayList<Double> = arrayListOf()
+    var cancelticket:ArrayList<Double> = arrayListOf()
+
     var totalamount:Double=0.0
-    var manualticket:Double=0.0
-    var cancelticket:Double=0.0
-    var expenses:String?= "0.0"
-    var witholding:String="0.0"
     var drivercommision:String="0.0"
     var conductorcommision:String="0.0"
-    var infault:String?= null
-    var totalTripcost:Double=0.0
-    var totalwitholding:Double=0.0
-    var remit:Double=0.0
     var bonus = 100.0
+    var infault:String?= null
+    var expensesTotal:String?= "0.0"
+    var witholdingTotal:String="0.0"
+//    var manualticket:Double=0.0
+//    var cancelticket:Double=0.0
+//
+//
+
+//
+//    var totalTripcost:Double=0.0
+//    var totalwitholding:Double=0.0
+//    var remit:Double=0.0
+
 
 
 
     var EXPENSES_ACTIVITY=1
     var WITHOLD=2
+    var CANCELLED=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +121,6 @@ class IngressoActivity : AppCompatActivity() {
         dbViewmodel.getPartialRemit()
         dbViewmodel.getTotalAmountTrip()
 
-
         _binding.txtdrivername.text=GlobalVariable.driver
         _binding.txtconductorname.text=GlobalVariable.conductor
 
@@ -119,29 +132,36 @@ class IngressoActivity : AppCompatActivity() {
             val stringWithoutSpaces = manual.replace(" ", "")
             manual= stringWithoutSpaces.replace(" ", "")
 
-            totalamount +=manual.toDouble()
+            manualticket.add(manual.toDouble())
+
+            totalamount += manual.toDouble()
+
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
+
             _binding.txttotalgross.text="${ans}"
-//            _binding.etmanualticket.setText("")
+
             _binding.txtnetcollection.text="${ans}"
         }
 
         _binding.btnCancelledticket.setOnClickListener {
             var manual= _binding.etCancelledticket.text.toString()
 
-
             if(manual.isEmpty()) return@setOnClickListener
+
             val stringWithoutSpaces = manual.replace(" ", "")
             manual = stringWithoutSpaces.replace(" ", "")
 
             if(totalamount<=manual.toDouble()) return@setOnClickListener
-//            cancelticket += manual.toDouble()
+
+            cancelticket.add(manual.toDouble())
             totalamount -= manual.toDouble()
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
+
+            _binding.txttotalgross.text="${ans}"
             _binding.txtnetcollection.text="${ans}"
-//            _binding.etCancelledticket.setText("")
+
         }
 
         _binding.btnExpenses.setOnClickListener {
@@ -167,8 +187,8 @@ class IngressoActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            dbViewmodel.getTotalTripcost()
-            dbViewmodel.getTotalwithlding()
+//            dbViewmodel.getTotalTripcost()
+//            dbViewmodel.getTotalwithlding()
 
             var partialremit= _binding.txtpartialremit.text.toString()
             if(partialremit.isNullOrEmpty()) partialremit="0.0"
@@ -180,6 +200,7 @@ class IngressoActivity : AppCompatActivity() {
 
             var compute= net.toDouble()- finalremit.toDouble()
             if(compute>0) _binding.viewshort.isVisible=true
+            else _binding.viewshort.isVisible=false
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(compute)
             _binding.etshortover.text= ans.toString()
@@ -205,20 +226,38 @@ class IngressoActivity : AppCompatActivity() {
         }
 
         _binding.btnigresso.setOnClickListener {
-            _binding.btnigressoreprint.isEnabled=true
+            //_binding.btnigressoreprint.isEnabled=true
             if(_binding.etshortover.text.toString().isNullOrEmpty()) {
                 Toast(this).showCustomToast("PLEASE COMPUTE FINAL REMIT",this)
                 return@setOnClickListener
             }
             val formattedDateTime = getCurrentDateInFormat()
+            var manualticketamount:Double=0.0
+            var canceledTickectamount:Double=0.0
+
+            if(manualticket.isNullOrEmpty()){
+                manualticketamount=0.0
+            }else {
+                manualticket.forEach {
+                    manualticketamount += it
+                }
+            }
+
+            if (cancelticket.isNullOrEmpty()){
+                canceledTickectamount=0.0
+            }else{
+                cancelticket.forEach {
+                    canceledTickectamount += it
+                }
+            }
 
             var method= IngressoTable(
                 Id = 0,
                 TotalCollection =  convertDecimal(_binding.txttotalcollection.text.toString()),
-                ManualTicket = manualticket,
-                CancelledTicket = cancelticket,
-                TotalExpenses = convertDecimal(expenses),
-                TotalWitholding = convertDecimal(witholding),
+                ManualTicket = manualticketamount,
+                CancelledTicket = canceledTickectamount,
+                TotalExpenses = convertDecimal(expensesTotal),
+                TotalWitholding = convertDecimal(witholdingTotal),
                 DriverName = GlobalVariable.driver,
                 DriverCommission = convertDecimal(drivercommision),
                 ConductorName = GlobalVariable.conductor,
@@ -234,35 +273,35 @@ class IngressoActivity : AppCompatActivity() {
 
             try {
                 dbViewmodel.insertIngersso(method)
+
                 dbViewmodel.getTripticket()
                 dbViewmodel.tripticket.observe(this, Observer {
                         state->ProcessTriptickets(state)
                 })
 
-                dbViewmodel.inspectionreport.observe(this,Observer{
-                        state->Processinspectionreport(state)
-                })
 
-                dbViewmodel.mpadAssignment.observe(this,Observer{
-                        state-> Processmpadassignment(state)
-                })
 
-                dbViewmodel.partialremit.observe(this,Observer{
-                        state-> Processpartialremit(state)
-                })
 
-                dbViewmodel.tripcost.observe(this,Observer{
-                        state->ProcessTripcost(state)
-                })
+                Processpartialremit(AllPartialRemit)
+                ProcessTripcost(AllTripCost)
+                Processtripwitholding(AllWitholding)
+//                dbViewmodel.partialremit.observe(this,Observer{
+//                        state-> Processpartialremit(state)
+//               })
 
-                dbViewmodel.tripwitholding.observe(this,Observer{
-                        state->Processtripwitholding(state)
-                })
+//                dbViewmodel.tripcost.observe(this,Observer{
+//                        state->ProcessTripcost(state)
+//                })
+
+//                dbViewmodel.tripwitholding.observe(this,Observer{
+//                        state->Processtripwitholding(state)
+//                })
                // dbViewmodel.truncatetables()
             }catch (e:java.lang.Exception){
                 Log.e("erro",e.message.toString())
             }
         }
+
     }
 
     override fun onStart() {
@@ -275,21 +314,15 @@ class IngressoActivity : AppCompatActivity() {
             state->ProcessPartialremit(state)
         })
 
-        dbViewmodel.tripcost.observe(this, Observer {
-            state-> ProcessExpenses(state)
-        })
 
-        dbViewmodel.tripwitholding.observe(this, Observer {
-            state->Processwitholding(state)
-        })
 
-        dbViewmodel.totalTripcost?.observe(this,Observer{
-            state-> ProcessTotaltripcost(state)
-        })
-
-        dbViewmodel.totalwithodling?.observe(this,Observer{
-                state-> ProcessTotalwitholding(state)
-        })
+//        dbViewmodel.totalTripcost?.observe(this,Observer{
+//            state-> ProcessTotaltripcost(state)
+//        })
+//
+//        dbViewmodel.totalwithodling?.observe(this,Observer{
+//                state-> ProcessTotalwitholding(state)
+//        })
 
 
     }
@@ -300,24 +333,42 @@ class IngressoActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
        showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == EXPENSES_ACTIVITY) {
-            dbViewmodel.getTripcost()
+            AllTripCost= arrayListOf()
+//            dbViewmodel.getTripcost()
+//            dbViewmodel.tripcost.distinctUntilChanged().observe(this, Observer {
+//                    state-> ProcessExpenses(state)
+//            })
+
+            ProcessExpenses(GlobalVariable.AllTripCost)
         }
         else if(requestCode==WITHOLD){
-            dbViewmodel.getTripwitholding()
+              AllWitholding = arrayListOf()
+          //  dbViewmodel.getTripwitholding()
+//            dbViewmodel.tripwitholding.distinctUntilChanged().observe(this, Observer {
+//                    state->Processwitholding(state)
+//            })
+            Processwitholding(GlobalVariable.AllWitholding)
         }
+        else if(requestCode==CANCELLED){
+            Log.d("canceled","canceled")
+        }
+
+
+
+
 
     }
 
     val computeCommissions:(Double)-> Unit={
         val driver= totalamount * 0.09
         val conductor=totalamount* 0.07
+
         val amount= driver + conductor
         val decimalVat = DecimalFormat("#.00")
         val ans = decimalVat.format(amount)
@@ -345,6 +396,7 @@ class IngressoActivity : AppCompatActivity() {
 
     //region ALL PROCESS
     val ProcessTotal:(state: TicketTotal?) ->Unit={
+
         if(it!=null) {
             totalamount=it.total
             val decimalVat = DecimalFormat("#.00")
@@ -358,29 +410,35 @@ class IngressoActivity : AppCompatActivity() {
         }
     }
 
-    val ProcessTotaltripcost:(state: TripCostTotal?) ->Unit={
-        if(it?.total!=null) {
-          totalTripcost= it?.total!!
-        }else totalTripcost=0.0
-    }
+//    val ProcessTotaltripcost:(state: TripCostTotal?) ->Unit={
+//        if(it?.total!=null) {
+//          totalTripcost= it?.total!!
+//        }else totalTripcost=0.0
+//    }
 
-    val ProcessTotalwitholding:(state: WitholdingTotal?) ->Unit={
-        if(it?.total!=null) {
-            totalwitholding= it?.total!!
-        }else totalwitholding=0.0
-    }
+//    val ProcessTotalwitholding:(state: WitholdingTotal?) ->Unit={
+//        if(it?.total!=null) {
+//            totalwitholding= it?.total!!
+//        }else totalwitholding=0.0
+//    }
 
     val ProcessPartialremit:(state:List<PartialRemitTable>) ->Unit={
         var partial:Double=0.0
+        val decimalVat = DecimalFormat("#.00")
+
         if(it!=null) {
+
             it.forEach {
                 partial+= it.AmountRemited!!
+                AllPartialRemit.add(it)
             }
 
-            val decimalVat = DecimalFormat("#.00")
+
             val ans = decimalVat.format(partial)
+
             _binding.txtpartialremit.text="${ans}"
             totalamount -=partial
+
             val remit = decimalVat.format(totalamount)
             _binding.txtnetcollection.text="${remit}"
         }
@@ -388,41 +446,54 @@ class IngressoActivity : AppCompatActivity() {
 
     val ProcessExpenses:(state:List<TripCostTable>) ->Unit={
         var expensesamount:Double=0.0
-        if(it!=null) {
-            it.forEach {
+        var expenses="0.0"
+        if(!it.isNullOrEmpty()) {
+
+            it.forEach {expenses->
+
+                if(!AllTripCost.contains(expenses)){
+                    AllTripCost.add(expenses)
+                }
+
+            }
+
+
+            totalamount -= AllTripCost.last().amount!!
+            val decimalVat = DecimalFormat("#.00")
+            val ans = decimalVat.format(totalamount)
+            _binding.txtnetcollection.text="${ans}"
+
+            AllTripCost.forEach {
                 expensesamount += it.amount!!
             }
 
-            totalamount -= expensesamount
-            val decimalVat = DecimalFormat("#.00")
-            val ans = decimalVat.format(totalamount)
-
-
             expenses = decimalVat.format(expensesamount)
-
-            _binding.txtnetcollection.text="${ans}"
             _binding.btnExpenses.text="ENTER / " +"${expenses}"
-            // _binding.txttotalgross.text="${ans}"
+            expensesTotal = expenses
         }
     }
 
     val Processwitholding:(state:List<TripWitholdingTable>) ->Unit={
         var withold:Double=0.0
-        if(it!=null) {
-            it.forEach {
+        var witholding:String="0.0"
+        if(!it.isNullOrEmpty()) {
+            it.forEach { witholding->
+                if(!AllWitholding.contains(witholding)){
+                    AllWitholding.add(witholding)
+                }
+            }
+
+            totalamount -= AllWitholding.last().amount!! // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
+            val decimalVat = DecimalFormat("#.00")
+            _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
+
+            AllWitholding.forEach {
                 withold += it.amount!!
             }
 
-            totalamount -= withold
-            val decimalVat = DecimalFormat("#.00")
             witholding = decimalVat.format(withold)
-
-
-            // val expenses = decimalVat.format(expensesamount)
-
-            _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
             _binding.btnWitholding.text="ENTER / " +"${witholding}"
-            // _binding.txttotalgross.text="${ans}"
+            witholdingTotal = witholding
         }
     }
     //endregion
@@ -443,8 +514,6 @@ class IngressoActivity : AppCompatActivity() {
             _binding.txtdriverbonus.text= "${ans}"
             _binding.txtconductorbonus.text= "${ans}"
 
-//            // Update the total sales to the next threshold
-//            totalSales = 14000 + (totalSales - 14000) % 1000
         }
     }
 
@@ -480,6 +549,9 @@ class IngressoActivity : AppCompatActivity() {
             try {
                 dbViewmodel.insertticketsynch(triptickets)
                 dbViewmodel.getInspectionReport()
+                dbViewmodel.inspectionreport.observe(this,Observer{
+                        state->Processinspectionreport(state)
+                })
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
@@ -507,6 +579,9 @@ class IngressoActivity : AppCompatActivity() {
             try {
                 dbViewmodel.insert_synch_inspection(inspectionreport)
                 dbViewmodel.getMpadAssignment()
+                dbViewmodel.mpadAssignment.observe(this,Observer{
+                        state-> Processmpadassignment(state)
+                })
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
@@ -531,7 +606,7 @@ class IngressoActivity : AppCompatActivity() {
             }
             try {
                 dbViewmodel.insert_synch_mpad(mpadassignment)
-                dbViewmodel.getPartialRemit()
+               // dbViewmodel.getPartialRemit() // NEED TO REMOVE
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
@@ -555,7 +630,7 @@ class IngressoActivity : AppCompatActivity() {
             }
             try {
                 dbViewmodel.insert_synch_partial_remit(partialremit)
-                dbViewmodel.getTripcost()
+               // dbViewmodel.getTripcost()
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
@@ -578,7 +653,7 @@ class IngressoActivity : AppCompatActivity() {
             }
             try {
                dbViewmodel.insert_synch_trip_cost(tripcost)
-                dbViewmodel.getTripwitholding()
+               // dbViewmodel.getTripwitholding()
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
@@ -809,41 +884,6 @@ class IngressoActivity : AppCompatActivity() {
 //    }
 //
    //endregion
-
-    fun showSimpleDialog(context: Context, title: String, message: String) {
-        val builder = AlertDialog.Builder(context)
-
-        // Set the alert dialog title
-        builder.setTitle(title)
-
-        // Set the alert dialog message
-        builder.setMessage(message)
-
-        // Display a neutral button on alert dialog
-        builder.setNeutralButton("OK") { dialog, which ->
-            super.onBackPressed()
-            resetALl()
-            val resultIntent = Intent()
-            setResult(Activity.RESULT_OK, resultIntent)
-
-            finish()
-
-
-            overridePendingTransition(
-                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-            );
-        }
-
-        builder.setNegativeButton("CANCEL") { dialog, which ->
-
-            dialog.dismiss()
-        }
-
-        // Create and show the alert dialog
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
-    }
-
 
     //region PRINTER TWO
     private val TAG: String? = "IPosPrinterTestDemo"
@@ -1118,8 +1158,8 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${gross}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text.toString()}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Expenses: ${expenses}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Witholding: ${witholding}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Expenses: ${expensesTotal}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Witholding: ${witholdingTotal}\n", "ST", 24, callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
@@ -1199,4 +1239,37 @@ class IngressoActivity : AppCompatActivity() {
 
     //endregion
 
+    fun showSimpleDialog(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+
+        // Set the alert dialog title
+        builder.setTitle(title)
+
+        // Set the alert dialog message
+        builder.setMessage(message)
+
+        // Display a neutral button on alert dialog
+        builder.setNeutralButton("OK") { dialog, which ->
+            super.onBackPressed()
+            resetALl()
+            val resultIntent = Intent()
+            setResult(Activity.RESULT_OK, resultIntent)
+
+            finish()
+
+
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+        }
+
+        builder.setNegativeButton("CANCEL") { dialog, which ->
+
+            dialog.dismiss()
+        }
+
+        // Create and show the alert dialog
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
 }

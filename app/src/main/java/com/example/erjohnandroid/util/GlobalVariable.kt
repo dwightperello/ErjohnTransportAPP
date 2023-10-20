@@ -1,6 +1,8 @@
 package com.example.erjohnandroid.util
 
 import com.example.erjohnandroid.database.Model.LineSegmentTable
+import com.example.erjohnandroid.database.Model.TripCostTable
+import com.example.erjohnandroid.database.Model.TripWitholdingTable
 import com.paymaya.sdk.android.checkout.models.Item
 
 object GlobalVariable {
@@ -42,7 +44,8 @@ object GlobalVariable {
     var destinationcounter:Int=1
     var origincounter:Int=0
 
-
+    var AllWitholding:ArrayList<TripWitholdingTable> = arrayListOf()
+    var AllTripCost:ArrayList<TripCostTable> = arrayListOf()
 
 
 }

@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.*
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -406,11 +407,7 @@ class InspectionActivity : AppCompatActivity() {
                 MSG_IS_NORMAL -> if (getPrinterStatus() == PRINTER_NORMAL) {
                     //  loopPrint(loopPrintFlag)
                 }
-                MSG_IS_BUSY -> Toast.makeText(
-                    this@InspectionActivity,
-                    "PRINTING PLEASE WAIT",
-                    Toast.LENGTH_SHORT
-                ).show()
+                MSG_IS_BUSY -> Log.d("printing","PRINTING")
                 MSG_PAPER_LESS -> {
                     loopPrintFlag = DEFAULT_LOOP_PRINT
                     Toast.makeText(

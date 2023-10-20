@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.ExpensesTypeTable
@@ -71,12 +72,15 @@ class WitholdingActivity : AppCompatActivity() {
 
             witholds.add(method)
             dbViewmodel.insertTripwitholdingbulk(witholds)
-            val resultIntent = Intent()
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-            overridePendingTransition(
-                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-            );
+
+            dbViewmodel.getTripwitholding()
+            dbViewmodel.tripwitholding.distinctUntilChanged().observe(this, Observer {
+                    state->ProcesswitholdingResult(state)
+            })
+
+
+
+
         }
     }
 
@@ -96,6 +100,19 @@ class WitholdingActivity : AppCompatActivity() {
             _binding.rvwitholding.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
             witholdingAdapter.showwitholding(state)
         }
+    }
+
+    val ProcesswitholdingResult:(state:List<TripWitholdingTable>) ->Unit={
+        GlobalVariable.AllWitholding= arrayListOf()
+        if(!it.isNullOrEmpty()) {
+            GlobalVariable.AllWitholding.addAll(it)
+        }
+        val resultIntent = Intent()
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+        overridePendingTransition(
+            R.anim.screenslideleft, R.anim.screen_slide_out_right,
+        );
     }
 
     fun witholding(role: WitholdingTypeTable) {

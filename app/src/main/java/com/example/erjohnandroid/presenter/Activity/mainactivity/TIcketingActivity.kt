@@ -969,7 +969,8 @@ class TIcketingActivity : AppCompatActivity() {
         "com.iposprinter.iposprinterservice.THP_NORMALTEMP_ACTION"
     private val PRINTER_MOTOR_HIGHTEMP_ACTION =
         "com.iposprinter.iposprinterservice.MOTOR_HIGHTEMP_ACTION"
-    private val PRINTER_BUSY_ACTION = "com.iposprinter.iposprinterservice.BUSY_ACTION"
+    //private val PRINTER_BUSY_ACTION = "com.iposprinter.iposprinterservice.BUSY_ACTION"
+    private val PRINTER_BUSY_ACTION = ""
     private val PRINTER_CURRENT_TASK_PRINT_COMPLETE_ACTION =
         "com.iposprinter.iposprinterservice.CURRENT_TASK_PRINT_COMPLETE_ACTION"
 
@@ -1018,11 +1019,7 @@ class TIcketingActivity : AppCompatActivity() {
                 MSG_IS_NORMAL -> if (getPrinterStatus() == PRINTER_NORMAL) {
                     //  loopPrint(loopPrintFlag)
                 }
-                MSG_IS_BUSY -> Toast.makeText(
-                    this@TIcketingActivity,
-                    "BUSY",
-                    Toast.LENGTH_SHORT
-                ).show()
+                MSG_IS_BUSY -> Log.d("printing","PRINTING")
                 MSG_PAPER_LESS -> {
                     loopPrintFlag = DEFAULT_LOOP_PRINT
                     Toast.makeText(

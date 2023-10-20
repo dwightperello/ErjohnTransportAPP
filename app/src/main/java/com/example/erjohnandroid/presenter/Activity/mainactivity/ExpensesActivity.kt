@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.BusInfoTableItem
@@ -23,6 +24,7 @@ import com.example.erjohnandroid.presenter.adapter.LineAdapter
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -73,16 +75,28 @@ class ExpensesActivity : AppCompatActivity() {
             expenses.add(method)
             dbViewmodel.inserTirpcostBUlk(expenses)
 
-            val resultIntent = Intent()
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-            overridePendingTransition(
-                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-            );
+            dbViewmodel.getTripcost()
+            dbViewmodel.tripcost.distinctUntilChanged().observe(this, Observer {
+                    state-> ProcessExpenses(state)
+            })
+
+
         }
 
     }
+    val ProcessExpenses:(state:List<TripCostTable>) ->Unit={
+       GlobalVariable.AllTripCost= arrayListOf()
+        if(!it.isNullOrEmpty()) {
 
+          GlobalVariable.AllTripCost.addAll(it)
+        }
+        val resultIntent = Intent()
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+        overridePendingTransition(
+            R.anim.screenslideleft, R.anim.screen_slide_out_right,
+        );
+    }
 
     override fun onStart() {
         super.onStart()

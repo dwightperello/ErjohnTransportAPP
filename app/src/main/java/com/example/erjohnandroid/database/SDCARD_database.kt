@@ -17,7 +17,7 @@ abstract class SDCARD_database:RoomDatabase() {
     companion object{
         private  var dbInstance:SDCARD_database?= null
         var sd = Environment.getExternalStorageDirectory()
-//       val dbPath = File("/data/data/com.example.erjohnandroid/files", "CopyErjohnDB.db")
+      //val dbPath = File("/data/data/com.example.erjohnandroid/files", "CopyErjohnDB.db")
          val dbPath = File("/sdcard/Documents/files","CopyErjohnDB.db")
 
 

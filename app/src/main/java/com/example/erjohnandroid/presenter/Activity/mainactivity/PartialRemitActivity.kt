@@ -172,6 +172,13 @@ class PartialRemitActivity : AppCompatActivity() {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(IPosPrinterStatusListener)
+        unbindService(connectService)
+        handler!!.removeCallbacksAndMessages(null)
+    }
+
     //region PRINTER TWO
     private val TAG: String? = "IPosPrinterTestDemo"
 

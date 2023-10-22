@@ -110,7 +110,12 @@ class ticketdetailsActivity : AppCompatActivity() {
         }
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(IPosPrinterStatusListener)
+        unbindService(connectService)
+        handler!!.removeCallbacksAndMessages(null)
+    }
 
 
 

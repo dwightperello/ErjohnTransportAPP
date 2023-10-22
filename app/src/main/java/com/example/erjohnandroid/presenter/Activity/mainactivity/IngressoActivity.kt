@@ -1239,6 +1239,13 @@ class IngressoActivity : AppCompatActivity() {
 
     //endregion
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(IPosPrinterStatusListener)
+        unbindService(connectService)
+        handler!!.removeCallbacksAndMessages(null)
+    }
+
     fun showSimpleDialog(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
 

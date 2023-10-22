@@ -1340,6 +1340,15 @@ class TIcketingActivity : AppCompatActivity() {
     //endregion
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(IPosPrinterStatusListener)
+        unbindService(connectService)
+        handler!!.removeCallbacksAndMessages(null)
+    }
+
+
+
 
     //region PRINTER
 //    private val TAG: String? = "MainActivity"

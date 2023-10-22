@@ -262,6 +262,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
    //region PRINTER
 //    private val TAG: String? = "MainActivity"
 //    var PRN_TEXT: String? = "THIS IS A TEsT PRINT"
@@ -771,6 +772,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     //endregion
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(IPosPrinterStatusListener)
+        unbindService(connectService)
+        handler!!.removeCallbacksAndMessages(null)
+    }
 
 
 

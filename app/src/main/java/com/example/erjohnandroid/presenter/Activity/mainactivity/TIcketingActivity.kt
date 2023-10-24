@@ -663,7 +663,7 @@ class TIcketingActivity : AppCompatActivity() {
             if(!passtype.isNullOrEmpty()) {
                 ticketnumber +=1
                 ticketcounter +=1
-                _binding.txtticketcount.text="Next ticket: ${ticketcounter.toString()}"
+                _binding.txtticketcount.text="Next ticket: 00${ticketcounter.toString()}"
                  // var amounttotal = computeAmount()
 
 

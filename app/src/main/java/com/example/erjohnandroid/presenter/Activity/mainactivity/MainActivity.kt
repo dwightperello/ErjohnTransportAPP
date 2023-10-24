@@ -165,7 +165,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         _binding!!.btnTicketing.setOnClickListener {
-            startActivityWithAnimation<TIcketingActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+            showticketing()
+//            startActivityWithAnimation<TIcketingActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
         }
 
         _binding!!.btnInspection.setOnClickListener {
@@ -463,6 +464,32 @@ class MainActivity : AppCompatActivity() {
             val text = input.text.toString()
             if(text=="88888"){
                 startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+            }else{
+                Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+
+    }
+
+    fun showticketing(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Enter Pin")
+
+// Set up the input
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.gravity = Gravity.CENTER
+        builder.setView(input)
+
+// Set up the buttons
+        builder.setPositiveButton("OK") { dialog, which ->
+            val text = input.text.toString()
+            if(text=="12345"){
+                startActivityWithAnimation<TIcketingActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
             }else{
                 Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
             }

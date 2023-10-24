@@ -234,15 +234,22 @@ class DispatchActivity : AppCompatActivity() {
         GlobalVariable.line= role.name
         GlobalVariable.lineid= role.id
         if(role.remarks.equals("SB")){
-            _binding.cbNorth.isEnabled=true
-            _binding.cbSouth.isEnabled=true
+            _binding.cbNorth.isEnabled=false
+            _binding.cbSouth.isEnabled=false
+            _binding.cbNorth.isChecked=false
             isNorthAllowed=false
+            _binding.cbSouth.isChecked=true
+            GlobalVariable.direction="South"
         }
         else{
             isNorthAllowed=true
-            _binding.cbNorth.isEnabled=true
-            _binding.cbSouth.isEnabled=true
+            _binding.cbSouth.isChecked=false
+            _binding.cbNorth.isEnabled=false
+            _binding.cbSouth.isEnabled=false
+            _binding.cbNorth.isChecked=true
+            GlobalVariable.direction="North"
         }
+        _binding!!.txtDirection.text=("\nDIRECTION: ${GlobalVariable.direction}")
         _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
         Toast(this).showCustomToast("${GlobalVariable.line}",this)
     }
@@ -314,11 +321,24 @@ class DispatchActivity : AppCompatActivity() {
                 _binding.cbNorth.isChecked=false
                 return@setOnClickListener
             }
+
+//            else{
+//                Toast(this).showCustomToast("South Bound is not allowed",this)
+//                _binding.cbSouth.isChecked=false
+//                return@setOnClickListener
+//            }
+
             if(_binding.cbSouth.isChecked) _binding.cbSouth.isChecked=false
             GlobalVariable.direction="North"
             _binding!!.txtDirection.text=("\nDIRECTION: ${GlobalVariable.direction}")
         }
         _binding.cbSouth.setOnClickListener {
+            if(isNorthAllowed){
+                Toast(this).showCustomToast("South Bound is not allowed",this)
+                _binding.cbSouth.isChecked=false
+                return@setOnClickListener
+            }
+
             if(_binding.cbNorth.isChecked)_binding.cbNorth.isChecked=false
             GlobalVariable.direction="South"
             _binding!!.txtDirection.text=("\nDIRECTION: ${GlobalVariable.direction}")

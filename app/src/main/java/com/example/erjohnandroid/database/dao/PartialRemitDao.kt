@@ -11,8 +11,8 @@ interface PartialRemitDao {
     @Insert
     fun insertPartialremit(entity:PartialRemitTable)
 
-    @Query("SELECT * FROM PartialRemit")
-    fun getPartialRemit(): List<PartialRemitTable>
+    @Query("SELECT * FROM PartialRemit where ingressoRefId = :refid")
+    fun getPartialRemit(refid:Int): List<PartialRemitTable>
 
     @Query("DELETE FROM PartialRemit")
     fun truncatepartial()

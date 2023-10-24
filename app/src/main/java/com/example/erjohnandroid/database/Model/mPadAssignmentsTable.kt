@@ -12,5 +12,7 @@ data class mPadAssignmentsTable(
     val dispatcherName: String?,
     val driverName: String?,
     val line: String?,
-    val mPadUnit: String?
+    val mPadUnit: String?,
+    val ingressoRefId:Int?
+
 )

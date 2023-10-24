@@ -3,6 +3,7 @@ package com.example.erjohnandroid.database.repository
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.*
 import com.example.erjohnandroid.database.dao.*
+import com.example.erjohnandroid.util.GlobalVariable
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(private val lineDao: LineDao,private val lineSegmentDao: LineSegmentDao,private val busInfoDao: BusInfoDao,private val companiesDao: CompaniesDao,
@@ -70,7 +71,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
 
     fun getInspectionReport():List<InspectionReportTable>{
-        return inspectionReportDao.getInspectionReport()
+        return inspectionReportDao.getInspectionReport(GlobalVariable.ingressoRefId)
     }
 
     fun insertInspectionReportBulk(entity: InspectionReportTable){
@@ -94,7 +95,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
 
     fun getmpadAssignments():List<mPadAssignmentsTable>{
-        return mPadAssignmentsDao.getmpadAssignment()
+        return mPadAssignmentsDao.getmpadAssignment(GlobalVariable.ingressoRefId)
     }
 
     fun insertMpadAssignmentbulk(entity: List<mPadAssignmentsTable>){
@@ -110,7 +111,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
 
     fun getTripcost():List<TripCostTable>{
-        return tripCostDao.getTripCost()
+        return tripCostDao.getTripCost(GlobalVariable.ingressoRefId)
     }
 
     fun inserttripcostBUlk(entity: List<TripCostTable>){
@@ -118,7 +119,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
 
     fun getTripTicket():List<TripTicketTable>{
-        return  tripTicketDao.getTriptikcet()
+        return  tripTicketDao.getTriptikcet(GlobalVariable.ingressoRefId)
     }
 
     fun getTicketdetails(reverse:Int):List<TripTicketTable>{
@@ -134,7 +135,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
 
     fun getTripWitholding():List<TripWitholdingTable>{
-        return tripWitholdingDao.gettripwitholding()
+        return tripWitholdingDao.gettripwitholding(GlobalVariable.ingressoRefId)
     }
 
     fun insertTripWitholdingbulk(entity: List<TripWitholdingTable>){
@@ -154,7 +155,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
 
     fun getPartialRemit():List<PartialRemitTable>{
-        return partialRemitDao.getPartialRemit()
+        return partialRemitDao.getPartialRemit(GlobalVariable.ingressoRefId)
     }
 
 
@@ -178,56 +179,60 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return ingressoDao.inserIngresso(entity)
     }
 
-    fun getAllIngresso():List<IngressoTable>{
-        return  ingressoDao.getAllIngresso()
+    fun getAllIngresso(refid:Int):List<IngressoTable>{
+        return  ingressoDao.getAllIngresso(refid)
     }
 
     fun insertTripTicketsynch(entity:List<Sycn_TripticketTable>){
         return synchTripticketdao.insertTripTicket(entity)
     }
 
-    fun getallsynchTripticket():List<Sycn_TripticketTable>{
-        return  synchTripticketdao.getAllsynctickets()
+    fun getallsynchTripticket(refid: Int):List<Sycn_TripticketTable>{
+        return  synchTripticketdao.getAllsynctickets(refid)
     }
 
     fun insert_synch_inspection(entity:List<Sycnh_InspectionReportTable>){
         return synchInspectionreportdao.insertsynch_inspection(entity)
     }
 
-    fun get_synch_inspection():List<Sycnh_InspectionReportTable>{
-        return  synchInspectionreportdao.getsynch_inspection()
+    fun get_synch_inspection(refid: Int):List<Sycnh_InspectionReportTable>{
+        return  synchInspectionreportdao.getsynch_inspection(refid)
     }
 
     fun insert_synch_mpad(entity:List<Synch_mpadAssignmentsTable>){
         return synchMpadassignmentdao.insert_synch_mpad(entity)
     }
 
-    fun get_synch_mpad():List<Synch_mpadAssignmentsTable>{
-        return  synchMpadassignmentdao.get_synch_mpad()
+    fun get_synch_mpad(refid: Int):List<Synch_mpadAssignmentsTable>{
+        return  synchMpadassignmentdao.get_synch_mpad(refid)
     }
 
-    fun get_synch_partial_remit():List<Synch_partialremitTable>{
-        return  synchPartialremitdao.get_synch_partial_remit()
+    fun get_synch_partial_remit(refid: Int):List<Synch_partialremitTable>{
+        return  synchPartialremitdao.get_synch_partial_remit(refid)
     }
 
     fun insert_synch_partial_remit(entity:List<Synch_partialremitTable>){
         return synchPartialremitdao.insert_synch_partial_remit(entity)
     }
 
-    fun get_synch_trip_cost():List<Synch_TripCostTable>{
-        return  synchTripcostdao.get_synch_trip_cost()
+    fun get_synch_trip_cost(refid: Int):List<Synch_TripCostTable>{
+        return  synchTripcostdao.get_synch_trip_cost(refid)
     }
 
     fun insert_synch_trip_cost(entity:List<Synch_TripCostTable>){
         return synchTripcostdao.insert_synch_trip_cost(entity)
     }
 
-    fun get_synch_witholding():List<Synch_TripwitholdingTable>{
-        return  synchTripwitholdingdao.get_synch_witholding()
+    fun get_synch_witholding(refid: Int):List<Synch_TripwitholdingTable>{
+        return  synchTripwitholdingdao.get_synch_witholding(refid)
     }
 
     fun insert_synch_witholding(entity:List<Synch_TripwitholdingTable>){
         return synchTripwitholdingdao.insert_synch_witholding(entity)
+    }
+
+    fun getAllIngressoRefID():List<Int>{
+        return ingressoDao.getAllIngressoreif()
     }
 
     fun truncatetables(){

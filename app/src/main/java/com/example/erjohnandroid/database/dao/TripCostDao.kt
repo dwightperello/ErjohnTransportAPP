@@ -11,8 +11,8 @@ import com.example.erjohnandroid.database.Model.convertions.TripCostTotal
 @Dao
 interface TripCostDao {
 
-    @Query("Select * from TripCost")
-    fun getTripCost():List<TripCostTable>
+    @Query("Select * from TripCost where ingressoRefId = :refid")
+    fun getTripCost(refid:Int):List<TripCostTable>
 
     @Insert
     fun inserTripcostBulk(entity:List<TripCostTable>)

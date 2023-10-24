@@ -12,8 +12,11 @@ interface IngressoDao {
     @Insert
     fun inserIngresso(entity:IngressoTable)
 
-    @Query("Select * from Ingresso")
-    fun getAllIngresso():List<IngressoTable>
+    @Query("Select * from Ingresso where ingressoRefId = :refid")
+    fun getAllIngresso(refid:Int):List<IngressoTable>
+
+    @Query("Select DISTINCT ingressoRefId from Ingresso")
+    fun getAllIngressoreif():List<Int>
 
     @Query("DELETE FROM Ingresso")
     fun truncateingresso()

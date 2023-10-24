@@ -12,8 +12,8 @@ interface Synch_PartialRemitDao {
     @Insert
     fun insert_synch_partial_remit(entity:List<Synch_partialremitTable>)
 
-    @Query("Select * from CopyPartialRemit")
-    fun get_synch_partial_remit():List<Synch_partialremitTable>
+    @Query("Select * from CopyPartialRemit where ingressoRefId = :refid")
+    fun get_synch_partial_remit(refid:Int):List<Synch_partialremitTable>
 
     @Query("DELETE FROM CopyPartialRemit")
     fun truncatecopypartilaremit()

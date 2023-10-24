@@ -27,6 +27,7 @@ import com.example.erjohnandroid.printer.ThreadPoolManager
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
+import com.google.android.gms.common.internal.GmsLogger
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +64,12 @@ class DispatchActivity : AppCompatActivity() {
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
 
+        val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        GlobalVariable.ingressoRefId = sharedPrefs.getInt("ingressoRefId",1)
+        GlobalVariable.ingressoRefId += 1
+
+
+
 
        // _binding.txtdispatcherName.text ="Welcome "+ GlobalVariable.employeeName
       //  bindService()
@@ -97,7 +104,8 @@ class DispatchActivity : AppCompatActivity() {
                 driverName = GlobalVariable.driver,
                 line = GlobalVariable.line,
                 mPadUnit = GlobalVariable.deviceName,
-                mPadAssignmentId = 0
+                mPadAssignmentId = 0,
+                ingressoRefId = GlobalVariable.ingressoRefId
             )
             dispatch?.add(method)
             try {

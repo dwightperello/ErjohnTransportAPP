@@ -210,7 +210,8 @@ class InspectionActivity : AppCompatActivity() {
                 mPadUnit = GlobalVariable.deviceName,
                 qty = remint,
                 InspectionReportId = 0,
-                inspectorName = GlobalVariable.inspectorname
+                inspectorName = GlobalVariable.inspectorname,
+                ingressoRefId = GlobalVariable.ingressoRefId
 
             )
             try {

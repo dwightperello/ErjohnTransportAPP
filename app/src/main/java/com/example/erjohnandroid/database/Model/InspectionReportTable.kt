@@ -14,6 +14,6 @@ data class InspectionReportTable(
     val line: String?,
     val lineSegment: String?,
     val mPadUnit: String?,
-    val qty: Int?
-
+    val qty: Int?,
+    val ingressoRefId:Int?
 )

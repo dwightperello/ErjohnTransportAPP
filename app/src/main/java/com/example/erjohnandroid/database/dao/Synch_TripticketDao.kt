@@ -12,8 +12,8 @@ interface Synch_TripticketDao {
     @Insert
     fun insertTripTicket(entity:List<Sycn_TripticketTable>)
 
-    @Query("Select * from CopyTriptickets")
-    fun getAllsynctickets():List<Sycn_TripticketTable>
+    @Query("Select * from CopyTriptickets where ingressoRefId = :refid")
+    fun getAllsynctickets(refid:Int):List<Sycn_TripticketTable>
 
     @Query("DELETE FROM CopyTriptickets")
     fun truncatecopytripticket()

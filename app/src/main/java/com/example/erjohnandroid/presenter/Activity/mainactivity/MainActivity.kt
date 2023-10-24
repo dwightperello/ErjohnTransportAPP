@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         GlobalVariable.ticketnumber = sharedPrefs.getInt("ticketnumber", 0)
-
+       // GlobalVariable.ingressoRefId += sharedPrefs.getInt("ingressoRefId",1)
 
 
         val window = window

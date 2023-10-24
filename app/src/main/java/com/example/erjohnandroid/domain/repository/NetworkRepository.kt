@@ -29,6 +29,8 @@ interface NetworkRepository {
 
     suspend fun postIngresso(token: String,ingresso:List<Ingresso>) : Flow<ResultState<ResponseBody>>
 
+    suspend fun postIngressoALL(token: String,ingresso:postAllItem) : Flow<ResultState<ResponseBody>>
+
     suspend fun postInspection(token: String,inspectionReports:List<InspectionReports>) : Flow<ResultState<ResponseBody>>
 
     suspend fun postmpadAssignments(token: String,mPadAssignments:List<mPadAssignments>) : Flow<ResultState<ResponseBody>>

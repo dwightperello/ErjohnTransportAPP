@@ -815,7 +815,7 @@ class TIcketingActivity : AppCompatActivity() {
 
         try {
             postTripticket=TicketConvertions.convertTripTickets(amount!!.toDouble(),GlobalVariable.conductor!!,destination?.name!!,GlobalVariable.driver!!,
-                GlobalVariable.line!!,GlobalVariable.deviceName!!,origin?.name!!,passtype!!,ticketnumber.toString(),GlobalVariable.tripreverse!!,destination?.kmPoint!!,origin?.kmPoint!!,qty)
+                GlobalVariable.line!!,GlobalVariable.deviceName!!,origin?.name!!,passtype!!,ticketnumber.toString(),GlobalVariable.tripreverse!!,destination?.kmPoint!!,origin?.kmPoint!!,qty,GlobalVariable.ingressoRefId)
 
             totalfare=postTripticket?.amount!!
             qty=postTripticket?.qty
@@ -1217,7 +1217,7 @@ class TIcketingActivity : AppCompatActivity() {
                 )
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver: ${GlobalVariable.driver}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Device: ${GlobalVariable.deviceName}\n", "ST", 24, callback)
+               // mIPosPrinterService!!.printSpecifiedTypeText("Device: ${GlobalVariable.deviceName}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -1250,19 +1250,19 @@ class TIcketingActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
-                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
-
-//                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//                mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
+//                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
 //
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText(
-                    "********************************\n",
-                    "ST",
-                    24,
-                    callback
-                )
+////                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
+////
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//                mIPosPrinterService!!.printSpecifiedTypeText(
+//                    "********************************\n",
+//                    "ST",
+//                    24,
+//                    callback
+//                )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 

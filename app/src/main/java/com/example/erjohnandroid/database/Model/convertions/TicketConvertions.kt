@@ -11,9 +11,9 @@ import kotlin.collections.ArrayList
 
 object TicketConvertions {
 
-    val convertTripTickets :(Double,String,String,String,String,String,String,String,String,Int, Int,Int,Int) -> TripTicketTable ={ amount,conductorname,destination,drivername,line,
+    val convertTripTickets :(Double,String,String,String,String,String,String,String,String,Int, Int,Int,Int,Int) -> TripTicketTable ={ amount,conductorname,destination,drivername,line,
                                                                                                                                     mpadunit,origin,passengertype,ticketnumber,reverse,
-                                                                                                                                    kmdestination,kmorigin,qty->
+                                                                                                                                    kmdestination,kmorigin,qty,ingressorefid->
 
         val formattedDateTime = getCurrentDateInFormat()
         val method= TripTicketTable(
@@ -31,7 +31,8 @@ object TicketConvertions {
             tripReverse = reverse,
             KmDestination = kmdestination,
             KMOrigin = kmorigin,
-            qty = qty
+            qty = qty,
+            ingressoRefId = ingressorefid
 
         )
       method

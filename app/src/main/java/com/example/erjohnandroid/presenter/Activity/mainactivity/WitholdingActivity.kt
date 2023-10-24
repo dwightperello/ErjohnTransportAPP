@@ -67,7 +67,8 @@ class WitholdingActivity : AppCompatActivity() {
                 dateTimeStamp = formattedDateTime,
                 mPadUnit = GlobalVariable.deviceName,
                 name = "",
-                witholdingType = witholdingtype
+                witholdingType = witholdingtype,
+                ingressoRefId = GlobalVariable.ingressoRefId
             )
 
             witholds.add(method)

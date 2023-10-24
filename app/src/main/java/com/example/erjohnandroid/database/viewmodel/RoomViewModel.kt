@@ -124,6 +124,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _tripticketafterinspection:MutableLiveData<List<TripTicketTable>> = MutableLiveData()
     val tripticketafterinspection:LiveData<List<TripTicketTable>> = _tripticketafterinspection
 
+    private var _ingressoRefids:MutableLiveData<List<Int>> = MutableLiveData()
+    val ingressoRefids:LiveData<List<Int>> = _ingressoRefids
+
 
 
     //region OTHER METHODS
@@ -416,6 +419,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     //endregion
 
     //region INGRESSO
+
+    fun getAllIngressoRefID(){
+        viewModelScope.launch() {
+            val records = repository.getAllIngressoRefID()
+            _ingressoRefids.value = records
+        }
+    }
     fun getTotalAmountTrip() {
         viewModelScope.launch() {
             val records = repository.getTotalAmount()
@@ -430,16 +440,16 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun getAllIngresso(){
+    fun getAllIngresso(refid:Int){
         viewModelScope.launch() {
-            val records = repository.getAllIngresso()
+            val records = repository.getAllIngresso(refid)
             _ingresso.value = records
         }
     }
 
-    fun getTicketsForSynch(){
+    fun getTicketsForSynch(refid: Int){
         viewModelScope.launch() {
-            val records = repository.getallsynchTripticket()
+            val records = repository.getallsynchTripticket(refid)
             _ticketsycnh.value = records
         }
     }
@@ -451,9 +461,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun get_synch_inspection(){
+    fun get_synch_inspection(refid:Int){
         viewModelScope.launch() {
-            val records = repository.get_synch_inspection()
+            val records = repository.get_synch_inspection(refid)
             _synch_inspectionreport.value = records
         }
     }
@@ -465,9 +475,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun get_synch_mpad(){
+    fun get_synch_mpad(refid: Int){
         viewModelScope.launch() {
-            val records = repository.get_synch_mpad()
+            val records = repository.get_synch_mpad(refid)
             _synch_mpad.value = records
         }
     }
@@ -479,9 +489,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun get_synch_partial_remit(){
+    fun get_synch_partial_remit(refid: Int){
         viewModelScope.launch() {
-            val records = repository.get_synch_partial_remit()
+            val records = repository.get_synch_partial_remit(refid)
             _synch_partial.value = records
         }
     }
@@ -493,9 +503,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun get_synch_trip_cost(){
+    fun get_synch_trip_cost(refid: Int){
         viewModelScope.launch() {
-            val records = repository.get_synch_trip_cost()
+            val records = repository.get_synch_trip_cost(refid)
             _synch_trip_cost.value = records
         }
     }
@@ -507,9 +517,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun get_synch_trip_witholding(){
+    fun get_synch_trip_witholding(refid: Int){
         viewModelScope.launch() {
-            val records = repository.get_synch_witholding()
+            val records = repository.get_synch_witholding(refid)
             _synch_trip_witholdingt.value = records
         }
     }

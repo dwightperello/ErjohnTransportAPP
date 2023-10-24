@@ -10,5 +10,6 @@ data class Synch_TripCostTable(
     val costType: String?,
     val dateTimeStamp: String?,
     val driverConductorName: String?,
-    val line: String?
+    val line: String?,
+    val ingressoRefId:Int?
 )

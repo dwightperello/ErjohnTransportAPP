@@ -10,5 +10,6 @@ data class Synch_TripwitholdingTable(
     val dateTimeStamp: String,
     val mPadUnit: String?,
     var name: String?,
-    val witholdingType: String?
+    val witholdingType: String?,
+    val ingressoRefId:Int?
 )

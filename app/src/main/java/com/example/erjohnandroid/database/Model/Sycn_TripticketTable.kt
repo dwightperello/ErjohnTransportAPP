@@ -17,6 +17,7 @@ data class Sycn_TripticketTable(
     val passengerType: String?,
     var titcketNumber: String?,
     val qty:Int,
+    val ingressoRefId:Int?
 
 
     )

@@ -64,6 +64,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private var _postwitholdingBULK:MutableLiveData<ResultState<ResponseBody>> = MutableLiveData()
     val postwitholdingBULK:LiveData<ResultState<ResponseBody>> get() = _postwitholdingBULK
 
+    private var _postIngressoALL:MutableLiveData<ResultState<ResponseBody>> = MutableLiveData()
+    val postIngressoALL:LiveData<ResultState<ResponseBody>> get() = _postIngressoALL
+
     fun login(loginCredentials: request_login){
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.Login(loginCredentials)
@@ -128,6 +131,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.postIngresso("Bearer ${token}",ingresso)
                 .onEach { _postingresso.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun postIngressoALL(token: String,ingresso:postAllItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.postIngressoALL("Bearer ${token}",ingresso)
+                .onEach { _postIngressoALL.value=it }.launchIn(viewModelScope)
         }
     }
 

@@ -20,6 +20,7 @@ data class IngressoTable(
     val FinalRemit:Double?,
     val ShororOver:Double?,
     var InFault:String?,
-    val DateTimeStamp:String?
+    val DateTimeStamp:String?,
+    val ingressoRefId:Int?
 
 )

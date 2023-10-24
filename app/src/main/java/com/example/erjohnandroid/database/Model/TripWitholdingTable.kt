@@ -10,5 +10,6 @@ data class TripWitholdingTable(
     val dateTimeStamp: String?,
     val mPadUnit: String?,
     val name: String?,
-    val witholdingType: String?
+    val witholdingType: String?,
+    val ingressoRefId:Int?
 )

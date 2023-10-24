@@ -7,7 +7,6 @@ import com.example.erjohnandroid.util.ResultState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.ResponseBody
-import javax.inject.Inject
 
 class NetworkRepositoryImpl (private val networkService: NetworkService):NetworkRepository {
 
@@ -99,6 +98,19 @@ class NetworkRepositoryImpl (private val networkService: NetworkService):Network
         emit(ResultState.Loading)
         try {
             val response = networkService.postIngresso(token,ingresso)
+            emit(ResultState.Success(response))
+        }catch (e:Exception) {
+            emit((ResultState.Error(e)))
+        }
+    }
+
+    override suspend fun postIngressoALL(
+        token: String,
+        ingresso:postAllItem
+    ): Flow<ResultState<ResponseBody>> = flow {
+        emit(ResultState.Loading)
+        try {
+            val response = networkService.postIngressoALL(token,ingresso)
             emit(ResultState.Success(response))
         }catch (e:Exception) {
             emit((ResultState.Error(e)))

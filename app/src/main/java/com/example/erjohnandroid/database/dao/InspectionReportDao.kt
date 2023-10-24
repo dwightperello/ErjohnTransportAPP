@@ -12,8 +12,8 @@ interface InspectionReportDao {
     @Insert
     fun insertInspectionReportBulk(entity:InspectionReportTable)
 
-    @Query("SELECT * FROM InspectionReport")
-    fun getInspectionReport(): List<InspectionReportTable>
+    @Query("SELECT * FROM InspectionReport where ingressoRefId = :refid")
+    fun getInspectionReport(refid:Int): List<InspectionReportTable>
 
     @Query("DELETE FROM InspectionReport")
     fun truncatinspection()

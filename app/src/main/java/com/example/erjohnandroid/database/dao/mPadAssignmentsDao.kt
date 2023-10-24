@@ -9,8 +9,8 @@ import com.example.erjohnandroid.database.Model.mPadAssignmentsTable
 @Dao
 interface mPadAssignmentsDao {
 
-    @Query("Select * from mPadAssignments")
-    fun getmpadAssignment():List<mPadAssignmentsTable>
+    @Query("Select * from mPadAssignments where ingressoRefId = :refid")
+    fun getmpadAssignment(refid:Int):List<mPadAssignmentsTable>
 
     @Insert
     fun insertmpadassignmentBulk(entity:List<mPadAssignmentsTable>)

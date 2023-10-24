@@ -11,8 +11,8 @@ import com.example.erjohnandroid.database.Model.convertions.WitholdingTotal
 @Dao
 interface TripWitholdingDao {
 
-    @Query("Select * from TripWitholding")
-    fun gettripwitholding():List<TripWitholdingTable>
+    @Query("Select * from TripWitholding where ingressoRefId = :refid")
+    fun gettripwitholding(refid:Int):List<TripWitholdingTable>
 
     @Insert
     fun insertripwitholdingBulk(entity:List<TripWitholdingTable>)

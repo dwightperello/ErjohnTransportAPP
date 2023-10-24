@@ -12,8 +12,8 @@ interface Synch_TripcostDao {
     @Insert
     fun insert_synch_trip_cost(entity:List<Synch_TripCostTable>)
 
-    @Query("Select * from CopyTripCost")
-    fun get_synch_trip_cost():List<Synch_TripCostTable>
+    @Query("Select * from CopyTripCost where ingressoRefId = :refid")
+    fun get_synch_trip_cost(refid:Int):List<Synch_TripCostTable>
 
     @Query("DELETE FROM CopyTripCost")
     fun truncatecopytripcost()

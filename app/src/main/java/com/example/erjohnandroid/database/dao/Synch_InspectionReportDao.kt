@@ -12,8 +12,8 @@ interface Synch_InspectionReportDao {
     @Insert
     fun insertsynch_inspection(entity:List<Sycnh_InspectionReportTable>)
 
-    @Query("Select * from CopyInspectionReport")
-    fun getsynch_inspection():List<Sycnh_InspectionReportTable>
+    @Query("Select * from CopyInspectionReport where ingressoRefId = :refid")
+    fun getsynch_inspection(refid:Int):List<Sycnh_InspectionReportTable>
 
     @Query("DELETE FROM CopyInspectionReport")
     fun truncatecopyinspection()

@@ -267,7 +267,8 @@ class IngressoActivity : AppCompatActivity() {
                 FinalRemit = convertDecimal(_binding.etfinalremit.text.toString()),
                 ShororOver = convertDecimal(_binding.etshortover.text.toString()),
                 InFault = infault,
-                DateTimeStamp = formattedDateTime.toString()
+                DateTimeStamp = formattedDateTime.toString(),
+                ingressoRefId = GlobalVariable.ingressoRefId
 
             )
 
@@ -483,7 +484,7 @@ class IngressoActivity : AppCompatActivity() {
                 }
             }
 
-            totalamount -= AllWitholding.last().amount!! // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
+           // totalamount -= AllWitholding.last().amount!! // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
             val decimalVat = DecimalFormat("#.00")
             _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
 
@@ -541,7 +542,8 @@ class IngressoActivity : AppCompatActivity() {
                    passengerType = it.passengerType,
                    titcketNumber = it.titcketNumber!!,
                    qty = it.qty,
-                   Id = 0
+                   Id = 0,
+                   ingressoRefId = GlobalVariable.ingressoRefId
 
                )
                triptickets.add(method)
@@ -572,7 +574,8 @@ class IngressoActivity : AppCompatActivity() {
                   lineSegment = it.lineSegment,
                   mPadUnit = it.mPadUnit,
                   qty = it.qty,
-                  Id = 0
+                  Id = 0,
+                  ingressoRefId = GlobalVariable.ingressoRefId
               )
                 inspectionreport.add(method)
             }
@@ -600,7 +603,8 @@ class IngressoActivity : AppCompatActivity() {
                   driverName = it.driverName,
                   line = it.line,
                   mPadUnit = it.mPadUnit!!,
-                  Id = 0
+                  Id = 0,
+                  ingressoRefId = GlobalVariable.ingressoRefId
               )
                 mpadassignment.add(method)
             }
@@ -623,7 +627,8 @@ class IngressoActivity : AppCompatActivity() {
                    AmountRemited = it.AmountRemited,
                    Line = it.Line,
                    DateTimeStamp = it.DateTimeStamp,
-                   Id = 0
+                   Id = 0,
+                   ingressoRefId = GlobalVariable.ingressoRefId
 
                )
                 partialremit.add(method)
@@ -647,7 +652,8 @@ class IngressoActivity : AppCompatActivity() {
                    dateTimeStamp = it.dateTimeStamp!!,
                    driverConductorName = it.driverConductorName,
                    line = it.line,
-                   Id = 0
+                   Id = 0,
+                   ingressoRefId = GlobalVariable.ingressoRefId
                )
                 tripcost.add(method)
             }
@@ -670,7 +676,8 @@ class IngressoActivity : AppCompatActivity() {
                    mPadUnit = it.mPadUnit,
                    name = it.name,
                    witholdingType = it.witholdingType,
-                   Id = 0
+                   Id = 0,
+                   ingressoRefId = GlobalVariable.ingressoRefId
                )
                 withodling.add(method)
             }
@@ -706,6 +713,7 @@ class IngressoActivity : AppCompatActivity() {
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
         editor.putInt("ticketnumber", GlobalVariable.ticketnumber)
+        editor.putInt("ingressoRefId", GlobalVariable.ingressoRefId)
         ticketnumber= sharedPrefs.getInt("ticketnumber",0)
         //editor.putBoolean("isdispatch",false)
         GlobalVariable.isDispatched=false

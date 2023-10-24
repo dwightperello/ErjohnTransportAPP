@@ -69,7 +69,8 @@ class ExpensesActivity : AppCompatActivity() {
                 costType = expensestype,
                 driverConductorName = GlobalVariable.conductor +" " +GlobalVariable.driver,
                 line = GlobalVariable.line,
-                TripCostId = 0
+                TripCostId = 0,
+                ingressoRefId = GlobalVariable.ingressoRefId
             )
 
             expenses.add(method)

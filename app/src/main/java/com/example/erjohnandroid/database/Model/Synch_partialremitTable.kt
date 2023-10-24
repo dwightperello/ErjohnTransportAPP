@@ -10,5 +10,6 @@ data class Synch_partialremitTable(
     val Amount: Double?,
     val AmountRemited: Double?,
     val Line: String?,
-    val DateTimeStamp :String?
+    val DateTimeStamp :String?,
+    val ingressoRefId:Int?
 )

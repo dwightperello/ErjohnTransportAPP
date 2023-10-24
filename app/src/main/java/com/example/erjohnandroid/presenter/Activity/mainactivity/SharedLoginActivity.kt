@@ -47,6 +47,11 @@ class SharedLoginActivity : AppCompatActivity() {
 
         _binding.btnPin.setOnClickListener {
             pin = _binding.etPin.text.toString()
+            if(pin.isNullOrEmpty()){
+                Toast(this).showCustomToast("ENTER PIN",this)
+                return@setOnClickListener
+            }
+
             dbViewmodel.selectEmployee(pin!!.toInt())
         }
 

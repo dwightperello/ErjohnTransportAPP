@@ -12,8 +12,8 @@ interface Synch_mPadAssignmentDao {
     @Insert
     fun insert_synch_mpad(entity:List<Synch_mpadAssignmentsTable>)
 
-    @Query("Select * from CopymPadAssignments")
-    fun get_synch_mpad():List<Synch_mpadAssignmentsTable>
+    @Query("Select * from CopymPadAssignments where ingressoRefId = :refid ")
+    fun get_synch_mpad(refid:Int):List<Synch_mpadAssignmentsTable>
 
     @Query("DELETE FROM CopymPadAssignments")
     fun truncatecopympadAssignment()

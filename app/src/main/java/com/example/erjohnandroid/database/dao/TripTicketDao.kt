@@ -13,8 +13,8 @@ import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
 @Dao
 interface TripTicketDao {
 
-    @Query("Select * from TripTickets")
-    fun getTriptikcet():List<TripTicketTable>
+    @Query("Select * from TripTickets where ingressoRefId = :refid")
+    fun getTriptikcet(refid:Int):List<TripTicketTable>
 
     @Insert
     fun inserTripticketBulk(entity:TripTicketTable)

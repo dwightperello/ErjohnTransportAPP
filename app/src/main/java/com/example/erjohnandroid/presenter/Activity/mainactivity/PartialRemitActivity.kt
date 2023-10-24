@@ -92,7 +92,8 @@ class PartialRemitActivity : AppCompatActivity() {
                 Amount = stringcount.toDouble(),
                 AmountRemited = stringWithoutSpaces.toDouble(),
                 Line = GlobalVariable.line,
-                DateTimeStamp = formattedDateTime
+                DateTimeStamp = formattedDateTime,
+                ingressoRefId = GlobalVariable.ingressoRefId
             )
             try {
                 dbViewmodel.insertPartialremit(method)

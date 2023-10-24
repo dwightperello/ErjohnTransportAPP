@@ -38,6 +38,9 @@ interface NetworkService {
     @POST("Ingresso")
     suspend fun  postIngresso(@Header("Authorization")token:String,@Body ingresso:List<Ingresso>) : ResponseBody
 
+    @POST("Ingresso")
+    suspend fun  postIngressoALL(@Header("Authorization")token:String,@Body ingresso:postAllItem) : ResponseBody
+
     @POST("InspectionReports")
     suspend fun  postInspection(@Header("Authorization")token:String,@Body inspectionReports:List<InspectionReports>) : ResponseBody
 

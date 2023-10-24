@@ -47,5 +47,9 @@ object GlobalVariable {
     var AllWitholding:ArrayList<TripWitholdingTable> = arrayListOf()
     var AllTripCost:ArrayList<TripCostTable> = arrayListOf()
 
+    var ingressoRefId:Int=0
+
+
+
 
 }

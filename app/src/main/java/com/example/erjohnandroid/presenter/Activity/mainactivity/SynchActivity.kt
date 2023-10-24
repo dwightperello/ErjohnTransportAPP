@@ -1,27 +1,27 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
-import com.example.erjohnandroid.databinding.ActivityDispatchBinding
 import com.example.erjohnandroid.databinding.ActivitySynchBinding
 import com.example.erjohnandroid.domain.model.request.*
-import com.example.erjohnandroid.presenter.adapter.ExpensesAdapter
+import com.example.erjohnandroid.domain.model.response.LinesItem
 import com.example.erjohnandroid.presenter.viewmodel.networkViewModel
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.ResultState
 import com.example.erjohnandroid.util.showCustomToast
-import com.google.android.gms.common.internal.GmsLogger
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.ResponseBody
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -30,6 +30,15 @@ class SynchActivity : AppCompatActivity() {
     lateinit var _binding:ActivitySynchBinding
     private val viewModel: networkViewModel by viewModels()
     private val dbViewmodel:RoomViewModel by viewModels()
+
+    private var listOfRefID:ArrayList<Int> = arrayListOf()
+    private var ingresso:Ingresso?= null
+    private var inspection:ArrayList< Inspectionreport>?= arrayListOf()
+    private var mpadassignment:ArrayList<Mpadassignment>?= arrayListOf()
+    private var partialremit:ArrayList<Partialremitsdetail>?= arrayListOf()
+    private var tripcost:ArrayList<costtrip>?= arrayListOf()
+    private var tripwitholding:ArrayList<Tripwitholding>?= arrayListOf()
+    private var triptickets:ArrayList<tickettrip>?= arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,92 +49,181 @@ class SynchActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+
+        val window = window
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
         _binding.btnPostsynch.isEnabled=false
-        _binding.btnPostsynch.setText("PLEASE WAIT WHILE SYSTEM LOADS")
+        _binding.btnPostsynch.setText("PLEASE WAIT!")
+        _binding!!.txtPostsynching.append("Please wait while system prepares to synch")
 
 
         val delayInSeconds = 5
         val timer = Timer()
 
-        println("Before delay")
+
 
         timer.schedule(object : TimerTask() {
             override fun run() {
-                dbViewmodel.getTicketsForSynch()
+
+                dbViewmodel.getAllIngressoRefID()
             }
         }, delayInSeconds * 1000L)
 
         _binding.btnPostsynch.setOnClickListener {
-            _binding.btnPostsynch.isEnabled=false
             dbViewmodel.truncateCopyTables()
-            _binding!!.txtPostsynching.text=""
+            _binding.btnPostsynch.isEnabled=false
 
-            if(!post_ingresso.isNullOrEmpty()){
-                viewModel.postIngresso(GlobalVariable.token!!,post_ingresso!!.toList())
-            }
+            _binding!!.txtPostsynching.text=""
+            finish()
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+
+//            if(!post_ingresso.isNullOrEmpty()){
+//                viewModel.postIngresso(GlobalVariable.token!!,post_ingresso!!.toList())
+//            }
 
         }
 
     }
+    private fun getdate():String{
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
+    }
+    private fun ProcessAllIngressorefid(state: List<Int>?){
+        _binding!!.txtPostsynching.append("\nChecking data")
+        if(!state.isNullOrEmpty()) {
+            val formattedDateTime = getdate()
+           listOfRefID.addAll(state)
 
+           listOfRefID.forEach {
+                dbViewmodel.getAllIngresso(it)
+                dbViewmodel.get_synch_inspection(it)
+                dbViewmodel.get_synch_mpad(it)
+                dbViewmodel.get_synch_partial_remit(it)
+                dbViewmodel.get_synch_trip_cost(it)
+                dbViewmodel.get_synch_trip_witholding(it)
+                dbViewmodel.getTicketsForSynch(it)
+                var method= postAllItem(
+                    totalCollection = ingresso?.totalCollection ?:0.0,
+                    manualTicket = ingresso?.manualTicket ?: 0.0,
+                    cancelledTicket = ingresso?.cancelledTicket ?:0.0,
+                    totalExpenses = ingresso?.totalExpenses ?:0.0,
+                    totalWitholding = ingresso?.totalWitholding ?:0.0,
+                    driverName = ingresso?.driverName ?:"Driver",
+                    driverCommission = ingresso?.driverCommission ?:0.0,
+                    conductorName = ingresso?.conductorName?:"Conductor",
+                    conductorCommission = ingresso?.conductorCommission ?:0.0,
+                    net = ingresso?.net ?:0.0,
+                    partialRemit = ingresso?.partialRemit ?:0.0,
+                    finalRemit = ingresso?.finalRemit ?:0.0,
+                    shororOver = ingresso?.shororOver ?:0.0,
+                    inFault =  ingresso?.inFault ?:"none",
+                    dateTimeStamp = formattedDateTime,
+
+
+                    mpadassignments = mpadassignment?.toList()  ,
+                    partialremitsdetails = partialremit?.toList() ,
+                    inspectionreport = inspection?.toList() ,
+                    tripcost = tripcost!!.toList() ,
+                    triptickets = triptickets?.toList() ,
+                    tripwitholding = tripwitholding?.toList()
+                )
+
+//            val gson = Gson()
+//           val jsonResult = gson.toJson(method)
+
+               viewModel.postIngressoALL(GlobalVariable.token!!,method)
+               inspection= arrayListOf()
+               mpadassignment= arrayListOf()
+               partialremit= arrayListOf()
+               tripcost= arrayListOf()
+               tripwitholding=arrayListOf()
+               triptickets= arrayListOf()
+
+           }
+
+
+
+
+        }else{
+            Toast(this).showCustomToast("ALREADY SYNCH", this)
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+            finish()
+
+        }
+    }
     override fun onStart() {
         super.onStart()
-
-        dbViewmodel.ticketsycnh.observe(this, Observer {
-            state->Processtripticket(state)
+        dbViewmodel.ingressoRefids.observe(this, Observer {
+                state-> ProcessAllIngressorefid(state)
         })
 
         dbViewmodel.ingresso.observe(this, Observer {
-            state-> ProcessIngresso(state)
+                state-> ProcessIngresso(state)
         })
 
         dbViewmodel.synch_inspectionreport.observe(this,Observer{
-            state->ProcessInspection(state)
+                state->ProcessInspection(state)
         })
 
         dbViewmodel.synch_mpad.observe(this, Observer {
-            state->ProccessmpadAssignment(state)
+                state->ProccessmpadAssignment(state)
         })
 
         dbViewmodel.synch_partial.observe(this,Observer{
-            state->ProcessPartialRemit(state)
+                state->ProcessPartialRemit(state)
         })
 
         dbViewmodel.synch_trip_cost.observe(this, Observer {
-            state->ProcessTripCost(state)
+                state->ProcessTripCost(state)
         })
 
         dbViewmodel.synch_trip_witholdingt.observe(this,Observer{
-            state->ProcessWitholding(state)
+                state->ProcessWitholding(state)
         })
 
-        viewModel.postingresso.observe(this, Observer {
-            state->Process_postIngresso(state)
+        dbViewmodel.ticketsycnh.observe(this, Observer {
+                state->Processtripticket(state)
         })
 
-        viewModel.posttripticketBULK.observe(this, Observer {
-            state-> Process_triptickets(state)
+        viewModel.postIngressoALL.observe(this, Observer {
+            state -> Processadding(state)
         })
 
-        viewModel.postmpadassignments.observe(this, Observer {
-            state->Process_mpadassignments(state)
-        })
 
-        viewModel.postinspection.observe(this,Observer{
-            state->Process_inspection(state)
-        })
+    }
 
-        viewModel.postpartialremit.observe(this, Observer {
-            state->Process_partialremit(state)
-        })
 
-        viewModel.posttripcosts.observe(this, Observer {
-                state->Process_tripcost(state)
-        })
+    private fun Processadding(state: ResultState<ResponseBody>){
+        when(state){
+            is ResultState.Loading ->{
+                _binding!!.txtPostsynching.append("\nPosting Ingresso to service....")
+            }
 
-        viewModel.postwitholdingBULK.observe(this, Observer {
-                state->Process_witholding(state)
-        })
+
+            is ResultState.Success->{
+                Toast(this).showCustomToast("Synching Success", this)
+                _binding!!.txtPostsynching.append("\nSYNCHING SUCCESS")
+                _binding.btnPostsynch.setText("CLOSE NOW")
+                _binding.btnPostsynch.isEnabled=true
+            }
+            is ResultState.Error->{
+                Toast(this).showCustomToast(state.exception.toString(), this)
+                _binding!!.txtPostsynching.append("\nFailed")
+            }
+            else -> {}
+        }
     }
 
     private fun Process_postIngresso(state: ResultState<ResponseBody>){
@@ -137,7 +235,7 @@ class SynchActivity : AppCompatActivity() {
 
             is ResultState.Success->{
                 _binding!!.txtPostsynching.append("\nSuccess")
-                    viewModel.posttripticketBULK(GlobalVariable.token!!,post_tripticket!!.toList())
+                  //  viewModel.posttripticketBULK(GlobalVariable.token!!,post_tripticket!!.toList())
             }
             is ResultState.Error->{
                 Toast(this).showCustomToast(state.exception.toString(), this)
@@ -156,7 +254,7 @@ class SynchActivity : AppCompatActivity() {
 
             is ResultState.Success->{
                 _binding!!.txtPostsynching.append("\nSuccess")
-                    viewModel.postmpadAssignments(GlobalVariable.token!!,post_mpadassignment!!.toList())
+                  //  viewModel.postmpadAssignments(GlobalVariable.token!!,post_mpadassignment!!.toList())
 
 //                if(post_inspection.isNullOrEmpty()){
 //                    _binding!!.txtPostsynching.append("\nInspection Report empty, skipping....")
@@ -174,7 +272,6 @@ class SynchActivity : AppCompatActivity() {
         }
     }
 
-
     private fun Process_mpadassignments(state: ResultState<ResponseBody>){
         when(state){
             is ResultState.Loading ->{
@@ -186,29 +283,29 @@ class SynchActivity : AppCompatActivity() {
                 _binding!!.txtPostsynching.append("\nSuccess")
 
 
-                if(post_inspection.isNullOrEmpty()){
-                    _binding!!.txtPostsynching.append("\nInspection Report empty, skipping....")
-                }else{
-                    viewModel.postInspection(GlobalVariable.token!!,post_inspection!!.toList())
-                }
+//                if(post_inspection.isNullOrEmpty()){
+//                    _binding!!.txtPostsynching.append("\nInspection Report empty, skipping....")
+//                }else{
+//                    viewModel.postInspection(GlobalVariable.token!!,post_inspection!!.toList())
+//                }
 
-                if(post_partialremit.isNullOrEmpty()){
-                    _binding!!.txtPostsynching.append("\nPartial Remit empty, skipping....")
-                }else{
-                    viewModel.postPartialRemits(GlobalVariable.token!!,post_partialremit!!.toList())
-                }
+//                if(post_partialremit.isNullOrEmpty()){
+//                    _binding!!.txtPostsynching.append("\nPartial Remit empty, skipping....")
+//                }else{
+//                    viewModel.postPartialRemits(GlobalVariable.token!!,post_partialremit!!.toList())
+//                }
 
-                if(post_tripcost.isNullOrEmpty()){
-                    _binding!!.txtPostsynching.append("\nTrip Expenses empty, skipping....")
-                }else{
-                    viewModel.postTripcosts(GlobalVariable.token!!,post_tripcost!!.toList())
-                }
+//                if(post_tripcost.isNullOrEmpty()){
+//                    _binding!!.txtPostsynching.append("\nTrip Expenses empty, skipping....")
+//                }else{
+//                    viewModel.postTripcosts(GlobalVariable.token!!,post_tripcost!!.toList())
+//                }
 
-                if(post_witholding.isNullOrEmpty()){
-                    _binding!!.txtPostsynching.append("\nWitholding empty, skipping....")
-                }else{
-                    viewModel.postWitholdingsBULK(GlobalVariable.token!!,post_witholding!!.toList())
-                }
+//                if(post_witholding.isNullOrEmpty()){
+//                    _binding!!.txtPostsynching.append("\nWitholding empty, skipping....")
+//                }else{
+//                   // viewModel.postWitholdingsBULK(GlobalVariable.token!!,post_witholding!!.toList())
+//                }
 
                 Toast(this).showCustomToast(" SYCNHING FINISH", this)
             }
@@ -301,11 +398,11 @@ class SynchActivity : AppCompatActivity() {
 
 
 
-    private var post_tripticket:ArrayList<TripTIcket>?= arrayListOf()
+
     private fun Processtripticket(state: List<Sycn_TripticketTable>?){
         if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.text="PLEASE WAIT WHILE SYSTEM FETCH DATA FROM LOCAL DATABASE \n\n FETCH TRIP TICKETS...."
+
            state.forEach {
                var method= TripTIcket(
                    mPadUnit = it.mPadUnit!!,
@@ -320,9 +417,30 @@ class SynchActivity : AppCompatActivity() {
                    driverName = it.driverName!!,
                    qty = it.qty
                )
-               post_tripticket?.add(method)
+               var method2 = tickettrip(
+                 amount = method.amount,
+                   conductorName = method.conductorName,
+                   dateTimeStamp = method.dateTimeStamp,
+                   destination = method.destination,
+                   driverName = method.driverName,
+                   id = 0,
+                   ingreId = 0,
+                   line = method.line,
+                   mPadUnit = method.mPadUnit,
+                   origin = method.origin,
+                   passengerType = method.passengerType,
+                   qty = method.qty,
+                   titcketNumber = method.titcketNumber
+
+
+
+               )
+
+               triptickets?.add(method2)
+               _binding!!.txtPostsynching.text="\n\n FETCH TRIP TICKETS...."
+
            }
-            dbViewmodel.getAllIngresso()
+           // dbViewmodel.getAllIngresso()
         }
         else{
             Toast(this).showCustomToast("NO TRIP TICKETS FOUND",this)
@@ -330,11 +448,11 @@ class SynchActivity : AppCompatActivity() {
         }
     }
 
-    private var post_ingresso:ArrayList<Ingresso>? = arrayListOf()
+
     private fun ProcessIngresso(state: List<IngressoTable>?){
         if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.append("\n\n FETCH INGRESSO DATA....")
+
             state.forEach {
                 if(it.InFault.isNullOrEmpty())it.InFault="none"
                 var method= Ingresso(
@@ -353,22 +471,22 @@ class SynchActivity : AppCompatActivity() {
                   inFault = it.InFault!!,
                   dateTimeStamp = it.DateTimeStamp!!,
                   finalRemit = it.FinalRemit!!
-
                 )
-                post_ingresso?.add(method)
+            ingresso=method
+                _binding!!.txtPostsynching.append("\n\n FETCH INGRESSO DATA....")
             }
-            dbViewmodel.get_synch_inspection()
+
         }
         else{
             Toast(this).showCustomToast("NO TRIP TICKETS FOUND",this)
         }
     }
 
-    private var post_inspection:ArrayList<InspectionReports>? = arrayListOf()
+
     private fun ProcessInspection(state: List<Sycnh_InspectionReportTable>?){
         if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.append("\n\n FETCH INSPECTION REPORT....")
+
             state.forEach {
                var method= InspectionReports(
                    inspectorName = it.inspectorName!!,
@@ -381,21 +499,35 @@ class SynchActivity : AppCompatActivity() {
                    actualPassengerCount = it.actualPassengerCount!!,
                    difference = it.difference!!
                )
-                post_inspection?.add(method)
+                var method2 = Inspectionreport(
+                    actualPassengerCount = method.actualPassengerCount,
+                    dateTimeStamp = method.dateTimeStamp,
+                    difference = method.difference,
+                    direction = method.direction,
+                    id = 0,
+                    ingId = 0,
+                    inspectorName = method.inspectorName,
+                    line = method.line,
+                    lineSegment = method.lineSegment,
+                    mPadUnit = method.mPadUnit,
+                    qty = method.qty
+
+
+                )
+
+                inspection?.add(method2)
+                _binding!!.txtPostsynching.append("\n\n FETCH INSPECTION REPORT....")
             }
-                dbViewmodel.get_synch_mpad()
+
         }
-        else{
-            _binding!!.txtPostsynching.append("\n\n NO INSPECTION REPORT FOUND, SKIPPING....")
-            dbViewmodel.get_synch_mpad()
-        }
+
     }
 
-    private var post_mpadassignment:ArrayList<mPadAssignments>? = arrayListOf()
+
     private fun ProccessmpadAssignment(state: List<Synch_mpadAssignmentsTable>?){
         if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.append("\n\n FETCH mPAD ASSIGNMENT....")
+
             state.forEach {
                 var method= mPadAssignments(
                     mPadUnit = it.mPadUnit!!,
@@ -406,21 +538,33 @@ class SynchActivity : AppCompatActivity() {
                     conductorName = it.conductorName!!,
                     driverName = it.driverName!!
                 )
-                post_mpadassignment?.add(method)
+                var method2= Mpadassignment(
+                    busNumber = method.busNumber,
+                    conductorName = method.conductorName,
+                    dataTimeStamp = method.dataTimeStamp,
+                    dispatcherName = method.dispatcherName,
+                    driverName = method.driverName,
+                    id = 0,
+                    ingressoId = 0,
+                    line = method.line,
+                    mPadUnit = method.mPadUnit
+
+
+                )
+
+                mpadassignment?.add(method2)
+                _binding!!.txtPostsynching.append("\n\n FETCH mPAD ASSIGNMENT....")
             }
-                dbViewmodel.get_synch_partial_remit()
+
         }
-        else{
-            _binding!!.txtPostsynching.append("\n\n NO mPAD ASSIGNMENT FOUND, SKIPPING....")
-            dbViewmodel.get_synch_partial_remit()
-        }
+
     }
 
-    private var post_partialremit:ArrayList<PartialRemit>? = arrayListOf()
+
     private fun ProcessPartialRemit(state: List<Synch_partialremitTable>?){
         if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.append("\n\n FETCH PARTIAL REMIT....")
+
             state.forEach {
                var method= PartialRemit(
                    amount = it.Amount!!,
@@ -429,21 +573,31 @@ class SynchActivity : AppCompatActivity() {
                    line = it.Line!!,
                    dateTimeStamp = it.DateTimeStamp!!
                )
-                post_partialremit?.add(method)
+                var method2 = Partialremitsdetail(
+                    amount = method.amount,
+                    amountRemited = method.amountRemited,
+                    cashierName = method.cashierName,
+                    dateTimeStamp = method.dateTimeStamp,
+                    id = 0,
+                    ingressId = 0,
+                    line = method.line
+
+
+                )
+
+                partialremit?.add(method2)
+                _binding!!.txtPostsynching.append("\n\n FETCH PARTIAL REMIT....")
             }
-                dbViewmodel.get_synch_trip_cost()
+
         }
-        else{
-            _binding!!.txtPostsynching.append("\n\n NO PARTIAL REMIT FOUND, SKIPPING....")
-            dbViewmodel.get_synch_trip_cost()
-        }
+
     }
 
-    private var post_tripcost:ArrayList<TripCost>? = arrayListOf()
+
     private fun ProcessTripCost(state: List<Synch_TripCostTable>?){
         if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.append("\n\n FETCH TRIP EXPENSES....")
+
             state.forEach {
                 var method=TripCost(
                     costType = it.costType!!,
@@ -452,40 +606,55 @@ class SynchActivity : AppCompatActivity() {
                     line = it.line!!,
                     driverConductorName = it.driverConductorName!!
                 )
-                post_tripcost?.add(method)
+                var method2= costtrip(
+                    amount = method.amount,
+                    costType = method.costType,
+                    dateTimeStamp = method.dateTimeStamp,
+                    driverConductorName = method.driverConductorName,
+                    id = 0,
+                    ingresId = 0,
+                    line = method.line
+
+                )
+
+                tripcost?.add(method2)
+                _binding!!.txtPostsynching.append("\n\n FETCH TRIP EXPENSES....")
             }
-            dbViewmodel.get_synch_trip_witholding()
+
 
         }
-        else{
-            _binding!!.txtPostsynching.append("\n\n NO TRIP EXPENSES FOUND, SKIPPING....")
-            dbViewmodel.get_synch_trip_witholding()
-        }
+
     }
 
-    private var post_witholding:ArrayList<TripWitholdings>? = arrayListOf()
-    private fun ProcessWitholding(state: List<Synch_TripwitholdingTable>?){
-        if(!state.isNullOrEmpty()){
 
-            _binding!!.txtPostsynching.append("\n\n FETCH WITHOLDINGS....")
+    private fun ProcessWitholding(state: List<Synch_TripwitholdingTable>?){
+        if(!state.isNullOrEmpty()) {
+
+
             state.forEach {
-                if(it.name.isNullOrEmpty())it.name="VERIFICATION"
-                var method= TripWitholdings(
+                if (it.name.isNullOrEmpty()) it.name = "VERIFICATION"
+                var method = TripWitholdings(
                     mPadUnit = it.mPadUnit!!,
                     witholdingType = it.witholdingType!!,
                     name = it.name!!,
                     amount = it.amount!!,
                     dateTimeStamp = it.dateTimeStamp
                 )
-                post_witholding?.add(method)
+                var method2 = Tripwitholding(
+                    amount = method.amount,
+                    dateTimeStamp = method.dateTimeStamp,
+                    id = -0,
+                    ingrId = 0,
+                    mPadUnit = method.mPadUnit,
+                    name = method.name,
+                    witholdingType = method.witholdingType
+
+
+                )
+
+                tripwitholding?.add(method2)
+                _binding!!.txtPostsynching.append("\n\n FETCH WITHOLDINGS....")
             }
-            _binding.btnPostsynch.isEnabled=true
-            _binding.btnPostsynch.setText("SYSTEM READY TO SYNCH")
-        }
-        else{
-            _binding!!.txtPostsynching.append("\n\n NO WITHOLDINGS FOUND, SKIPPING....")
-            _binding.btnPostsynch.isEnabled=true
-            _binding.btnPostsynch.setText("SYSTEM READY TO SYNCH")
         }
     }
 
@@ -496,4 +665,39 @@ class SynchActivity : AppCompatActivity() {
         );
         finish()
     }
+
+
+    //region TEST IF STILL NEEDED.. PUT IN START
+//
+//    viewModel.postingresso.observe(this, Observer {
+//        state->Process_postIngresso(state)
+//    })
+//
+//    viewModel.posttripticketBULK.observe(this, Observer {
+//        state-> Process_triptickets(state)
+//    })
+//
+//    viewModel.postmpadassignments.observe(this, Observer {
+//        state->Process_mpadassignments(state)
+//    })
+//
+//    viewModel.postinspection.observe(this,Observer{
+//        state->Process_inspection(state)
+//    })
+//
+//    viewModel.postpartialremit.observe(this, Observer {
+//        state->Process_partialremit(state)
+//    })
+//
+//    viewModel.posttripcosts.observe(this, Observer {
+//        state->Process_tripcost(state)
+//    })
+//
+//    viewModel.postwitholdingBULK.observe(this, Observer {
+//        state->Process_witholding(state)
+//    })
+    //endregion
+
+
+
 }

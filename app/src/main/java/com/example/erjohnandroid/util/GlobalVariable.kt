@@ -1,5 +1,6 @@
 package com.example.erjohnandroid.util
 
+import com.example.erjohnandroid.database.Model.HotSpotsTable
 import com.example.erjohnandroid.database.Model.LineSegmentTable
 import com.example.erjohnandroid.database.Model.TripCostTable
 import com.example.erjohnandroid.database.Model.TripWitholdingTable
@@ -36,6 +37,8 @@ object GlobalVariable {
     var deviceName:String?= null
 
     var linesegment:List<LineSegmentTable>?= arrayListOf()
+
+    var hotspot:List<HotSpotsTable>?= arrayListOf()
 
     var remainingPass:Int?=null
 

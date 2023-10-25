@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
+import com.example.erjohnandroid.database.Model.HotSpotsTable
 import com.example.erjohnandroid.database.Model.LineSegmentTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TicketConvertions
@@ -129,6 +130,10 @@ class TIcketingActivity : AppCompatActivity() {
         dbViewmodel.linesegment.observe(this, Observer {
                 state->processLine(state)
 
+        })
+
+        dbViewmodel.hotspots.observe(this,Observer{
+            state -> ProcessHotspot(state)
         })
 
 //        dbViewmodel.passengertype.observe(this, Observer {
@@ -297,6 +302,21 @@ class TIcketingActivity : AppCompatActivity() {
             _binding.btnOriginForward.isEnabled=false
         }
 
+        dbViewmodel.gethotspots(GlobalVariable.lineid!!)
+
+    }
+
+    val ProcessHotspot:(state: List<HotSpotsTable>?) ->Unit={
+        if(!it.isNullOrEmpty()){
+            GlobalVariable.hotspot= it
+
+        }else
+        {
+            Toast(this@TIcketingActivity).showCustomToast("NO HOTSPOT FOUND",this@TIcketingActivity)
+        }
+
+
+
     }
 
     val processRemsouth:(state: List<TripTicketTable>?) ->Unit={
@@ -355,6 +375,8 @@ class TIcketingActivity : AppCompatActivity() {
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
             }
             clearAllSearchFields()
+
+
             computeAmount()
         }
 
@@ -763,42 +785,50 @@ class TIcketingActivity : AppCompatActivity() {
               }
           }
           else{
-              if(GlobalVariable.direction.equals("South")) KMdiff= destination?.kmPoint!! - origin?.kmPoint!!
-              else KMdiff= origin?.kmPoint!! - destination?.kmPoint!!
+              val amountfromHspot= checkhotspot(destination?.kmPoint!!,origin?.kmPoint!!)
+              if (amountfromHspot!=null){
+                  total= amountfromHspot
+              }else
+              {
+                  if(GlobalVariable.direction.equals("South")) KMdiff= destination?.kmPoint!! - origin?.kmPoint!!
+                  else KMdiff= origin?.kmPoint!! - destination?.kmPoint!!
 
-              if(KMdiff > 5){
+                  if(KMdiff > 5){
 
-                  if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
-                      discount= fare.toDouble() *   discountamount
-                      amountafterdiscount= fare - discount
-                      getkmdiff = KMdiff - 5
-                      getExceedAmount = getkmdiff * 2.12
-                      total = getExceedAmount + amountafterdiscount
-                      total = total * qty
-                  }else{
-                      getkmdiff = KMdiff -5
-                      getExceedAmount= getkmdiff * 2.65
-                      total = getExceedAmount + fare
-                      total= total * qty
+                      if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
+                          discount= fare.toDouble() *   discountamount
+                          amountafterdiscount= fare - discount
+                          getkmdiff = KMdiff - 5
+                          getExceedAmount = getkmdiff * 2.12
+                          total = getExceedAmount + amountafterdiscount
+                          total = total * qty
+                      }else{
+                          getkmdiff = KMdiff -5
+                          getExceedAmount= getkmdiff * 2.65
+                          total = getExceedAmount + fare
+                          total= total * qty
+                      }
+
                   }
+                  else{
+                      if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
+                          discount= fare *  discountamount
+                          amountafterdiscount= fare - discount
+                          total= amountafterdiscount * qty
+                      }else{
+                          total= fare.toDouble() * qty
+                      }
 
-              }
-              else{
-                  if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
-                      discount= fare *  discountamount
-                      amountafterdiscount= fare - discount
-                      total= amountafterdiscount * qty
-                  }else{
-                      total= fare.toDouble() * qty
                   }
-
-              }
 //        if(_binding.cbBaggage.isChecked){
 //            var bag= _binding.etbaggaeamount.text.toString()
 //            if(bag.isNullOrEmpty()) bag="0.0"
 //            baggageamount += bag.toDouble()
 //            total += baggageamount
 //        }
+
+
+              }
 
 
           }
@@ -943,6 +973,13 @@ class TIcketingActivity : AppCompatActivity() {
         _binding.etOriginsearch.setText("")
         _binding.etDestinationsearch.clearFocus()
         _binding.etOriginsearch.clearFocus()
+    }
+
+    val checkhotspot:(Int,Int)-> Double? ={ from, to ->
+        var hotspotamount:Double?= null
+        val filteredList =GlobalVariable.hotspot?.filter { it.pointfrom == from && it.pointto == to || it.pointfrom == to && it.pointto == from }
+        hotspotamount = filteredList?.firstOrNull()?.fare
+        hotspotamount
     }
 
 

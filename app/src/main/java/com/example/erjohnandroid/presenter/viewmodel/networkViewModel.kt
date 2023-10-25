@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.erjohnandroid.database.Model.HotSpotsTable
 import com.example.erjohnandroid.domain.model.request.*
 import com.example.erjohnandroid.domain.model.response.*
 import com.example.erjohnandroid.domain.repository.NetworkRepositoryImpl
@@ -24,6 +25,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
 
     private  var _allLines:MutableLiveData<ResultState<ArrayList<LinesItem>>> = MutableLiveData()
     val allLines:LiveData<ResultState<ArrayList<LinesItem>>> get() = _allLines
+
+    private  var _allHotspots:MutableLiveData<ResultState<ArrayList<HotSpotItem>>> = MutableLiveData()
+    val allHotspots:LiveData<ResultState<ArrayList<HotSpotItem>>> get() = _allHotspots
 
     private  var _companies:MutableLiveData<ResultState<ArrayList<CompaniesItem>>> = MutableLiveData()
     val companies:LiveData<ResultState<ArrayList<CompaniesItem>>> get() = _companies
@@ -67,6 +71,8 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private var _postIngressoALL:MutableLiveData<ResultState<ResponseBody>> = MutableLiveData()
     val postIngressoALL:LiveData<ResultState<ResponseBody>> get() = _postIngressoALL
 
+
+
     fun login(loginCredentials: request_login){
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.Login(loginCredentials)
@@ -81,6 +87,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.getAllLines("Bearer ${token}")
                 .onEach { _allLines.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun getAllHotspots(token:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.getAllHotspots("Bearer ${token}")
+                .onEach { _allHotspots.value=it }.launchIn(viewModelScope)
         }
     }
 

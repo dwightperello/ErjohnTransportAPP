@@ -82,6 +82,11 @@ class GetSynchingActivity : AppCompatActivity() {
         viewModel.witholdingtype.observe(this, Observer {
                 state-> PRocesswitholding(state)
         })
+
+        viewModel.allHotspots.observe(this, Observer {
+          state->ProcessHotspot(state)
+        })
+
     }
 
     private var linesegment:ArrayList<LineSegment>?= ArrayList<LineSegment>()
@@ -97,6 +102,7 @@ class GetSynchingActivity : AppCompatActivity() {
     private var dbExpensestype:ArrayList<ExpensesTypeTable>?= arrayListOf()
     private var dbPassengertype:ArrayList<PassengerTypeTable>?= arrayListOf()
     private var dbWitholdingtype:ArrayList<WitholdingTypeTable>?= arrayListOf()
+    private var dbHotspots:ArrayList<HotSpotsTable>?= arrayListOf()
 
     private fun ProcessLines(state: ResultState<ArrayList<LinesItem>>?){
         when(state){
@@ -350,8 +356,46 @@ class GetSynchingActivity : AppCompatActivity() {
                        )
                         dbWitholdingtype?.add(method)
                     }
-
+                    viewModel.getAllHotspots(GlobalVariable.token!!)
                     Log.d("withold",dbWitholdingtype?.size.toString())
+                    //InsertDB()
+                }
+
+            }
+            is ResultState.Error->{
+                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
+
+
+            }
+            else -> {}
+        }
+    }
+
+    private fun ProcessHotspot(state: ResultState<ArrayList<HotSpotItem>>?){
+        when(state){
+            is ResultState.Loading ->{
+                _binding!!.txtGetsynchingtext.append("\nGetting Hotspots....")
+            }
+            is ResultState.Success-> {
+
+                if (state.data != null) {
+                    Log.d("hsize",state.data.size.toString())
+                    state.data.forEach {
+                        var method= HotSpotsTable(
+                            fare = it.fare,
+                            id = it.id,
+                            lineid = it.lineid,
+                            modeid = it.modeid,
+                            namE2 = it.namE2,
+                            name = it.name,
+                            pointfrom = it.pointfrom,
+                            pointto = it.pointto,
+                            tag = it.tag
+                        )
+                        dbHotspots?.add(method)
+                    }
+
+                    Log.d("hotspots",dbWitholdingtype?.size.toString())
                     InsertDB()
                 }
 
@@ -377,6 +421,7 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertExpensestypeBulk(dbExpensestype!!)
             dbViewmodel.insertPassengerTypeBUlk(dbPassengertype!!)
             dbViewmodel.insertWitholdingtypebulk(dbWitholdingtype!!)
+            dbViewmodel.insertAllHotspots(dbHotspots!!)
             finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
 

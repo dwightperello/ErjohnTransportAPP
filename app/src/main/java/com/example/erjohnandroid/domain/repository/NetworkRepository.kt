@@ -13,6 +13,8 @@ interface NetworkRepository {
 
     suspend fun getAllLines(token:String):Flow<ResultState<ArrayList<LinesItem>>>
 
+    suspend fun getAllHotspots(token:String):Flow<ResultState<ArrayList<HotSpotItem>>>
+
     suspend fun getCompanies(token:String):Flow<ResultState<ArrayList<CompaniesItem>>>
 
     suspend fun getBusinfo(token:String):Flow<ResultState<ArrayList<BusInfos>>>

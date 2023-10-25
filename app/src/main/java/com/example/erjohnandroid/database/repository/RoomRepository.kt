@@ -13,7 +13,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
                                          private val tripTicketDao: TripTicketDao,private val tripWitholdingDao: TripWitholdingDao,private val witholdingTypeDao: WitholdingTypeDao,
                                          private val partialRemitDao: PartialRemitDao, private val ingressoDao: IngressoDao,private val synchTripticketdao: Synch_TripticketDao,
                                          private val synchInspectionreportdao: Synch_InspectionReportDao, private val synchMpadassignmentdao: Synch_mPadAssignmentDao,
-                                         private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,private val synchTripwitholdingdao: Synch_TripwitholdingDao) {
+                                         private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,private val synchTripwitholdingdao: Synch_TripwitholdingDao,private val hotSpotDAO: HotSpotDAO) {
 
     //region
 
@@ -21,8 +21,16 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return busInfoDao.getBusinfo(id)
     }
 
+    fun getHotspot(id: Int):List<HotSpotsTable>{
+        return  hotSpotDAO.getHotspots(id)
+    }
+
     fun insertBusinfoBulk(entity:List<BusInfoTableItem>){
         return busInfoDao.insertBusinfoBulk(entity)
+    }
+
+    fun insertHotspotBulk(entity:List<HotSpotsTable>){
+        return hotSpotDAO.insertAllHotSpots(entity)
     }
 
     fun getAllCompanies():List<CompaniesTable>{

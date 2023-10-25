@@ -23,6 +23,10 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private  var _businfo:MutableLiveData<List<BusInfoTableItem>> = MutableLiveData()
     val businfo:LiveData<List<BusInfoTableItem>> = _businfo
 
+
+    private  var _hotspots:MutableLiveData<List<HotSpotsTable>> = MutableLiveData()
+    val hotspots:LiveData<List<HotSpotsTable>> = _hotspots
+
     private var _company:MutableLiveData<List<CompaniesTable>> = MutableLiveData()
     val company:LiveData<List<CompaniesTable>> = _company
 
@@ -138,9 +142,23 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun gethotspots(id:Int){
+        viewModelScope.launch() {
+            val records=  repository.getHotspot(id)
+            _hotspots.value=records
+        }
+    }
+
     fun insertBusinfo(entity: List<BusInfoTableItem>){
         viewModelScope.launch() {
             val records=  repository.insertBusinfoBulk(entity)
+
+        }
+    }
+
+    fun insertAllHotspots(entity: List<HotSpotsTable>){
+        viewModelScope.launch() {
+            val records=  repository.insertHotspotBulk(entity)
 
         }
     }

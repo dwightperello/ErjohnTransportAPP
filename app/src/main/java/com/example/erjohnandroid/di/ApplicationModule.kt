@@ -194,4 +194,10 @@ object ApplicationModule {
         return appdb.getIngresoDao()
     }
 
+    @Provides
+    @Singleton
+    fun ProvideHotspot(appdb: AppDatabase):HotSpotDAO{
+        return appdb.getHotspotDao()
+    }
+
 }

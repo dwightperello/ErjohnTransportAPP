@@ -1162,7 +1162,7 @@ class IngressoActivity : AppCompatActivity() {
                     callback
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("SALES\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("SALES\n\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${gross}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text.toString()}\n", "ST", 24, callback)
@@ -1178,7 +1178,7 @@ class IngressoActivity : AppCompatActivity() {
                 )
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Benefits\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Benefits\n\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Total Commission: ${_binding.txttotalcommision.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver Commission: ${_binding.txtdrivercommision.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor Commission: ${_binding.txtconductorcommision.text}\n", "ST", 24, callback)
@@ -1193,14 +1193,42 @@ class IngressoActivity : AppCompatActivity() {
                     callback
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Inspection Report\n", "ST", 24, 1,callback)
-              inspectionreport.forEach {
+                mIPosPrinterService!!.PrintSpecFormatText("Inspection Report\n\n", "ST", 24, 1,callback)
+                inspectionreport.forEach {
                   mIPosPrinterService!!.printSpecifiedTypeText("Inspector: ${it.inspectorName}\n", "ST", 24, callback)
                   mIPosPrinterService!!.printSpecifiedTypeText("Count: ${it.actualPassengerCount} - Discrepancy: ${it.difference} \n", "ST", 24, callback)
                   mIPosPrinterService!!.printSpecifiedTypeText("Segment: ${it.lineSegment}\n", "ST", 24, callback)
                   mIPosPrinterService!!.printSpecifiedTypeText("mPAD: ${it.mPadUnit}\n", "ST", 24, callback)
               }
 
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText(
+                    "********************************\n",
+                    "ST",
+                    24,
+                    callback
+                )
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Expenses\n\n", "ST", 24, 1,callback)
+
+                GlobalVariable.AllTripCost.forEach {
+                    mIPosPrinterService!!.printSpecifiedTypeText("Expenses type: ${it.costType}\n", "ST", 24, callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)
+                }
+
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText(
+                    "********************************\n",
+                    "ST",
+                    24,
+                    callback
+                )
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Witholding\n\n", "ST", 24, 1,callback)
+                GlobalVariable.AllWitholding.forEach {
+                    mIPosPrinterService!!.printSpecifiedTypeText("Witholding type: ${it.witholdingType}\n", "ST", 24, callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)
+                }
 
                 mIPosPrinterService!!.printerPerformPrint(160, callback)
                 runOnUiThread {

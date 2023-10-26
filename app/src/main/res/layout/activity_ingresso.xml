@@ -583,7 +583,6 @@
                    android:text="SUBMIT INGRESSO"/>
 
                 <Button
-                    android:visibility="gone"
                     android:enabled="false"
                     android:gravity="center"
                     android:layout_gravity="center"

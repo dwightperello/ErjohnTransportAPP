@@ -652,7 +652,7 @@ class InspectionActivity : AppCompatActivity() {
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 tripticket?.forEach {
-                    mIPosPrinterService!!.printSpecifiedTypeText("Fr: ${it.KMOrigin} - To: ${it.KmDestination} - Amount:${it.amount}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("${it.time}  000${it.titcketNumber}  ${it.KMOrigin}  ${it.KmDestination}   ${it.amount}\n", "ST", 24,  callback)
                 }
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(

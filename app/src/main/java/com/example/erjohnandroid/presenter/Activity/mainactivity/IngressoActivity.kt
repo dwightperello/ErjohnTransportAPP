@@ -105,14 +105,14 @@ class IngressoActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         val window = window
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                )
+//        window.decorView.systemUiVisibility = (
+//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                )
 
 
         initPrinter()
@@ -301,6 +301,10 @@ class IngressoActivity : AppCompatActivity() {
             }catch (e:java.lang.Exception){
                 Log.e("erro",e.message.toString())
             }
+        }
+
+        _binding.btnigressoreprint.setOnClickListener {
+            printText("Erjohn & Almark Transit Corp")
         }
 
     }
@@ -688,8 +692,9 @@ class IngressoActivity : AppCompatActivity() {
                 gross=ans
                 printText("Erjohn & Almark Transit Corp")
                dbViewmodel.insert_synch_witholding(withodling)
-               dbViewmodel.truncatetables()
+//               dbViewmodel.truncatetables()
                // resetALl()
+                _binding.btnigressoreprint.isEnabled=true
                 _binding.btnigresso.isEnabled=false
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
@@ -1200,22 +1205,22 @@ class IngressoActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Inspection Report\n\n", "ST", 24, 1,callback)
-                inspectionreport.forEach {
-                  mIPosPrinterService!!.printSpecifiedTypeText("Inspector: ${it.inspectorName}\n", "ST", 24, callback)
-                  mIPosPrinterService!!.printSpecifiedTypeText("Count: ${it.actualPassengerCount} - Discrepancy: ${it.difference} \n", "ST", 24, callback)
-                  mIPosPrinterService!!.printSpecifiedTypeText("Segment: ${it.lineSegment}\n", "ST", 24, callback)
-                  mIPosPrinterService!!.printSpecifiedTypeText("mPAD: ${it.mPadUnit}\n", "ST", 24, callback)
-              }
-
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText(
-                    "********************************\n",
-                    "ST",
-                    24,
-                    callback
-                )
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//                mIPosPrinterService!!.PrintSpecFormatText("Inspection Report\n\n", "ST", 24, 1,callback)
+//                inspectionreport.forEach {
+//                  mIPosPrinterService!!.printSpecifiedTypeText("Inspector: ${it.inspectorName}\n", "ST", 24, callback)
+//                  mIPosPrinterService!!.printSpecifiedTypeText("Count: ${it.actualPassengerCount} - Discrepancy: ${it.difference} \n", "ST", 24, callback)
+//                  mIPosPrinterService!!.printSpecifiedTypeText("Segment: ${it.lineSegment}\n", "ST", 24, callback)
+//                  mIPosPrinterService!!.printSpecifiedTypeText("mPAD: ${it.mPadUnit}\n", "ST", 24, callback)
+//              }
+//
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//                mIPosPrinterService!!.printSpecifiedTypeText(
+//                    "********************************\n",
+//                    "ST",
+//                    24,
+//                    callback
+//                )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Expenses\n\n", "ST", 24, 1,callback)
 
@@ -1240,34 +1245,34 @@ class IngressoActivity : AppCompatActivity() {
 
                 mIPosPrinterService!!.printerPerformPrint(160, callback)
                 runOnUiThread {
-                    super.onBackPressed()
-                    resetALl()
-                    val resultIntent = Intent()
-                    setResult(Activity.RESULT_OK, resultIntent)
-
-                    finish()
-
-
-                    overridePendingTransition(
-                        R.anim.screenslideleft, R.anim.screen_slide_out_right,
-                    );
+                   // super.onBackPressed()
+//                    resetALl()
+//                    val resultIntent = Intent()
+//                    setResult(Activity.RESULT_OK, resultIntent)
+//
+//                    finish()
+//
+//
+//                    overridePendingTransition(
+//                        R.anim.screenslideleft, R.anim.screen_slide_out_right,
+//                    );
                 }
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
             finally {
                 runOnUiThread {
-                    super.onBackPressed()
-                    resetALl()
-                    val resultIntent = Intent()
-                    setResult(Activity.RESULT_OK, resultIntent)
-
-                    finish()
-
-
-                    overridePendingTransition(
-                        R.anim.screenslideleft, R.anim.screen_slide_out_right,
-                    );
+                   // super.onBackPressed()
+//                    resetALl()
+//                    val resultIntent = Intent()
+//                    setResult(Activity.RESULT_OK, resultIntent)
+//
+//                    finish()
+//
+//
+//                    overridePendingTransition(
+//                        R.anim.screenslideleft, R.anim.screen_slide_out_right,
+//                    );
                 }
             }
         }
@@ -1302,6 +1307,7 @@ class IngressoActivity : AppCompatActivity() {
         // Display a neutral button on alert dialog
         builder.setNeutralButton("OK") { dialog, which ->
             super.onBackPressed()
+            dbViewmodel.truncatetables()
             resetALl()
             val resultIntent = Intent()
             setResult(Activity.RESULT_OK, resultIntent)

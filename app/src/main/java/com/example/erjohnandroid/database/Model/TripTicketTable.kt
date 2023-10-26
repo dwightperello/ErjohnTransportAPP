@@ -20,6 +20,7 @@ data class TripTicketTable(
     val KMOrigin: Int?,
     val KmDestination: Int,
     val qty:Int,
+    val time:String,
     //NOT INCLUDED IN THE API
     val tripReverse:Int?,
     val ingressoRefId:Int?

@@ -12,10 +12,21 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
                                          private val passengerTypeDao: PassengerTypeDao,private val tripCostDao: TripCostDao,
                                          private val tripTicketDao: TripTicketDao,private val tripWitholdingDao: TripWitholdingDao,private val witholdingTypeDao: WitholdingTypeDao,
                                          private val partialRemitDao: PartialRemitDao, private val ingressoDao: IngressoDao,private val synchTripticketdao: Synch_TripticketDao,
-                                         private val synchInspectionreportdao: Synch_InspectionReportDao, private val synchMpadassignmentdao: Synch_mPadAssignmentDao,
+                                         private val synchInspectionreportdao: Synch_InspectionReportDao, private val synchMpadassignmentdao: Synch_mPadAssignmentDao, private val ticketnumberdao: TicketNumDAO,
                                          private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,private val synchTripwitholdingdao: Synch_TripwitholdingDao,private val hotSpotDAO: HotSpotDAO) {
 
     //region
+
+    fun getTicketnumbers():TicketCounterTable{
+        return ticketnumberdao.getTicketstart()
+    }
+
+    fun updateTicketnumbers(ticketcounter:Int,refid: Int, id: Int){
+        return ticketnumberdao.updateTicketstart(ticketcounter,refid, id)
+    }
+    fun insertticketnum(entity:TicketCounterTable){
+        return ticketnumberdao.insertticketnum(entity)
+    }
 
     fun getAllBusinfo(id:Int):List<BusInfoTableItem>{
         return busInfoDao.getBusinfo(id)

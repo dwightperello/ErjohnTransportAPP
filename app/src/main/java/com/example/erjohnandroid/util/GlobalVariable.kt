@@ -33,6 +33,9 @@ object GlobalVariable {
     var tripreverse:Int?= 1
 
     var ticketnumber:Int=0
+    var originalTicketnum:Int=0
+
+    var batLevel:String?= null
 
     var deviceName:String?= null
 
@@ -50,6 +53,8 @@ object GlobalVariable {
     var AllWitholding:ArrayList<TripWitholdingTable> = arrayListOf()
     var AllTripCost:ArrayList<TripCostTable> = arrayListOf()
 
+
+    var ticketnumid:Int?= null
     var ingressoRefId:Int=0
 
 

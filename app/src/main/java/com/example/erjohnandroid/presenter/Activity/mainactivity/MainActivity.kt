@@ -83,8 +83,9 @@ class MainActivity : AppCompatActivity() {
         initiButtons()
         initibuttondisable()
 
-        val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        GlobalVariable.ticketnumber = sharedPrefs.getInt("ticketnumber", 0)
+//        val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//        GlobalVariable.ticketnumber = sharedPrefs.getInt("ticketnumber", 0)
+//        GlobalVariable.originalTicketnum= GlobalVariable.ticketnumber
        // GlobalVariable.ingressoRefId += sharedPrefs.getInt("ingressoRefId",1)
 
 
@@ -462,7 +463,7 @@ class MainActivity : AppCompatActivity() {
 // Set up the buttons
         builder.setPositiveButton("OK") { dialog, which ->
             val text = input.text.toString()
-            if(text=="88888"){
+            if(text=="1234"){
                 startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
             }else{
                 Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
@@ -488,7 +489,7 @@ class MainActivity : AppCompatActivity() {
 // Set up the buttons
         builder.setPositiveButton("OK") { dialog, which ->
             val text = input.text.toString()
-            if(text=="12345"){
+            if(text=="1234"){
                 startActivityWithAnimation<TIcketingActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
             }else{
                 Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()

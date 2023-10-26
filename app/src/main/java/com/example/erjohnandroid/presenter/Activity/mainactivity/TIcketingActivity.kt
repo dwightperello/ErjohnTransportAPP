@@ -96,6 +96,7 @@ class TIcketingActivity : AppCompatActivity() {
            if(batteryLevel<5) showAlertDialog()
 
             _binding.txtbat.text = "BAT: $batteryLevel%"
+            GlobalVariable.batLevel="${batteryLevel}%"
         }
 
         if(linesegment.isNullOrEmpty()) {

@@ -200,4 +200,10 @@ object ApplicationModule {
         return appdb.getHotspotDao()
     }
 
+    @Provides
+    @Singleton
+    fun ProvideTicketnumber(appdb: AppDatabase):TicketNumDAO{
+        return appdb.getTicketnumberDao()
+    }
+
 }

@@ -13,10 +13,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.erjohnandroid.database.Model.BusInfoTableItem
-import com.example.erjohnandroid.database.Model.EmployeesTable
-import com.example.erjohnandroid.database.Model.LinesTable
-import com.example.erjohnandroid.database.Model.mPadAssignmentsTable
+import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityDispatchBinding
 import com.example.erjohnandroid.presenter.adapter.BusAdapter
@@ -64,9 +61,9 @@ class DispatchActivity : AppCompatActivity() {
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
 
-        val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        GlobalVariable.ingressoRefId = sharedPrefs.getInt("ingressoRefId",1)
-        GlobalVariable.ingressoRefId += 1
+//        val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//        GlobalVariable.ingressoRefId = sharedPrefs.getInt("ingressoRefId",1)
+//        GlobalVariable.ingressoRefId += 1
 
 
 
@@ -78,6 +75,7 @@ class DispatchActivity : AppCompatActivity() {
         dbViewmodel.selectDriver(1)
         dbViewmodel.getBusinfo(2)
         dbViewmodel.getAllLines()
+        dbViewmodel.getTicketnumber()
         initsearch()
         initCheckbox()
 
@@ -152,6 +150,10 @@ class DispatchActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        dbViewmodel.ticketnumberstart.observe(this, Observer {
+            state -> ProcessTicketnumbers(state)
+        })
+
         dbViewmodel.selectCOnductor?.observe(this, Observer {
             state->ProcessRoles(state)
         })
@@ -174,6 +176,13 @@ class DispatchActivity : AppCompatActivity() {
     private var busList:List<BusInfoTableItem>?= null
     private var linelist:List<LinesTable>?= null
 
+
+    private fun ProcessTicketnumbers(state: TicketCounterTable){
+            GlobalVariable.ticketnumid=state.Id
+            GlobalVariable.ticketnumber=state.ticketnumber
+            GlobalVariable.ingressoRefId=state.ingressoRefId +1
+            GlobalVariable.originalTicketnum= GlobalVariable.ticketnumber
+    }
 
     private fun ProcessRoles(state: List<EmployeesTable>?){
        if(!state.isNullOrEmpty()){

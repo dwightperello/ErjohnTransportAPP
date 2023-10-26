@@ -710,12 +710,20 @@ class IngressoActivity : AppCompatActivity() {
         bus=null
 
         tripreverse=1
+
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
-        editor.putInt("ticketnumber", GlobalVariable.ticketnumber)
-        editor.putInt("ingressoRefId", GlobalVariable.ingressoRefId)
-        ticketnumber= sharedPrefs.getInt("ticketnumber",0)
-        //editor.putBoolean("isdispatch",false)
+        dbViewmodel.updateTicketnumber(GlobalVariable.ticketnumber,GlobalVariable.ingressoRefId,GlobalVariable.ticketnumid!!)
+
+
+
+
+
+//        editor.putInt("ticketnumber", GlobalVariable.ticketnumber)
+//        editor.putInt("ingressoRefId", GlobalVariable.ingressoRefId)
+//        ticketnumber= sharedPrefs.getInt("ticketnumber",0)
+//        GlobalVariable.originalTicketnum= GlobalVariable.ticketnumber
+
         GlobalVariable.isDispatched=false
 
         editor.apply()

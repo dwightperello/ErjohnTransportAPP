@@ -36,6 +36,7 @@ import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.*
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,6 +54,7 @@ class InspectionActivity : AppCompatActivity() {
     var pwd:Int=0
     var student:Int=0
     var regular:Int=0
+    var totalamount:Double=0.0
 
     var tripticket:kotlin.collections.List< TripTicketTable>?= null
 
@@ -77,6 +79,7 @@ class InspectionActivity : AppCompatActivity() {
 
 
         initPrinter()
+        _binding.btninspectionsave.isEnabled=true
         if(GlobalVariable.linesegment.isNullOrEmpty()){
             Toast(this).showCustomToast("NO TICKET YET",this)
             overridePendingTransition(
@@ -215,7 +218,7 @@ class InspectionActivity : AppCompatActivity() {
 
             )
             try {
-              //  printText("INSPECTION")
+                _binding.btninspectionsave.isEnabled=false
                 printText()
                 dbViewmodel.insertInspectionReportBulk(method)
 //                onBackPressed()
@@ -295,6 +298,9 @@ class InspectionActivity : AppCompatActivity() {
 
         if(it?.size!=null){
             tripticket=it
+            tripticket?.forEach {
+                totalamount += it.amount!!
+            }
 
             var sr= tripticket!!.filter { it.passengerType.equals("Senior") }
             senior= sr.size
@@ -593,6 +599,8 @@ class InspectionActivity : AppCompatActivity() {
         return 0 // Or you can return any default color if the Drawable is not a ColorDrawable
     }
     fun printText() {
+        val decimalVat = DecimalFormat("#.00")
+        val ans = decimalVat.format(totalamount)
         ThreadPoolManager.getInstance().executeTask {
 
             try {
@@ -601,7 +609,10 @@ class InspectionActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Inspection Report\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Inspector: ${GlobalVariable.inspectorname}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Inspector: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Route: ${GlobalVariable.line}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Bus #: BUS ${GlobalVariable.bus}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -610,12 +621,19 @@ class InspectionActivity : AppCompatActivity() {
                     callback
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
+
+                mIPosPrinterService!!.PrintSpecFormatText("TOTAL CASH: ${ans}\n\n", "ST", 32, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "KM Checked ${_binding.etInspectiondestination.text.toString()}\n",
                     "ST",
                     24,
                     callback
                 )
+                mIPosPrinterService!!.printSpecifiedTypeText("Trip: ${GlobalVariable.tripreverse}th trip, ${GlobalVariable.direction} Bound\n", "ST", 24,  callback)
+
+
+                mIPosPrinterService!!.printSpecifiedTypeText("Start ticket #: 000${GlobalVariable.originalTicketnum}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Last ticket #: 000${GlobalVariable.ticketnumber}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Regular: ${regular}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Senior: ${senior}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Pwd: ${pwd}\n", "ST", 24,  callback)
@@ -624,6 +642,7 @@ class InspectionActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Count: ${_binding.etActualcount.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Negative: ${_binding.txtinspectiondifference.text.toString()}\n", "ST", 24,  callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Battery: ${GlobalVariable.batLevel}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************",
@@ -633,7 +652,7 @@ class InspectionActivity : AppCompatActivity() {
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 tripticket?.forEach {
-                    mIPosPrinterService!!.printSpecifiedTypeText("From: ${it.KMOrigin} - To: ${it.KmDestination} \n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Fr: ${it.KMOrigin} - To: ${it.KmDestination} - Amount:${it.amount}\n", "ST", 24,  callback)
                 }
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(

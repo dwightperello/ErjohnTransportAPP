@@ -10,7 +10,7 @@ import com.example.erjohnandroid.database.dao.*
 @Database(entities = [LinesTable::class,LineSegmentTable::class,BusInfoTableItem::class,
     CompaniesTable::class,CompanyRolesTable::class,EmployeesTable::class,
     ExpensesTypeTable::class,InspectionReportTable::class,mPadAssignmentsTable::class,PassengerTypeTable::class,
-    TripCostTable::class,TripTicketTable::class,TripWitholdingTable::class,WitholdingTypeTable::class,HotSpotsTable::class,
+    TripCostTable::class,TripTicketTable::class,TripWitholdingTable::class,WitholdingTypeTable::class,HotSpotsTable::class,TicketCounterTable::class,
     PartialRemitTable::class,Sycn_TripticketTable::class,Sycnh_InspectionReportTable::class,Synch_mpadAssignmentsTable::class,Synch_partialremitTable::class,Synch_TripCostTable::class,Synch_TripwitholdingTable::class, IngressoTable::class], version = 1, exportSchema = false)
 abstract class AppDatabase:RoomDatabase() {
 
@@ -38,6 +38,8 @@ abstract class AppDatabase:RoomDatabase() {
     abstract fun getsynchTripCostDao():Synch_TripcostDao
     abstract fun getsynchTripwithodingDao():Synch_TripwitholdingDao
     abstract fun getIngresoDao():IngressoDao
+
+    abstract fun getTicketnumberDao():TicketNumDAO
 
 
     companion object{

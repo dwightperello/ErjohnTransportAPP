@@ -422,6 +422,14 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertPassengerTypeBUlk(dbPassengertype!!)
             dbViewmodel.insertWitholdingtypebulk(dbWitholdingtype!!)
             dbViewmodel.insertAllHotspots(dbHotspots!!)
+
+            var method= TicketCounterTable(
+                ticketnumber = 0,
+                ingressoRefId = 0,
+                Id = 0
+
+            )
+            dbViewmodel.inserticketnu(method)
             finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
 

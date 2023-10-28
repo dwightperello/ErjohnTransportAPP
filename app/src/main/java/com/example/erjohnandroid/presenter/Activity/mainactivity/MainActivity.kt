@@ -245,20 +245,41 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    var groupbyreverse:kotlin.collections.Map<Int?,List<TripTicketTable>>?= null
+
     val ProcessTriptickets:(state: List<TripTicketTable>) ->Unit={
         var amounttic:Double=0.0
+        var regualr:Int=0
+        var senior:Int=0
+        var pwd:Int=0
+        var student:Int=0
+        var baggage:Int=0
 
         if(it!=null) {
             alltickets=it
 
+            groupbyreverse = alltickets.groupBy { it.tripReverse }
+
             alltickets.forEach {
                 amounttic+=it.amount!!
             }
+
+            var reg= alltickets.filter { it.passengerType.equals("Regular") }
+            regualr= reg.size
+            var sr = alltickets.filter { it.passengerType.equals("Senior") }
+            senior=sr.size
+            var disable= alltickets.filter { it.passengerType.equals("PWD") }
+            pwd= disable.size
+            var std= alltickets.filter { it.passengerType.equals("Student") }
+            student=std.size
+            var bg= alltickets.filter { it.passengerType.equals("Baggage") }
+            baggage=bg.size
+
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(amounttic)
 
            // printText("Erjohn & Almark Transit Corp",ans)
-            printText(ans)
+            printText(ans,regualr.toString(),senior.toString(),pwd.toString(),student.toString(),baggage.toString() )
 
         }
     }
@@ -755,7 +776,7 @@ class MainActivity : AppCompatActivity() {
         return dateFormat.format(currentDate)
     }
 
-    fun printText(amount:String) {
+    fun printText(amount:String,regualr:String,senior:String?,pwd:String?,student:String,baggage:String) {
         ThreadPoolManager.getInstance().executeTask {
 
             try {
@@ -769,6 +790,13 @@ class MainActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText(
+                    "********************************\n",
+                    "ST",
+                    24,
+                    callback
+                )
                 mIPosPrinterService!!.PrintSpecFormatText("Total Amount: ${amount}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
@@ -777,11 +805,42 @@ class MainActivity : AppCompatActivity() {
                     24,
                     callback
                 )
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Regular: ${regualr}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Senior: ${senior}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("PWD: ${pwd}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Student: ${student}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Baggage: ${baggage}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Battery: ${GlobalVariable.batLevel}%\n", "ST", 24, callback)
 
-                alltickets.forEach {
-                    mIPosPrinterService!!.printSpecifiedTypeText("Segment: ${it.origin} - ${it.destination}\n", "ST", 24, callback)
-                    mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)
+
+
+                for ((key,value) in groupbyreverse!!){
+                    var amount:Double=0.0
+                    mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText(
+                        "********************************\n",
+                        "ST",
+                        24,
+                        callback
+                    )
+                    mIPosPrinterService!!.PrintSpecFormatText("Trip #: ${key}\n", "ST", 24, 1,callback)
+                    mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                    for (ticket in value){
+                        mIPosPrinterService!!.printSpecifiedTypeText("${ticket.time}  000${ticket.titcketNumber}  ${ticket.KMOrigin}  ${ticket.KmDestination}  ${ticket.amount}\n", "ST", 24, callback)
+                        amount +=ticket.amount!!
+                    }
+                    mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                    mIPosPrinterService!!.PrintSpecFormatText("TOTAL AMOUNT: ${amount}\n", "ST", 24, 1,callback)
+                    mIPosPrinterService!!.printBlankLines(1, 8, callback)
+
                 }
+
+
+//                alltickets.forEach {
+//                    mIPosPrinterService!!.printSpecifiedTypeText("Segment: ${it.origin} - ${it.destination}\n", "ST", 24, callback)
+//                    mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)
+//                }
 
 
                 mIPosPrinterService!!.printerPerformPrint(160, callback)

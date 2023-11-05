@@ -21,6 +21,7 @@ import com.example.erjohnandroid.database.Model.convertions.TicketTotal
 import com.example.erjohnandroid.database.Model.convertions.TripCostTotal
 import com.example.erjohnandroid.database.Model.convertions.WitholdingTotal
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityIngressoBinding
 import com.example.erjohnandroid.printer.ThreadPoolManager
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
@@ -60,6 +61,7 @@ import kotlin.collections.ArrayList
 class IngressoActivity : AppCompatActivity() {
     lateinit var _binding:ActivityIngressoBinding
     private val dbViewmodel: RoomViewModel by viewModels()
+    private val externalViewModel:externalViewModel by viewModels()
 
     var alltickets:kotlin.collections.List<TripTicketTable> = arrayListOf()
 
@@ -724,7 +726,7 @@ class IngressoActivity : AppCompatActivity() {
 
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
-        dbViewmodel.updateTicketnumber(GlobalVariable.ticketnumber,GlobalVariable.ingressoRefId,GlobalVariable.ticketnumid!!)
+        externalViewModel.updateTicketnumber(GlobalVariable.ticketnumber,GlobalVariable.ingressoRefId,GlobalVariable.ticketnumid!!)
 
 
 

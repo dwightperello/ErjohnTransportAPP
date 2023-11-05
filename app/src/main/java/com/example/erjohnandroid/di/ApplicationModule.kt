@@ -5,6 +5,7 @@ import android.content.Context
 import com.example.erjohnandroid.database.AppDatabase
 import com.example.erjohnandroid.database.SDCARD_database
 import com.example.erjohnandroid.database.dao.*
+import com.example.erjohnandroid.database.externalDatabase
 import com.example.erjohnandroid.database.repository.sd_Repository
 import com.example.erjohnandroid.database.sdcard_dao.sd_TripticketDao
 import com.example.erjohnandroid.domain.network.NetworkBuilder
@@ -52,6 +53,12 @@ object ApplicationModule {
     @Singleton
     fun Providesd(context: Application):SDCARD_database{
         return SDCARD_database.getAppDB(context)
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidesExternalDB(context: Application):externalDatabase{
+        return externalDatabase.getAppDB(context)
     }
 
     @Provides
@@ -138,6 +145,12 @@ object ApplicationModule {
     @Singleton
     fun ProvidesdTripticket(appdb: SDCARD_database):sd_TripticketDao{
         return appdb.getdsTripticketDao ()
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidesexternalDatabase(appdb: externalDatabase):ExternalDBDao{
+        return appdb.getexternalTicketCounter ()
     }
 
     @Provides

@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityDispatchBinding
 import com.example.erjohnandroid.presenter.adapter.BusAdapter
 import com.example.erjohnandroid.presenter.adapter.DriverAdapter
@@ -35,6 +36,7 @@ import java.util.*
 class DispatchActivity : AppCompatActivity() {
     lateinit var _binding:ActivityDispatchBinding
     private val dbViewmodel: RoomViewModel by viewModels()
+    private val externalViewModel:externalViewModel by viewModels()
 
     private  lateinit var rolesasapter:RoleAdapter
     private  lateinit var driverAdapter: DriverAdapter
@@ -75,7 +77,7 @@ class DispatchActivity : AppCompatActivity() {
         dbViewmodel.selectDriver(1)
         dbViewmodel.getBusinfo(2)
         dbViewmodel.getAllLines()
-        dbViewmodel.getTicketnumber()
+        externalViewModel.getTicketnumber()
         initsearch()
         initCheckbox()
 
@@ -150,7 +152,7 @@ class DispatchActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        dbViewmodel.ticketnumberstart.observe(this, Observer {
+        externalViewModel.ticketnumberstart.observe(this, Observer {
             state -> ProcessTicketnumbers(state)
         })
 

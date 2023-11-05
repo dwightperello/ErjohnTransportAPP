@@ -19,8 +19,8 @@ import javax.inject.Inject
 class RoomViewModel @Inject constructor(private val repository: RoomRepository):ViewModel() {
 
 
-    private  var _ticketnumberstart:MutableLiveData<TicketCounterTable> = MutableLiveData()
-    val ticketnumberstart:LiveData<TicketCounterTable> = _ticketnumberstart
+//    private  var _ticketnumberstart:MutableLiveData<TicketCounterTable> = MutableLiveData()
+//    val ticketnumberstart:LiveData<TicketCounterTable> = _ticketnumberstart
 
     private  var _businfo:MutableLiveData<List<BusInfoTableItem>> = MutableLiveData()
     val businfo:LiveData<List<BusInfoTableItem>> = _businfo
@@ -137,19 +137,19 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
 
     //region OTHER METHODS
 
-    fun getTicketnumber(){
-        viewModelScope.launch() {
-            val records=  repository.getTicketnumbers()
-            _ticketnumberstart.value=records
-        }
-    }
+//    fun getTicketnumber(){
+//        viewModelScope.launch() {
+//            val records=  repository.getTicketnumbers()
+//            _ticketnumberstart.value=records
+//        }
+//    }
 
-    fun updateTicketnumber(ticketnumber:Int,refid: Int, id: Int){
-        viewModelScope.launch() {
-            val records=  repository.updateTicketnumbers(ticketnumber,refid,id)
-
-        }
-    }
+//    fun updateTicketnumber(ticketnumber:Int,refid: Int, id: Int){
+//        viewModelScope.launch() {
+//            val records=  repository.updateTicketnumbers(ticketnumber,refid,id)
+//
+//        }
+//    }
     fun getBusinfo(id:Int){
         viewModelScope.launch() {
             val records=  repository.getAllBusinfo(id)
@@ -171,12 +171,12 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun inserticketnu(entity: TicketCounterTable){
-        viewModelScope.launch() {
-            val records=  repository.insertticketnum(entity)
-
-        }
-    }
+//    fun inserticketnu(entity: TicketCounterTable){
+//        viewModelScope.launch() {
+//            val records=  repository.insertticketnum(entity)
+//
+//        }
+//    }
 
     fun insertAllHotspots(entity: List<HotSpotsTable>){
         viewModelScope.launch() {

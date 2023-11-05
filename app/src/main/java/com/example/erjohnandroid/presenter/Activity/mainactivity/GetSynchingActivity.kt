@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityGetSynchingBinding
 import com.example.erjohnandroid.domain.model.response.*
 import com.example.erjohnandroid.presenter.viewmodel.networkViewModel
@@ -29,6 +30,7 @@ class GetSynchingActivity : AppCompatActivity() {
     private var _binding:ActivityGetSynchingBinding?= null
     private val viewModel: networkViewModel by viewModels()
     private val dbViewmodel:RoomViewModel by viewModels()
+    private val externalViewmodel:externalViewModel by viewModels()
 
     var text:String="Please wait getting Lines data..."
 
@@ -429,7 +431,7 @@ class GetSynchingActivity : AppCompatActivity() {
                 Id = 0
 
             )
-            dbViewmodel.inserticketnu(method)
+            externalViewmodel.inserticketnu(method)
             finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
 

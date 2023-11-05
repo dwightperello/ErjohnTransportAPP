@@ -34,7 +34,7 @@ class TicketDetailsAdapter(private val activity: Activity): RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val role= products[position]
-        holder.id.text="${role.TripTicketId}"
+        holder.id.text="000${role.titcketNumber}"
         holder.amount.text="${role.amount}"
         holder.origin.text="${role.origin}"
         holder.destination.text="${role.destination}"

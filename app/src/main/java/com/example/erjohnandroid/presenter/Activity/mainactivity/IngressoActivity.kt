@@ -370,7 +370,7 @@ class IngressoActivity : AppCompatActivity() {
 
     }
 
-    val computeCommissions:(Double)-> Unit={
+    val computeCommissions:(Double)-> String={
         val driver= totalamount * 0.09
         val conductor=totalamount* 0.07
 
@@ -383,6 +383,7 @@ class IngressoActivity : AppCompatActivity() {
         _binding.txtdrivercommision.text=drivercommision.toString()
         conductorcommision=decimalVat.format(conductor)
         _binding.txtconductorcommision.text=conductorcommision.toString()
+        ans.toString()
     }
 
     fun getCurrentDateInFormat(): String {
@@ -399,6 +400,7 @@ class IngressoActivity : AppCompatActivity() {
 
     }
 
+    var commisionamount:String?=null
     //region ALL PROCESS
     val ProcessTotal:(state: TicketTotal?) ->Unit={
 
@@ -411,7 +413,7 @@ class IngressoActivity : AppCompatActivity() {
             _binding.txttotalgross.text="${ans}"
             _binding.txtnetcollection.text="${ans}"
 
-            computeCommissions(totalamount)
+          commisionamount= computeCommissions(totalamount)
         }
     }
 
@@ -443,6 +445,7 @@ class IngressoActivity : AppCompatActivity() {
 
             _binding.txtpartialremit.text="${ans}"
             totalamount -=partial
+            totalamount -= commisionamount!!.toDouble()
 
             val remit = decimalVat.format(totalamount)
             _binding.txtnetcollection.text="${remit}"
@@ -716,6 +719,9 @@ class IngressoActivity : AppCompatActivity() {
 
         tripreverse=1
 
+        GlobalVariable.AllWitholding= arrayListOf()
+        GlobalVariable.AllTripCost= arrayListOf()
+
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
         dbViewmodel.updateTicketnumber(GlobalVariable.ticketnumber,GlobalVariable.ingressoRefId,GlobalVariable.ticketnumid!!)
@@ -734,7 +740,7 @@ class IngressoActivity : AppCompatActivity() {
         editor.apply()
         linesegment= arrayListOf()
         remainingPass= null
-        ticketcounter=1
+        ticketcounter=GlobalVariable.ticketnumber
         destinationcounter=1
         origincounter=0
 

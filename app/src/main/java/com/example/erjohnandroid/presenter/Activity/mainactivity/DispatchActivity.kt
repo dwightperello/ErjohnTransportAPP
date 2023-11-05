@@ -180,6 +180,7 @@ class DispatchActivity : AppCompatActivity() {
     private fun ProcessTicketnumbers(state: TicketCounterTable){
             GlobalVariable.ticketnumid=state.Id
             GlobalVariable.ticketnumber=state.ticketnumber
+            GlobalVariable.ticketcounter = GlobalVariable.ticketnumber
             GlobalVariable.ingressoRefId=state.ingressoRefId +1
             GlobalVariable.originalTicketnum= GlobalVariable.ticketnumber
     }

@@ -377,7 +377,7 @@ class ticketdetailsActivity : AppCompatActivity() {
             try {
                 val formattedDateTime = getCurrentDateInFormat()
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Ticket Details\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Ticket Details - Reverse\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Cashier Name: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
@@ -399,8 +399,8 @@ class ticketdetailsActivity : AppCompatActivity() {
                 )
 
                 tripticketTable?.forEach {
-                    mIPosPrinterService!!.printSpecifiedTypeText("From: ${it.KMOrigin} - To: ${it.KmDestination} \n", "ST", 24,  callback)
-                    mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("000${it.titcketNumber} ${it.KMOrigin} ${it.KmDestination} ${it.amount} \n", "ST", 24,  callback)
+                   // mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24,  callback)
                 }
 
 

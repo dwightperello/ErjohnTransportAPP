@@ -45,7 +45,7 @@ object GlobalVariable {
 
     var remainingPass:Int?=null
 
-    var ticketcounter:Int=1
+    var ticketcounter:Int=0
 
     var destinationcounter:Int=1
     var origincounter:Int=0

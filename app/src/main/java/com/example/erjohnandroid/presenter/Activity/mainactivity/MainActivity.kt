@@ -830,8 +830,10 @@ class MainActivity : AppCompatActivity() {
                         mIPosPrinterService!!.printSpecifiedTypeText("${ticket.time}  000${ticket.titcketNumber}  ${ticket.KMOrigin}  ${ticket.KmDestination}  ${ticket.amount}\n", "ST", 24, callback)
                         amount +=ticket.amount!!
                     }
+                    val decimalVat = DecimalFormat("#.00")
+                    val ans = decimalVat.format(amount)
                     mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                    mIPosPrinterService!!.PrintSpecFormatText("TOTAL AMOUNT: ${amount}\n", "ST", 24, 1,callback)
+                    mIPosPrinterService!!.PrintSpecFormatText("TOTAL AMOUNT: ${ans}\n", "ST", 24, 1,callback)
                     mIPosPrinterService!!.printBlankLines(1, 8, callback)
 
                 }

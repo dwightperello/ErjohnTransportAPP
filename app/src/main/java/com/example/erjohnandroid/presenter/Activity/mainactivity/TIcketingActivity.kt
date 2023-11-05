@@ -42,6 +42,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -64,7 +67,7 @@ class TIcketingActivity : AppCompatActivity() {
     var postTripticket:TripTicketTable?= null
 
     private var qty:Int=1
-    val fare:Double=15.00
+    val fare:Double=30.00
     var discountamount:Double=0.20
     val pesoSign = '\u20B1'
     var totalfare:Double=0.0
@@ -313,7 +316,7 @@ class TIcketingActivity : AppCompatActivity() {
 
         }else
         {
-            Toast(this@TIcketingActivity).showCustomToast("NO HOTSPOT FOUND",this@TIcketingActivity)
+           // Toast(this@TIcketingActivity).showCustomToast("NO HOTSPOT FOUND",this@TIcketingActivity)
         }
 
 
@@ -684,7 +687,7 @@ class TIcketingActivity : AppCompatActivity() {
             }
 
             if(!passtype.isNullOrEmpty()) {
-                ticketnumber +=1
+//                ticketnumber +=1
                 ticketcounter +=1
                 _binding.txtticketcount.text="Next ticket: 00${ticketcounter.toString()}"
                  // var amounttotal = computeAmount()
@@ -794,22 +797,62 @@ class TIcketingActivity : AppCompatActivity() {
                   if(GlobalVariable.direction.equals("South")) KMdiff= destination?.kmPoint!! - origin?.kmPoint!!
                   else KMdiff= origin?.kmPoint!! - destination?.kmPoint!!
 
-                  if(KMdiff > 5){
+                  if(KMdiff > 13 && KMdiff <= 34){
 
                       if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
-                          discount= fare.toDouble() *   discountamount
-                          amountafterdiscount= fare - discount
-                          getkmdiff = KMdiff - 5
-                          getExceedAmount = getkmdiff * 2.12
-                          total = getExceedAmount + amountafterdiscount
-                          total = total * qty
+//                          discount= fare.toDouble() *   discountamount
+//                          amountafterdiscount= fare - discount
+//                          getkmdiff = KMdiff - 13
+//                          getExceedAmount = getkmdiff * 2.12
+//                          total = getExceedAmount + amountafterdiscount
+//                          total = total * qty + 2
+
+                         // discount= fare.toDouble() *   discountamount
+                        //  amountafterdiscount= fare - discount
+                          getkmdiff = KMdiff
+                          getExceedAmount = getkmdiff * 2.35
+                          discount= getExceedAmount *   discountamount
+                          amountafterdiscount= getExceedAmount - discount
+                          total = amountafterdiscount
+                          total = total * qty + 2
                       }else{
-                          getkmdiff = KMdiff -5
-                          getExceedAmount= getkmdiff * 2.65
-                          total = getExceedAmount + fare
-                          total= total * qty
+//                          getkmdiff = KMdiff -13
+//                          getExceedAmount= getkmdiff * 2.35
+//                          total = getExceedAmount + fare
+//                          total= total * qty + 2
+
+
+                          getExceedAmount= KMdiff!! * 2.35
+                          total = getExceedAmount
+                          total= total * qty + 2
                       }
 
+                  }
+                  else if(KMdiff > 13 && KMdiff > 34){
+                      if(passtype.equals("Senior") || passtype.equals("Student")|| passtype.equals("PWD")) {
+//                          discount= fare.toDouble() *   discountamount
+//                          amountafterdiscount= fare - discount
+//                          getkmdiff = KMdiff - 13
+//                          getExceedAmount = getkmdiff * 2.12
+//                          total = getExceedAmount + amountafterdiscount
+//                          total = total * qty
+                          getkmdiff = KMdiff
+                          getExceedAmount = getkmdiff * 2.35
+                          discount= getExceedAmount *   discountamount
+                          amountafterdiscount= getExceedAmount - discount
+                          total = amountafterdiscount
+                          total = total * qty
+
+                      }else{
+//                          getkmdiff = KMdiff -13
+//                          getExceedAmount= getkmdiff * 2.35
+//                          total = getExceedAmount + fare
+//                          total= total * qty
+
+                          getExceedAmount= KMdiff!! * 2.35
+                          total = getExceedAmount
+                          total= total * qty
+                      }
                   }
                   else{
                       if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
@@ -837,10 +880,24 @@ class TIcketingActivity : AppCompatActivity() {
           Toast(this).showCustomToast("ERROR on fare Computation: ${e.message}",this)
       }
 
+//        val decimalVat = DecimalFormat("#.00")
+//        val ans = decimalVat.format(total)
+//        amount= ans.toString()
+//        _binding.txtamount.text=amount
+
         val decimalVat = DecimalFormat("#.00")
-        val ans = decimalVat.format(total)
-        amount= ans.toString()
-        _binding.txtamount.text=amount
+        val decimalPart = total!! - floor(total)
+        val roundedNumber = if (decimalPart >= 0.5) {
+            kotlin.math.ceil(total).toInt()
+        } else {
+            kotlin.math.floor(total).toInt()
+        }
+
+       // val roundedTotal = ceil(total!!).toInt() // Round off the total to the nearest integer
+        val ans = decimalVat.format(roundedNumber)
+        amount = ans.toString()
+        _binding.txtamount.text = amount
+
 
 
 
@@ -1264,7 +1321,6 @@ class TIcketingActivity : AppCompatActivity() {
                     callback
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-
                 mIPosPrinterService!!.PrintSpecFormatText("FARE: ${totalfare.toString()} ${pesoSign}\n", "ST", 32, 1,callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
@@ -1276,6 +1332,7 @@ class TIcketingActivity : AppCompatActivity() {
                 )
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Ticket #: 000${GlobalVariable.ticketnumber}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Passenger Type: ${passtype}\n", "ST", 24,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("QTY: ${qty}\n", "ST", 24,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Origin: ${_binding.etOrigin.text.toString()}\n", "ST", 24, callback)
@@ -1346,6 +1403,7 @@ class TIcketingActivity : AppCompatActivity() {
                 //  bitmapRecycle(mBitmap)
                 mIPosPrinterService!!.printerPerformPrint(160, callback)
                 runOnUiThread {
+                   // ticketnumber +=1
                     passtype = "Regular"
                     _binding.txtqty.text = "1"
                     qty = 1
@@ -1357,6 +1415,7 @@ class TIcketingActivity : AppCompatActivity() {
             }
             finally {
                 runOnUiThread {
+                    ticketnumber +=1
                     passtype = "Regular"
                     _binding.txtqty.text = "1"
                     qty = 1

@@ -424,7 +424,7 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertAllHotspots(dbHotspots!!)
 
             var method= TicketCounterTable(
-                ticketnumber = 0,
+                ticketnumber = 1,
                 ingressoRefId = 0,
                 Id = 0
 

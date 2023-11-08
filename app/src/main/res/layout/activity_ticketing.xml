@@ -733,40 +733,67 @@
                 android:gravity="center"
                 android:layout_height="0dp"
                 android:layout_weight=".5">
-                <TextView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/txtonhand"
-                    android:text="0.0"
-                    android:textSize="@dimen/_15sdp"
-                    android:gravity="left"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"/>
+                    android:layout_weight="1">
 
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                   android:id="@+id/txtamount"
-                                    android:text="0.0"
-                                    android:textSize="@dimen/_20sdp"
-                                    android:gravity="right"
-                                    android:textColor="@color/black"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/_20sdp"
-                    android:gravity="left"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:id="@+id/txtpesosign"
-                    android:text="sign"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:id="@+id/txtonhand"
+                        android:text="0.0"
+                        android:textSize="@dimen/_15sdp"
+                        android:gravity="left"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_20sdp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:id="@+id/txtpesosign"
+                        android:text="sign"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/txtamount"
+                        android:text="0.0"
+                        android:textSize="@dimen/_15sdp"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/txtkm"
+                        android:text="Km"
+                        android:textSize="@dimen/_15sdp"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+
+
+
+
 
             </LinearLayout>
 

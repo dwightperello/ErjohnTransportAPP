@@ -280,7 +280,10 @@ class DispatchActivity : AppCompatActivity() {
            }
 
            override fun onQueryTextChange(newText: String?): Boolean {
-               val filtered = conductorList?.filter { it.name?.toLowerCase(Locale.getDefault())!!.contains(newText!!) }
+               val filtered = conductorList?.filter {
+                  // it.name?.toLowerCase(Locale.getDefault())!!.contains(newText!!)
+                   it.name?.toLowerCase(Locale.getDefault())?.startsWith(newText!!.toLowerCase(Locale.getDefault())) == true
+               }
                rolesasapter.showCOnductor(filtered!!)
                return false
            }
@@ -293,7 +296,10 @@ class DispatchActivity : AppCompatActivity() {
            }
 
            override fun onQueryTextChange(newText: String?): Boolean {
-               val filtered = driverList?.filter { it.name?.toLowerCase(Locale.getDefault())!!.contains(newText!!) }
+               val filtered = driverList?.filter {
+                  // it.name?.toLowerCase(Locale.getDefault())!!.contains(newText!!)
+                   it.name?.toLowerCase(Locale.getDefault())?.startsWith(newText!!.toLowerCase(Locale.getDefault())) == true
+               }
                driverAdapter.showDriver(filtered!!)
                return false
            }

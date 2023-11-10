@@ -62,16 +62,6 @@ class DispatchActivity : AppCompatActivity() {
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-
-//        val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-//        GlobalVariable.ingressoRefId = sharedPrefs.getInt("ingressoRefId",1)
-//        GlobalVariable.ingressoRefId += 1
-
-
-
-
-       // _binding.txtdispatcherName.text ="Welcome "+ GlobalVariable.employeeName
-      //  bindService()
         initPrinter()
         dbViewmodel.selectConductor(2)
         dbViewmodel.selectDriver(1)
@@ -80,11 +70,6 @@ class DispatchActivity : AppCompatActivity() {
         externalViewModel.getTicketnumber()
         initsearch()
         initCheckbox()
-
-//        _binding.btnprint.setOnClickListener {
-//
-//        }
-
 
         _binding.btnSave.setOnClickListener {
 
@@ -109,22 +94,24 @@ class DispatchActivity : AppCompatActivity() {
             )
             dispatch?.add(method)
             try {
+                externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId)
                 dbViewmodel.insertmPadAssignmentBulk(dispatch!!)
                 val resultIntent = Intent()
                 setResult(Activity.RESULT_OK, resultIntent)
 
 
                 GlobalVariable.isDispatched=true
+                GlobalVariable.isFromDispatch=true
                 finish()
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
 
-            var headerprint="Erjohn & Almark Transit Corp "
 
-            printText()
 
-           // printText(headerprint)
+           printText()
+
+
 
         }
 
@@ -183,7 +170,7 @@ class DispatchActivity : AppCompatActivity() {
             GlobalVariable.ticketnumid=state.Id
             GlobalVariable.ticketnumber=state.ticketnumber
             GlobalVariable.ticketcounter = GlobalVariable.ticketnumber
-            GlobalVariable.ingressoRefId=state.ingressoRefId +1
+            GlobalVariable.ingressoRefId=state.ingressoRefId + 1
             GlobalVariable.originalTicketnum= GlobalVariable.ticketnumber
     }
 

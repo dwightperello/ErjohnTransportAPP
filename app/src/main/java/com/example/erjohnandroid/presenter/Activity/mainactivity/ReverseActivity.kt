@@ -18,6 +18,7 @@ import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
 
 import com.example.erjohnandroid.databinding.ActivityReverseBinding
 import com.example.erjohnandroid.presenter.adapter.ReverseAdapter
@@ -33,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ReverseActivity : AppCompatActivity() {
     lateinit var _binding: ActivityReverseBinding
     private val dbViewmodel: RoomViewModel by viewModels()
+    private  val externalViewModel:externalViewModel by viewModels()
     private  lateinit var reverseAdapter: ReverseAdapter
 
 
@@ -68,7 +70,7 @@ class ReverseActivity : AppCompatActivity() {
                 GlobalVariable.destinationcounter=1
                 GlobalVariable.origincounter=0
                 GlobalVariable.tripreverse = GlobalVariable.tripreverse?.plus(1)
-
+                externalViewModel.updateSavedDispatchedReverse(GlobalVariable.direction!!,GlobalVariable.tripreverse!!)
 
                 finish()
                 overridePendingTransition(

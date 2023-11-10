@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.LinesTable
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityChangeRouteBinding
 import com.example.erjohnandroid.presenter.adapter.ChangeRouteAdapter
 import com.example.erjohnandroid.presenter.adapter.LineAdapter
@@ -23,6 +24,7 @@ class ChangeRouteActivity : AppCompatActivity() {
     private var _binding:ActivityChangeRouteBinding?= null
     private  lateinit var changeRouteAdapter: ChangeRouteAdapter
     private val dbViewmodel: RoomViewModel by viewModels()
+    private val externalViewModel:externalViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,8 @@ class ChangeRouteActivity : AppCompatActivity() {
             GlobalVariable.destinationcounter=1
             GlobalVariable.origincounter=0
             GlobalVariable.tripreverse = GlobalVariable.tripreverse?.plus(1)
+
+            externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId)
 
             finish()
             overridePendingTransition(

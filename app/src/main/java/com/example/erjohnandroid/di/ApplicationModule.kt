@@ -155,6 +155,12 @@ object ApplicationModule {
 
     @Provides
     @Singleton
+    fun ProvidesSavedDispatch(appdb: externalDatabase):SavedDispatchedDao{
+        return appdb.getSaveDispatchInfo ()
+    }
+
+    @Provides
+    @Singleton
     fun ProvideTripwitholding(appdb: AppDatabase):TripWitholdingDao{
         return appdb.getTripwitholdingtDao()
     }

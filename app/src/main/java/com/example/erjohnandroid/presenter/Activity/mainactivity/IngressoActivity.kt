@@ -276,7 +276,7 @@ class IngressoActivity : AppCompatActivity() {
 
             try {
                 dbViewmodel.insertIngersso(method)
-
+                externalViewModel.updateIsDispathced(false)
                 dbViewmodel.getTripticket()
                 dbViewmodel.tripticket.observe(this, Observer {
                         state->ProcessTriptickets(state)
@@ -726,9 +726,9 @@ class IngressoActivity : AppCompatActivity() {
 
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
+        //GlobalVariable.ingressoRefId +=1
         externalViewModel.updateTicketnumber(GlobalVariable.ticketnumber,GlobalVariable.ingressoRefId,GlobalVariable.ticketnumid!!)
-
-
+        externalViewModel.updateReverseonly(GlobalVariable.tripreverse!!)
 
 
 

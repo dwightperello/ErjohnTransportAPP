@@ -21,8 +21,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.LinesTable
+import com.example.erjohnandroid.database.Model.TicketCounterTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
+import com.example.erjohnandroid.database.Model.externalDispatch.SavedDispatchInfo
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.database.viewmodel.sd_viewmodel
 import com.example.erjohnandroid.databinding.ActivityMainBinding
 import com.example.erjohnandroid.presenter.viewmodel.networkViewModel
@@ -52,6 +55,9 @@ class MainActivity : AppCompatActivity() {
     private val networkViewModel:networkViewModel by viewModels()
     private val roomviewmodel: RoomViewModel by viewModels()
     private val sdViewmodel:sd_viewmodel by viewModels()
+    private  val externalviewmodel:externalViewModel by viewModels()
+
+
 
     var alltickets:kotlin.collections.List<TripTicketTable> = arrayListOf()
 
@@ -144,15 +150,55 @@ class MainActivity : AppCompatActivity() {
         })
 
 
+
+        externalviewmodel.ticketnumberstart.observe(this, Observer {
+                state -> ProcessTicketnumbers(state)
+        })
+    }
+
+    private fun ProcessTicketnumbers(state: TicketCounterTable){
+        GlobalVariable.ticketnumid=state.Id
+        GlobalVariable.ticketnumber=state.ticketnumber
+        GlobalVariable.ticketcounter = state.ticketnumber
+       // GlobalVariable.ingressoRefId=state.ingressoRefId +1
+       // GlobalVariable.ingressoRefId=state.ingressoRefId
+        //GlobalVariable.originalTicketnum= state.ticketnumber
     }
 
     private fun ProcessAllLinesResponse(state: List<LinesTable>){
       if( !state.isNullOrEmpty()){
             Log.d("ays","ASYA")
+          if(!GlobalVariable.isFromDispatch) {
+              externalviewmodel.getSavedDispatch()
+              externalviewmodel.savedDispatch.observe(this,Observer{
+                      state -> ProcessSavedDispatch(state)
+              })
+          }
+          GlobalVariable.isFromDispatch=false
       }else{
           startActivityWithAnimation<LoginActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
             finish()
       }
+    }
+
+    private fun ProcessSavedDispatch(state: SavedDispatchInfo){
+        if( state.isDispatched){
+            externalviewmodel.getTicketnumber()
+            GlobalVariable.conductor = state.conductorName
+            GlobalVariable.bus= state.busNumber
+            GlobalVariable.driver=state.driverName
+            GlobalVariable.direction= state.direction
+            GlobalVariable.isDispatched=true
+            GlobalVariable.line=state.line
+            GlobalVariable.lineid = state.LineId
+            GlobalVariable.originalTicketnum = state.orginalTicketnumber
+            GlobalVariable.employeeName = state.dispatcherName
+            GlobalVariable.tripreverse= state.reverse
+            GlobalVariable.deviceName=state.mPadUnit
+            GlobalVariable.ingressoRefId=state.ingressoRefId
+        }else{
+
+        }
     }
 
     val initiButtons={
@@ -225,7 +271,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == DISPATCH_ACTIVITY) {
-            if(GlobalVariable.isDispatched) enablebutton()
+            if(GlobalVariable.isDispatched) {
+                enablebutton()
+
+            }
 //            if (resultCode == Activity.RESULT_OK) {
 //
 //            }

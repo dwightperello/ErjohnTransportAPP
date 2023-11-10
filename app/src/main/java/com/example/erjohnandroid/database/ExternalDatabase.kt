@@ -6,15 +6,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.erjohnandroid.database.Model.TicketCounterTable
+import com.example.erjohnandroid.database.Model.externalDispatch.SavedDispatchInfo
 import com.example.erjohnandroid.database.dao.ExternalDBDao
+import com.example.erjohnandroid.database.dao.SavedDispatchedDao
 
 
 import java.io.File
 
-@Database(entities = [TicketCounterTable::class],version=1, exportSchema = false)
+@Database(entities = [TicketCounterTable::class,SavedDispatchInfo::class],version=1, exportSchema = false)
 abstract class externalDatabase: RoomDatabase() {
 
     abstract fun getexternalTicketCounter(): ExternalDBDao
+    abstract fun getSaveDispatchInfo(): SavedDispatchedDao
 
     companion object{
         private  var dbInstance: externalDatabase?= null

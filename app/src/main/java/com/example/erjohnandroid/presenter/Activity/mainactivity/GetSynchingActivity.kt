@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
+import com.example.erjohnandroid.database.Model.externalDispatch.SavedDispatchInfo
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityGetSynchingBinding
@@ -431,7 +432,26 @@ class GetSynchingActivity : AppCompatActivity() {
                 Id = 0
 
             )
+
+            var methodSavedDispatch= SavedDispatchInfo(
+                busNumber = "1111",
+                conductorName = "Conductor",
+                isDispatched = false,
+                dispatcherName = "dispatcher",
+                driverName = "driver",
+                line = "testline",
+                LineId = 1,
+                mPadUnit = "testdevice",
+               // ingressoRefId = 0,
+                reverse = 0,
+                orginalTicketnumber = 0,
+                direction = "nothing",
+                ingressoRefId = 0
+
+            )
+
             externalViewmodel.inserticketnu(method)
+            externalViewmodel.insertSavedDispatched(methodSavedDispatch)
             finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
 

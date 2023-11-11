@@ -49,6 +49,11 @@ class ChangeRouteActivity : AppCompatActivity() {
         initCheckbox()
 
         _binding!!.btnsavechangeroute.setOnClickListener {
+            if(_binding?.cbNorth?.isChecked==false || _binding?.cbSouth?.isChecked==false){
+                Toast(this).showCustomToast("Select Direction",this)
+                return@setOnClickListener
+            }
+
             GlobalVariable.remainingPass=0
             GlobalVariable.destinationcounter=1
             GlobalVariable.origincounter=0
@@ -60,6 +65,10 @@ class ChangeRouteActivity : AppCompatActivity() {
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );
+        }
+
+        _binding!!.btnclose.setOnClickListener {
+            this.finish()
         }
     }
 

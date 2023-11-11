@@ -481,6 +481,8 @@ class TIcketingActivity : AppCompatActivity() {
                 var originss= _binding.etOriginsearch.text.toString()
                 if(!TextUtils.isDigitsOnly(originss) || originss.isNullOrEmpty()){
                     //Toast(this@TIcketingActivity).showCustomToast("Search field should only contain numeric or field is empty",this@TIcketingActivity)
+                   // hideSoftKeyboard()
+                    hideKeyboard(_binding.etOriginsearch)
                     return
                 }
 
@@ -570,6 +572,7 @@ class TIcketingActivity : AppCompatActivity() {
                 var destinationss= _binding.etDestinationsearch.text.toString()
                 if(!TextUtils.isDigitsOnly(destinationss)||destinationss.isNullOrEmpty()){
                    // Toast(this@TIcketingActivity).showCustomToast("Search field should only contain numeric or field is empty",this@TIcketingActivity)
+                    hideKeyboard(_binding.etDestinationsearch)
                     return
                 }
 
@@ -764,7 +767,7 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     val computeAmount:()->String ={
-//        var postTripticket:ArrayList<TripTicketTable>?= arrayListOf()
+        val discountamount: Double = 20.0
         var baggageamount:Double=0.0
         var KMdiff:Int=0
         var amount:String?=null
@@ -778,116 +781,70 @@ class TIcketingActivity : AppCompatActivity() {
         qty= z.toInt()
 
         if(GlobalVariable.line!!.equals("GMA-PITX") || GlobalVariable.line.equals("PITX-GMA")){
-
-
             try {
-                if(passtype.equals("Baggage")){
-                    if(_binding.cbBaggage.isChecked){
-                        var bag= _binding.etbaggaeamount.text.toString()
-                        if(bag.isNullOrEmpty()){
-                            bag="0.0"
-                            baggageamount = bag.toDouble()
-                            total = baggageamount
-                        }else{
-                            baggageamount = bag.toDouble()
-                            total = baggageamount
-                        }
-
-                    }
+                if (passtype == "Baggage" && _binding.cbBaggage.isChecked) {
+                    KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
+                    val bag = _binding.etbaggaeamount.text.toString().toDoubleOrNull() ?: 0.0
+                    baggageamount = bag
+                    total = baggageamount
                 }
+
                 else{
                     val amountfromHspot= checkhotspotPITX(destination?.kmPoint!!,origin?.kmPoint!!)
                     if (amountfromHspot!=null){
+                        if(GlobalVariable.direction.equals("South")) KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
+                        else KMdiff = origin?.kmPoint!! - destination?.kmPoint!!
                         total= amountfromHspot
+                        _binding.btnPrintticke.isVisible=true
                     }
                     else
                     {
                         if(GlobalVariable.direction.equals("South")) {
                             KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
                             kmdiffprint = KMdiff
-                            if (KMdiff <= 0) {
-                                // throw IllegalArgumentException()
-                                _binding.btnPrintticke.isVisible = false
-                            } else {
-                                _binding.btnPrintticke.isVisible = true
-                            }
+
+                            _binding.btnPrintticke.isVisible = KMdiff > 0
 
                             if (KMdiff <= 10 && origin?.kmPoint!! < 10) {
-                                val discountamount: Double = 20.0
-                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals(
-                                        "PWD"
-                                    )
-                                ) {
+                                total = if (passtype in listOf("Senior", "Student", "PWD")) {
                                     discount = (discountamount / 100) * fare
-                                    amountafterdiscount = fare - discount
-                                    total = amountafterdiscount * qty
+                                    fare - discount
                                 } else {
-                                    total = fare.toDouble() * qty
-                                }
+                                    fare.toDouble()
+                                } * qty
                             }
+
                             else if (KMdiff > 10 && origin?.kmPoint!! <= 10) {
-                                val discountamount: Double = 0.20
-                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
-                                {
-                                    getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.65
-                                    discount = getExceedAmount * discountamount
-                                    amountafterdiscount = getExceedAmount - discount
-                                    total = amountafterdiscount
-                                    total = total * qty + 2
+                                val baseFare = KMdiff!! * 2.65
+                                if (passtype in listOf("Senior", "Student", "PWD")) {
+                                    val discount = baseFare * discountamount
+                                    val amountAfterDiscount = baseFare - discount
+                                    total = amountAfterDiscount * qty + 2
                                 } else {
-                                    getExceedAmount = KMdiff!! * 2.65
-                                    total = getExceedAmount
-                                    total = total * qty + 2
+                                    total = baseFare * qty + 2
                                 }
                             }
-                            else if (KMdiff <= 5 && origin?.kmPoint!! >= 10 && destination?.kmPoint!! <=16) {
-                                val discountamount: Double = 0.20
-                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
+
+                            else if (KMdiff <= 5 && origin?.kmPoint!! >= 10) {
+                                if (passtype in listOf("Senior", "Student", "PWD"))total = 12.0
+                                else  total = 15.0.toDouble() * qty
+                            }
+
+                            else if (origin?.kmPoint!! >= 10  && KMdiff > 5 && KMdiff<=9) {
+                                if (passtype in listOf("Senior", "Student", "PWD")) total = 21.0
+                                else  total = 26.0.toDouble()
+                            }
+
+                            else if (origin?.kmPoint!! >= 10 &&  KMdiff > 9) {
+                                val baseFare = KMdiff!! * 2.65
+                                if (passtype in listOf("Senior", "Student", "PWD"))
                                 {
-//                                    discount =(discountamount / 100) * 15.0 // IF KM ORIGIN IS ABOVE 10 but destination is below 16 fare =15.0
-//                                    amountafterdiscount = fare - discount
-//                                    total = amountafterdiscount * qty
-                                    total = 12.0
+                                    val discount = baseFare * discountamount
+                                    val amountAfterDiscount = baseFare - discount
+                                    total = amountAfterDiscount * qty + 2
                                 } else {
-                                    total = 15.0.toDouble() * qty
+                                    total = baseFare * qty + 2
                                 }
-
-                            } else if (origin?.kmPoint!! >= 10 && destination?.kmPoint!! >= 16 && KMdiff > 5 && destination?.kmPoint!! <= 19) {
-                                val discountamount: Double = 0.20
-                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
-                                 {
-//                                    getkmdiff = KMdiff
-//                                    getExceedAmount = getkmdiff * 26.0
-//                                    discount = getExceedAmount * discountamount
-//                                    amountafterdiscount = getExceedAmount - discount
-//                                    total = amountafterdiscount
-//                                    total = total * qty
-                                     total = 21.0
-
-                                } else {
-
-                                    total = 26.0.toDouble()
-                                }
-                            } else if (origin?.kmPoint!! >= 10 && destination?.kmPoint!! >= 20 && KMdiff > 5) {
-                                val discountamount: Double = 0.20
-                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals(
-                                        "PWD"
-                                    )
-                                ) {
-                                    getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.65
-                                    discount = getExceedAmount * discountamount
-                                    amountafterdiscount = getExceedAmount - discount
-                                    total = amountafterdiscount
-                                    total = total * qty + 2
-                                } else {
-                                    getExceedAmount = KMdiff!! * 2.65
-                                    total = getExceedAmount
-                                    total = total * qty + 2
-                                }
-
-
                             }
                         }
 
@@ -902,20 +859,20 @@ class TIcketingActivity : AppCompatActivity() {
                                 _binding.btnPrintticke.isVisible = true
                             }
 
-                            if (KMdiff <= 5 ) {
+                            if (KMdiff <= 5 && !(origin?.kmPoint!! <= 10)) {
 
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 { total=12.0}
                                 else {total = 15.0.toDouble() * qty}
 
 
-                            } else if (KMdiff > 5 && KMdiff <9) {
+                            } else if (KMdiff > 5 && KMdiff <9 && !(origin?.kmPoint!!<=10)) {
 
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 { total=21.0 }
                                 else { total= 26.0}
                             }
-                            else if(KMdiff==9){
+                            else if(KMdiff==9 && !(origin?.kmPoint!!<=10)){
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 { total=21.0 }
                                 else { total= 26.0}
@@ -941,7 +898,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
 
                             }
-                            else if( origin?.kmPoint!!<10){
+                            else if( origin?.kmPoint!!<=10 && KMdiff<10){
                                 val discountamount: Double = 20.0
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 {
@@ -1162,7 +1119,7 @@ class TIcketingActivity : AppCompatActivity() {
         val ans = decimalVat.format(roundedNumber)
         amount = ans.toString()
         _binding.txtamount.text = amount
-        _binding.txtkm.text="~${kmdiffprint}km"
+        _binding.txtkm.text="~${KMdiff}km"
 
 
 
@@ -1279,6 +1236,7 @@ class TIcketingActivity : AppCompatActivity() {
                 amountafterdiscount= hotspotamount - discount
                 hotspotamount= amountafterdiscount * qty
             }
+
         }
 
         hotspotamount
@@ -1692,7 +1650,10 @@ class TIcketingActivity : AppCompatActivity() {
         handler!!.removeCallbacksAndMessages(null)
     }
 
-
+    fun hideKeyboard(view: View) {
+        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
 
     //region PRINTER

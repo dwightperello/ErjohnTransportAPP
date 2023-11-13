@@ -1539,10 +1539,8 @@ class TIcketingActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Passenger Type: ${passtype}\n", "ST", 24,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("QTY: ${qty}\n", "ST", 24,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Fare KM: ${kmdiffprint}\n", "ST", 24,callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Origin: ${_binding.etOrigin.text.toString()}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Origin Km: ${_binding.txtoriginKM.text.toString()}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Destination: ${_binding.etDestination.text.toString()}\n", "ST", 24,  callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Destination Km: ${_binding.txtDestination.text.toString()}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Fm: ${_binding.txtoriginKM.text.toString()}km~${_binding.etOrigin.text.toString()}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("To: ${_binding.txtDestination.text.toString()}km~${_binding.etDestination.text.toString()}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",

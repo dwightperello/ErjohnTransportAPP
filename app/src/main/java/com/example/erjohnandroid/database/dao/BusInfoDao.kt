@@ -13,4 +13,7 @@ interface BusInfoDao {
 
     @Query("SELECT * FROM BusInfo where companyId = :id")
     fun getBusinfo(id:Int): List<BusInfoTableItem>
+
+    @Query("DELETE FROM BusInfo")
+    fun truncateBusinfo()
 }

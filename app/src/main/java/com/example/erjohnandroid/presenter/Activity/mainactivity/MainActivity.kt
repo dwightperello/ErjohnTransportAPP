@@ -216,6 +216,10 @@ class MainActivity : AppCompatActivity() {
 //            startActivityWithAnimation<TIcketingActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
         }
 
+        _binding!!.btnupdateData.setOnClickListener {
+            showUpdateData()
+        }
+
         _binding!!.btnInspection.setOnClickListener {
             val intent = Intent(this, SharedLoginActivity::class.java)
             intent.putExtra("activity",INSPECTION)
@@ -561,6 +565,32 @@ class MainActivity : AppCompatActivity() {
             val text = input.text.toString()
             if(text=="1234"){
                 startActivityWithAnimation<TIcketingActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+            }else{
+                Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which -> dialog.cancel() }
+
+        builder.show()
+
+    }
+
+    fun showUpdateData(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("UPDATE SAVED DATA")
+
+// Set up the input
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.gravity = Gravity.CENTER
+        builder.setView(input)
+
+// Set up the buttons
+        builder.setPositiveButton("OK") { dialog, which ->
+            val text = input.text.toString()
+            if(text=="90909"){
+                startActivityWithAnimation<LoginActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
             }else{
                 Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
             }

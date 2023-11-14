@@ -14,4 +14,7 @@ interface WitholdingTypeDao {
 
     @Insert
     fun insertwitholdingtypeBUlk(entity:List<WitholdingTypeTable>)
+
+    @Query("DELETE FROM WitholdingType")
+    fun truncatewitholdingType()
 }

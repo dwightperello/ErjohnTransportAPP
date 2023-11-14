@@ -597,6 +597,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun truncateBeforeUpdate(){
+        viewModelScope.launch() {
+            val records=  repository.truncateForUpdate()
+
+        }
+    }
+
     fun insertTripticketBulkTwo(entity: List<TripTicketTable>){
         viewModelScope.launch() {
             val records=  repository.insertTripticketBulkTwo(entity)

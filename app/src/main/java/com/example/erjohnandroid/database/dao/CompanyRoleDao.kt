@@ -13,4 +13,7 @@ interface CompanyRoleDao {
 
     @Query("SELECT * FROM EmployeeRoles")
     fun getAllCompanyroles(): List<CompanyRolesTable>
+
+    @Query("DELETE FROM EmployeeRoles")
+    fun truncateCompanyrole()
 }

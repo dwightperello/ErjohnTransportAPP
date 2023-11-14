@@ -14,4 +14,7 @@ interface ExpensesTypeDao {
 
     @Query("SELECT * FROM ExpensesTypes")
     fun getExpensesStype(): List<ExpensesTypeTable>
+
+    @Query("DELETE FROM ExpensesTypes")
+    fun truncateExpenses()
 }

@@ -24,5 +24,8 @@ interface EmployeesDao {
     @Query("SELECT * FROM Employees where companyRolesId = :id")
     fun selectDriver(id:Int):List<EmployeesTable>
 
+    @Query("DELETE FROM Employees")
+    fun truncateEmployees()
+
 
 }

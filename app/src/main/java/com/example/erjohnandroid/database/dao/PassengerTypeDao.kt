@@ -15,5 +15,6 @@ interface PassengerTypeDao {
     @Insert
     fun insertPassengerTypeBulk(entity:List<PassengerTypeTable>)
 
-
+    @Query("DELETE FROM PassengerType")
+    fun truncatePassengertype()
 }

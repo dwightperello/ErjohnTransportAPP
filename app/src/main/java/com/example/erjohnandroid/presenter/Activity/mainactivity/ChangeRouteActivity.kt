@@ -49,10 +49,10 @@ class ChangeRouteActivity : AppCompatActivity() {
         initCheckbox()
 
         _binding!!.btnsavechangeroute.setOnClickListener {
-            if(_binding?.cbNorth?.isChecked==false || _binding?.cbSouth?.isChecked==false){
-                Toast(this).showCustomToast("Select Direction",this)
-                return@setOnClickListener
-            }
+//            if(_binding?.cbNorth?.isChecked==false || _binding?.cbSouth?.isChecked==false){
+//                Toast(this).showCustomToast("Select Direction",this)
+//                return@setOnClickListener
+//            }
 
             GlobalVariable.remainingPass=0
             GlobalVariable.destinationcounter=1
@@ -75,6 +75,8 @@ class ChangeRouteActivity : AppCompatActivity() {
     fun Liness(role: LinesTable) {
         GlobalVariable.line= role.name
         GlobalVariable.lineid= role.id
+        if(role.remarks.equals("SB")) GlobalVariable.direction= "South"
+        else GlobalVariable.direction= "North"
         Toast(this).showCustomToast("${GlobalVariable.line}",this)
     }
 

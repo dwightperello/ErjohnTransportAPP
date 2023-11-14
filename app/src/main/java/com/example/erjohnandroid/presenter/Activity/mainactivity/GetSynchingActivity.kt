@@ -47,6 +47,13 @@ class GetSynchingActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
+        try {
+            dbViewmodel.truncateBeforeUpdate()
+        }catch (e:java.lang.Exception){
+            Toast.makeText(this,"Error on Local DB !! ${e.message}",Toast.LENGTH_LONG).show()
+        }
+
+
         _binding!!.btnGetAlldata.setOnClickListener {
             viewModel.getAllLines(GlobalVariable.token!!)
             _binding!!.btnGetAlldata.isEnabled=false

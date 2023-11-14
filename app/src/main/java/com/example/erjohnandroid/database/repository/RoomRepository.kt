@@ -273,6 +273,19 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         synchTripwitholdingdao.truncatecopywitholdings()
     }
 
+    fun truncateForUpdate(){
+        lineDao.truncateLines()
+        busInfoDao.truncateBusinfo()
+        companiesDao.truncateCopaniesDao()
+        companyRoleDao.truncateCompanyrole()
+        employeesDao.truncateEmployees()
+        expensesTypeDao.truncateExpenses()
+        hotSpotDAO.truncateHotspot()
+        lineSegmentDao.truncateLineSegment()
+        passengerTypeDao.truncatePassengertype()
+        witholdingTypeDao.truncatewitholdingType()
+    }
+
     fun insertTripticketBulkTwo(entity:List<TripTicketTable>){
         return tripTicketDao.inserTripticketBulktwo(entity)
     }

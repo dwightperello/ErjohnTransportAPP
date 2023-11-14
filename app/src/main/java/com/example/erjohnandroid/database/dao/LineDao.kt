@@ -12,4 +12,7 @@ interface LineDao {
 
     @Insert
     fun insertAllLines(entity:List<LinesTable>)
+
+    @Query("DELETE FROM Lines")
+    fun truncateLines()
 }

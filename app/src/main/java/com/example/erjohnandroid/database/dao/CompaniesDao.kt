@@ -14,4 +14,7 @@ interface CompaniesDao {
 
     @Query("SELECT * FROM Companies")
     fun getCompanies(): List<CompaniesTable>
+
+    @Query("DELETE FROM Companies")
+    fun truncateCopaniesDao()
 }

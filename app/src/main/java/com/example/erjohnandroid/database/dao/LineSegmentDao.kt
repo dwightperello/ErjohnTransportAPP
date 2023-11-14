@@ -14,4 +14,7 @@ interface LineSegmentDao {
 
     @Insert
     fun insertAllLinesegment(entity:List<LineSegmentTable>)
+
+    @Query("DELETE FROM LineSegment")
+    fun truncateLineSegment()
 }

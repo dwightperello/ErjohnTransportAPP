@@ -767,7 +767,7 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     val computeAmount:()->String ={
-        val discountamount: Double = 20.0
+        val discountamount: Double = 0.20
         var baggageamount:Double=0.0
         var KMdiff:Int=0
         var amount:String?=null
@@ -783,7 +783,8 @@ class TIcketingActivity : AppCompatActivity() {
         if(GlobalVariable.line!!.equals("GMA-PITX") || GlobalVariable.line.equals("PITX-GMA")){
             try {
                 if (passtype == "Baggage" && _binding.cbBaggage.isChecked) {
-                    KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
+                    if(GlobalVariable.direction.equals("South")) KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
+                    else KMdiff = origin?.kmPoint!! - destination?.kmPoint!!
                     val bag = _binding.etbaggaeamount.text.toString().toDoubleOrNull() ?: 0.0
                     baggageamount = bag
                     total = baggageamount
@@ -963,6 +964,8 @@ class TIcketingActivity : AppCompatActivity() {
         {
             try {
                 if(passtype.equals("Baggage")){
+                    if(GlobalVariable.direction.equals("South")) KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
+                    else KMdiff = origin?.kmPoint!! - destination?.kmPoint!!
                     if(_binding.cbBaggage.isChecked){
                         var bag= _binding.etbaggaeamount.text.toString()
                         if(bag.isNullOrEmpty()){
@@ -979,6 +982,8 @@ class TIcketingActivity : AppCompatActivity() {
                 else{
                     val amountfromHspot= checkhotspot(destination?.kmPoint!!,origin?.kmPoint!!)
                     if (amountfromHspot!=null){
+                        if(GlobalVariable.direction.equals("South")) KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
+                        else KMdiff = origin?.kmPoint!! - destination?.kmPoint!!
                         total= amountfromHspot
                     }
                     else
@@ -993,7 +998,8 @@ class TIcketingActivity : AppCompatActivity() {
                                 _binding.btnPrintticke.isVisible=true
                             }
                             if(KMdiff <= 13){
-                                val discountamount:Double=20.0
+//                                val discountamount:Double=20.0
+                                val discountamount:Double=0.20
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     discount=  (discountamount / 100) * fare
                                     amountafterdiscount= fare - discount
@@ -1041,7 +1047,7 @@ class TIcketingActivity : AppCompatActivity() {
                             KMdiff= origin?.kmPoint!! - destination?.kmPoint!!
                             kmdiffprint= KMdiff
                             if(KMdiff<=0){
-                                throw IllegalArgumentException()
+                                //throw IllegalArgumentException()
                                 _binding.btnPrintticke.isVisible=false
                             }else _binding.btnPrintticke.isVisible= true
                             if(KMdiff!! <= 13){
@@ -1075,7 +1081,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 val discountamount:Double=0.20
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.36
+                                    getExceedAmount = getkmdiff * 2.35
                                     discount= getExceedAmount *   discountamount
                                     amountafterdiscount= getExceedAmount - discount
                                     total = amountafterdiscount

@@ -17,4 +17,7 @@ interface HotSpotDAO {
 
     @Insert
     fun insertAllHotSpots(entity:List<HotSpotsTable>)
+
+    @Query("DELETE FROM HotSpots")
+    fun truncateHotspot()
 }

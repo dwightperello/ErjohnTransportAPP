@@ -245,7 +245,7 @@
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SYNCH DATA"
+                    android:text="SYNCH INGRESSO"
                     android:textSize="@dimen/_12sdp"
                     android:gravity="center"/>
 
@@ -262,13 +262,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:id="@+id/btnupdateData"
                     android:background="@drawable/baseline_cloud_circle_24"/>
 
                 <TextView
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="CLOUD-OPTIONAL"
+                    android:text="UPDATE DATABASE"
                     android:textSize="@dimen/_12sdp"
                     android:gravity="center"/>
 

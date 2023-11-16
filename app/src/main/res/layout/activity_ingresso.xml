@@ -369,7 +369,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/_12sdp"
-                    android:text="100:"
+                    android:text="100"
                     android:textStyle="bold"
                     android:id="@+id/txtnetcollection"/>
 
@@ -377,7 +377,7 @@
 
             <LinearLayout
                 android:id="@+id/viewdriverbonus"
-                android:visibility="gone"
+
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -400,14 +400,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/_12sdp"
-                    android:text="0.0:"
+                    android:text="0.0"
                     android:textStyle="bold"
                     android:id="@+id/txtdriverbonus"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
+
                 android:id="@+id/viewconductorbonus"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_width="match_parent"
@@ -431,7 +431,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/_12sdp"
-                    android:text="0.0:"
+                    android:text="0.0"
                     android:textStyle="bold"
                     android:id="@+id/txtconductorbonus"/>
 

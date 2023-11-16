@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
     val TRIP_REPORT_ACTIVITY=11
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding= ActivityMainBinding.inflate(layoutInflater)
@@ -205,6 +206,7 @@ class MainActivity : AppCompatActivity() {
         _binding!!.btnDispatch.setOnClickListener {
             //startActivityWithAnimation<SharedLoginActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
             val intent = Intent(this, SharedLoginActivity::class.java)
+            intent.putExtra("activity", DISPATCH_ACTIVITY)
             startActivityForResult(intent,DISPATCH_ACTIVITY)
             overridePendingTransition(
                 R.anim.screenslideright, R.anim.screen_slide_out_left

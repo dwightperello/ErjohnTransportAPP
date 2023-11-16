@@ -911,44 +911,6 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                             }
 
-//                            else if (origin?.kmPoint!! >= 10 && destination?.kmPoint!! >= 16 && KMdiff > 5 && destination?.kmPoint!! <= 19) {
-//                                val discountamount: Double = 0.20
-//                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals(
-//                                        "PWD"
-//                                    )
-//                                ) {
-//                                    getkmdiff = KMdiff
-//                                    getExceedAmount = getkmdiff * 26.0
-//                                    discount = getExceedAmount * discountamount
-//                                    amountafterdiscount = getExceedAmount - discount
-//                                    total = amountafterdiscount
-//                                    total = total * qty
-//                                } else {
-//
-//                                    total = 26.0.toDouble()
-//                                }
-//                            }
-//                            else if (origin?.kmPoint!! >= 10 && destination?.kmPoint!! >= 20 && KMdiff > 5) {
-//                                val discountamount: Double = 0.20
-//                                if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals(
-//                                        "PWD"
-//                                    )
-//                                ) {
-//                                    getkmdiff = KMdiff
-//                                    getExceedAmount = getkmdiff * 2.65
-//                                    discount = getExceedAmount * discountamount
-//                                    amountafterdiscount = getExceedAmount - discount
-//                                    total = amountafterdiscount
-//                                    total = total * qty + 2
-//                                } else {
-//                                    getExceedAmount = KMdiff!! * 2.65
-//                                    total = getExceedAmount
-//                                    total = total * qty + 2
-//                                }
-//
-//
-//                            }
-
 
                         }
 
@@ -1038,6 +1000,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 else
                                 {
                                     getExceedAmount= KMdiff!! * 2.35
+                                   // getExceedAmount= KMdiff!! * 100.00
                                     total = getExceedAmount
                                     total= total * qty
                                 }

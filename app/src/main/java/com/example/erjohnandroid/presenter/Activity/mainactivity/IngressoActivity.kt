@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
+import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.TicketTotal
@@ -75,7 +76,7 @@ class IngressoActivity : AppCompatActivity() {
     var totalamount:Double=0.0
     var drivercommision:String="0.0"
     var conductorcommision:String="0.0"
-    var bonus = 100.0
+    val bonus = 100.0
     var infault:String?= null
     var expensesTotal:String?= "0.0"
     var witholdingTotal:String="0.0"
@@ -207,11 +208,11 @@ class IngressoActivity : AppCompatActivity() {
             val ans = decimalVat.format(compute)
             _binding.etshortover.text= ans.toString()
 
-            if(totalamount>=14000){
-                _binding.viewconductorbonus.isVisible=true
-                _binding.viewdriverbonus.isVisible=true
-                calculateBonus(totalamount)
-            }
+//            if(totalamount>=14000){
+//                _binding.viewconductorbonus.isVisible=true
+//                _binding.viewdriverbonus.isVisible=true
+//                calculateBonus(totalamount)
+//            }
 
         }
 
@@ -270,7 +271,9 @@ class IngressoActivity : AppCompatActivity() {
                 ShororOver = convertDecimal(_binding.etshortover.text.toString()),
                 InFault = infault,
                 DateTimeStamp = formattedDateTime.toString(),
-                ingressoRefId = GlobalVariable.ingressoRefId
+                ingressoRefId = GlobalVariable.ingressoRefId,
+                DriverBonus = convertDecimal(_binding.txtdriverbonus.text.toString()),
+                ConductorBonus = convertDecimal(_binding.txtconductorbonus.text.toString())
 
             )
 
@@ -416,6 +419,12 @@ class IngressoActivity : AppCompatActivity() {
             _binding.txtnetcollection.text="${ans}"
 
           commisionamount= computeCommissions(totalamount)
+            if(totalamount>=14000){
+                _binding.viewconductorbonus.isVisible=true
+                _binding.viewdriverbonus.isVisible=true
+                calculateBonus(totalamount)
+            }
+
         }
     }
 
@@ -493,7 +502,7 @@ class IngressoActivity : AppCompatActivity() {
                 }
             }
 
-           // totalamount -= AllWitholding.last().amount!! // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
+            totalamount += AllWitholding.last().amount!! // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
             val decimalVat = DecimalFormat("#.00")
             _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
 
@@ -504,28 +513,65 @@ class IngressoActivity : AppCompatActivity() {
             witholding = decimalVat.format(withold)
             _binding.btnWitholding.text="ENTER / " +"${witholding}"
             witholdingTotal = witholding
+
+           // totalamount-=
         }
     }
     //endregion
 
-
+    var finalbonusIfAny:String?= "0.0"
     fun calculateBonus(sales: Double) {
        // totalSales += sales
-        var total=sales
 
-        if (total >= 14000) {
 
-            val bonusIncreaseCount = (total - 14000) / 1000
-            bonus += bonusIncreaseCount * 100
+        var bonusamountTotal=0.0
+        var bonusEach=0.0
+
+        if (sales >= 14000) {
+
+            val aboveThresholdAmount = (sales - 14000)
+            val bonuscount= (aboveThresholdAmount/1000).toInt()
+
+            bonusEach= bonus +(bonuscount * 50)
+
+//            bonus += bonusIncreaseCount * 50
 
             val decimalVat = DecimalFormat("#.00")
-            var ans = decimalVat.format(bonus)
+            var ans = decimalVat.format(bonusEach)
 
             _binding.txtdriverbonus.text= "${ans}"
             _binding.txtconductorbonus.text= "${ans}"
 
+            bonusamountTotal= bonusEach * 2
+
+            totalamount -= bonusamountTotal
+            var AfterDeductBonus= decimalVat.format(totalamount)
+
+            _binding.txtnetcollection.text="${AfterDeductBonus}"
+            val formattedDateTime = getCurrentDateInFormat()
+            var method= TripCostTable(
+                amount = bonusamountTotal,
+                costType = "Bonus",
+                dateTimeStamp = formattedDateTime,
+                line = GlobalVariable.line,
+                ingressoRefId = GlobalVariable.ingressoRefId,
+                TripCostId = 0,
+                driverConductorName = GlobalVariable.driver +"/" + GlobalVariable.conductor
+            )
+
+            GlobalVariable.bonusArraylist.add(method)
+            var expensesamount:Double=0.0
+            var expenses="0.0"
+            GlobalVariable.bonusArraylist.forEach {
+                expensesamount += it.amount!!
+            }
+            expenses = decimalVat.format(expensesamount)
+            finalbonusIfAny=expenses
+            //expensesTotal = expenses
         }
     }
+
+
 
     //region SYNCHING
     private var triptickets:ArrayList<Sycn_TripticketTable> = arrayListOf()
@@ -1188,6 +1234,7 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Expenses: ${expensesTotal}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Bonus Expenses: ${finalbonusIfAny}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Witholding: ${witholdingTotal}\n", "ST", 24, callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
@@ -1233,6 +1280,11 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Expenses\n\n", "ST", 24, 1,callback)
 
                 GlobalVariable.AllTripCost.forEach {
+                    mIPosPrinterService!!.printSpecifiedTypeText("Expenses type: ${it.costType}\n", "ST", 24, callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)
+                }
+
+                GlobalVariable.bonusArraylist.forEach {
                     mIPosPrinterService!!.printSpecifiedTypeText("Expenses type: ${it.costType}\n", "ST", 24, callback)
                     mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)
                 }

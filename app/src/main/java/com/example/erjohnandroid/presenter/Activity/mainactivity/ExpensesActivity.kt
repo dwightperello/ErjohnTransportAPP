@@ -22,6 +22,7 @@ import com.example.erjohnandroid.presenter.adapter.BusAdapter
 import com.example.erjohnandroid.presenter.adapter.ExpensesAdapter
 import com.example.erjohnandroid.presenter.adapter.LineAdapter
 import com.example.erjohnandroid.util.GlobalVariable
+import com.example.erjohnandroid.util.GlobalVariable.AllTripCost
 import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -87,7 +88,10 @@ class ExpensesActivity : AppCompatActivity() {
     }
     val ProcessExpenses:(state:List<TripCostTable>) ->Unit={
        GlobalVariable.AllTripCost= arrayListOf()
+
         if(!it.isNullOrEmpty()) {
+
+
 
           GlobalVariable.AllTripCost.addAll(it)
         }

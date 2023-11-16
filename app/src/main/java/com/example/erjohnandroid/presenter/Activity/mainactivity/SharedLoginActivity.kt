@@ -69,71 +69,78 @@ class SharedLoginActivity : AppCompatActivity() {
     private fun ProcessRoles(state: EmployeesTable?){
         try {
             if( state!=null){
-                if(state.companyRolesId==4){
-                    if(GlobalVariable.isDispatched)return
-                    GlobalVariable.employeeName= state.name
-                   // startActivityWithAnimation<DispatchActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
-                    val intent = Intent(this, DispatchActivity::class.java)
-                    startActivityForResult(intent,DISPATCH_ACTIVITY)
-                    overridePendingTransition(
-                        R.anim.screenslideright, R.anim.screen_slide_out_left
-                    );
-                    finish()
-                }
-                else if(state.companyRolesId==3){
-                    if(!GlobalVariable.isDispatched){
-                       // Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
-                        Toast(this).showCustomToast("PLEASE DISPATCH",this)
-                        return
-                    }
-                    if (activity!!.equals(9)){
-                        GlobalVariable.inspectorname=state.name
-                        startActivityWithAnimation<InspectionActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                if(activity==1){
+                    if(state.companyRolesId==4 || state.companyRolesId==3){
+                        if(GlobalVariable.isDispatched)return
+                        GlobalVariable.employeeName= state.name
+                        // startActivityWithAnimation<DispatchActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                        val intent = Intent(this, DispatchActivity::class.java)
+                        startActivityForResult(intent,DISPATCH_ACTIVITY)
+                        overridePendingTransition(
+                            R.anim.screenslideright, R.anim.screen_slide_out_left
+                        );
                         finish()
+                    } else Toast(this).showCustomToast("Check Pin",this)
+                }
+                else if(activity==9){
+                    if(state.companyRolesId==3 || state.companyRolesId==4){
+                        if(!GlobalVariable.isDispatched){
+                            // Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                            Toast(this).showCustomToast("PLEASE DISPATCH",this)
+                            return
+                        }
+                        if (activity!!.equals(9)){
+                            GlobalVariable.inspectorname=state.name
+                            startActivityWithAnimation<InspectionActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                            finish()
+                        }
+                    } else Toast(this).showCustomToast("Check Pin",this)
+                }
+                else if(activity==4) {
+                    if (state.companyRolesId == 5) {
+                        if (!GlobalVariable.isDispatched) {
+                            //Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                            Toast(this).showCustomToast("PLEASE DISPATCH", this)
+                            return
+                        }
+
+                        if (activity!!.equals(4)) {
+                            GlobalVariable.cashiername = state.name
+                            val intent = Intent(this, IngressoActivity::class.java)
+                            startActivityForResult(intent, 3)
+                            activity = null
+                            finish()
+                            overridePendingTransition(
+                                R.anim.screenslideright, R.anim.screen_slide_out_left
+                            );
+                        }
+                    } else Toast(this).showCustomToast("Check Pin",this)
+                }
+                else if(activity==5) {
+                    if(state.companyRolesId==5) {
+                        GlobalVariable.cashiername=state.name
+                        startActivityWithAnimation<PartialRemitActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                        finish()
+                    } else Toast(this).showCustomToast("Check Pin",this)
+                }
+//                else if(activity==10) {
+//
+//                }
+
+
+            }
+            else{
+                if(activity==10){
+                    if(pin.equals("30300")){
+                        startActivityWithAnimation<SettingsActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                        finish()
+                    }else{
+                        _binding.etPin.setText("")
+                        // Toast.makeText(this,"NO DATA FOUND", Toast.LENGTH_LONG).show()
+                        Toast(this).showCustomToast("NO DATA FOUND",this)
                     }
-
                 }
-                else if(state.companyRolesId==5){
-                    if(!GlobalVariable.isDispatched){
-                        //Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
-                        Toast(this).showCustomToast("PLEASE DISPATCH",this)
-                        return
-                    }
-
-                   if(activity!!.equals(4)){
-                       GlobalVariable.cashiername=state.name
-                       val intent = Intent(this, IngressoActivity::class.java)
-                       startActivityForResult(intent,3)
-                       activity=null
-                       finish()
-                       overridePendingTransition(
-                           R.anim.screenslideright, R.anim.screen_slide_out_left
-                       );
-                       //startActivityWithAnimation<IngressoActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
-
-                   }else if(activity!!.equals(5))
-                   {
-                       GlobalVariable.cashiername=state.name
-                       startActivityWithAnimation<PartialRemitActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
-                       finish()
-                   }
-
-
-                }
-
-
-                else
-                Toast(this).showCustomToast("CHECK PIN",this)
-            }else{
-
-                if(pin.equals("30300")){
-                    startActivityWithAnimation<SettingsActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
-                    finish()
-                }else{
-                    _binding.etPin.setText("")
-                   // Toast.makeText(this,"NO DATA FOUND", Toast.LENGTH_LONG).show()
-                    Toast(this).showCustomToast("NO DATA FOUND",this)
-                }
+              //  Toast(this).showCustomToast("CHECK PIN",this)
 
             }
         }catch (e:java.lang.Exception){

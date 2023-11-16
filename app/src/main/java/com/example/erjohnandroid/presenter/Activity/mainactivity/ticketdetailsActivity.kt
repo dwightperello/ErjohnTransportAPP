@@ -380,6 +380,7 @@ class ticketdetailsActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Ticket Details - Reverse\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Cashier Name: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Trip #: ${GlobalVariable.tripreverse}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -398,10 +399,10 @@ class ticketdetailsActivity : AppCompatActivity() {
                     callback
                 )
 
-                tripticketTable?.forEach {
-                    mIPosPrinterService!!.printSpecifiedTypeText("000${it.titcketNumber} ${it.KMOrigin} ${it.KmDestination} ${it.amount} \n", "ST", 24,  callback)
-                   // mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24,  callback)
-                }
+//                tripticketTable?.forEach {
+//                    mIPosPrinterService!!.printSpecifiedTypeText("000${it.titcketNumber} ${it.KMOrigin} ${it.KmDestination} ${it.amount} \n", "ST", 24,  callback)
+//                   // mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24,  callback)
+//                }
 
 
                 mIPosPrinterService!!.printerPerformPrint(160, callback)

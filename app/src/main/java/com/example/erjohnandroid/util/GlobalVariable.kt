@@ -53,7 +53,7 @@ object GlobalVariable {
 
     var AllWitholding:ArrayList<TripWitholdingTable> = arrayListOf()
     var AllTripCost:ArrayList<TripCostTable> = arrayListOf()
-
+    var bonusArraylist:ArrayList<TripCostTable> = arrayListOf()
 
     var ticketnumid:Int?= 1
     var ingressoRefId:Int=0

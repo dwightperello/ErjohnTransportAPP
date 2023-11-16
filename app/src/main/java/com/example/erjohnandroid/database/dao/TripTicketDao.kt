@@ -8,6 +8,7 @@ import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TicketTotal
 import com.example.erjohnandroid.database.Model.convertions.TripAmountPerReverse
 import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
+import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
 
 
 @Dao
@@ -39,6 +40,22 @@ interface TripTicketDao {
 
     @Query("DELETE FROM TripTickets")
     fun truncateTripticket()
+
+    //@Query("SELECT * FROM TripTickets WHERE TripTicketId IN (SELECT MIN(TripTicketId) FROM TripTickets GROUP BY tripReverse UNION SELECT MAX(TripTicketId) FROM TripTickets GROUP BY tripReverse)")
+   // @Query("SELECT *, (SELECT SUM(amount) FROM TripTickets t WHERE t.tripReverse = TripTickets.tripReverse) AS totalAmount, (SELECT SUM(qty) FROM TripTickets t WHERE t.tripReverse = TripTickets.tripReverse) AS totalQty FROM TripTickets WHERE TripTicketId IN (SELECT MIN(TripTicketId) FROM TripTickets GROUP BY tripReverse UNION SELECT MAX(TripTicketId) FROM TripTickets GROUP BY tripReverse)")
+
+   // @Query("SELECT tripReverse, SUM(amount) AS totalAmount, GROUP_CONCAT(titcketNumber) AS ticketNumbers FROM TripTickets WHERE TripTicketId IN (SELECT MIN(TripTicketId) FROM TripTickets GROUP BY tripReverse UNION SELECT MAX(TripTicketId) FROM TripTickets GROUP BY tripReverse) GROUP BY tripReverse")
+  // @Query("SELECT tripReverse, SUM(amount) AS totalAmount, GROUP_CONCAT(titcketNumber) AS ticketNumbers FROM TripTickets GROUP BY tripReverse")
+
+    @Query("SELECT tripReverse, SUM(amount) AS totalAmount, COUNT(*) AS ticketCount, " +
+            "(SELECT titcketNumber FROM TripTickets WHERE TripTickets.tripReverse = t1.tripReverse ORDER BY TripTicketId ASC LIMIT 1) AS firstTicketNumber, " +
+            "(SELECT titcketNumber FROM TripTickets WHERE TripTickets.tripReverse = t1.tripReverse ORDER BY TripTicketId DESC LIMIT 1) AS lastTicketNumber " +
+            "FROM TripTickets t1 GROUP BY t1.tripReverse")
+
+
+    fun getAllTicketsForReverse(): List<TotalAmountAndTicketNumbersPerReverse>
+
+    //fun getAllTicketsForReverse():List<TripTicketTable>
 
     @Query("SELECT  COUNT(amount) AS ticket_count, sum(amount) as sumamount FROM TripTickets where tripReverse = :reverse")
     fun getPerTripAmount(reverse:Int): TripAmountPerReverse

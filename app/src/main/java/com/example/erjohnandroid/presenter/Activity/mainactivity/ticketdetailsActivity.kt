@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.TripTicketTable
+import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityDispatchBinding
 import com.example.erjohnandroid.databinding.ActivitySharedLoginBinding
@@ -37,6 +38,7 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ticketdetailsActivity : AppCompatActivity() {
@@ -107,8 +109,24 @@ class ticketdetailsActivity : AppCompatActivity() {
             _binding.rvTicketdetails.adapter= TicketDetailsAdapter
             _binding.rvTicketdetails.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
             TicketDetailsAdapter.showdetails(state)
+            dbViewmodel.getAllTripTicketForReverse()
+            dbViewmodel.alltripticketforreverse.observe(this, Observer {
+                state -> ProcessTripTicketReverse(state)
+            })
         }
     }
+    var ticketforReverse:ArrayList<TotalAmountAndTicketNumbersPerReverse> = arrayListOf()
+    private fun ProcessTripTicketReverse(state: List<TotalAmountAndTicketNumbersPerReverse>?){
+        if(!state.isNullOrEmpty()){
+            ticketforReverse = arrayListOf()
+            state.forEach {
+                ticketforReverse.add(it)
+            }
+
+        }
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -379,7 +397,9 @@ class ticketdetailsActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Ticket Details - Reverse\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Cashier Name: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Trip #: ${GlobalVariable.tripreverse}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
@@ -398,11 +418,17 @@ class ticketdetailsActivity : AppCompatActivity() {
                     24,
                     callback
                 )
+                mIPosPrinterService!!.PrintSpecFormatText("DETAILS PER REVERSE: \n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
 
-//                tripticketTable?.forEach {
-//                    mIPosPrinterService!!.printSpecifiedTypeText("000${it.titcketNumber} ${it.KMOrigin} ${it.KmDestination} ${it.amount} \n", "ST", 24,  callback)
-//                   // mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24,  callback)
-//                }
+                ticketforReverse?.forEach {
+                    mIPosPrinterService!!.printSpecifiedTypeText("Reverse: ${it.tripReverse}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Total: ${it.totalAmount}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Start #: 000${it.firstTicketNumber}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("End #: 000${it.lastTicketNumber}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printSpecifiedTypeText("Ticket Count: ${it.ticketCount}\n", "ST", 24,  callback)
+                    mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                }
 
 
                 mIPosPrinterService!!.printerPerformPrint(160, callback)

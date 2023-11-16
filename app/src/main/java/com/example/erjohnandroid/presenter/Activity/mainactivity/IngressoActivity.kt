@@ -764,6 +764,7 @@ class IngressoActivity : AppCompatActivity() {
         conductor=null
         driver=null
         bus=null
+        GlobalVariable.bonusArraylist = arrayListOf()
 
         tripreverse=1
 

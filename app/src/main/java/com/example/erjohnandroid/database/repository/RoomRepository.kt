@@ -2,6 +2,7 @@ package com.example.erjohnandroid.database.repository
 
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.*
+import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
 import com.example.erjohnandroid.database.dao.*
 import com.example.erjohnandroid.util.GlobalVariable
 import javax.inject.Inject
@@ -309,6 +310,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun getTripticketafterInspectionNorth(searchkm:Int,reverse: Int): List<TripTicketTable>{
         return inspectionReportDao.getTripticketsAfterInspectionNorth(searchkm,reverse)
+    }
+
+    fun getAllTripTicketForReverse():List<TotalAmountAndTicketNumbersPerReverse>{
+        return  tripTicketDao.getAllTicketsForReverse()
     }
 
 

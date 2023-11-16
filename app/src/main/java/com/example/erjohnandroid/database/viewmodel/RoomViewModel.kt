@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.*
+import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
 import com.example.erjohnandroid.database.repository.RoomRepository
 import com.example.erjohnandroid.domain.model.response.Employee
 import com.example.erjohnandroid.util.ResultState
@@ -133,7 +134,8 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _ingressoRefids:MutableLiveData<List<Int>> = MutableLiveData()
     val ingressoRefids:LiveData<List<Int>> = _ingressoRefids
 
-
+    private var _alltripticketforreverse:MutableLiveData<List<TotalAmountAndTicketNumbersPerReverse>> = MutableLiveData()
+    val alltripticketforreverse:LiveData<List<TotalAmountAndTicketNumbersPerReverse>> = _alltripticketforreverse
 
     //region OTHER METHODS
 
@@ -608,6 +610,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.insertTripticketBulkTwo(entity)
 
+        }
+    }
+
+    fun getAllTripTicketForReverse(){
+        viewModelScope.launch() {
+            val records=  repository.getAllTripTicketForReverse()
+            _alltripticketforreverse.value=records
         }
     }
     //endregion

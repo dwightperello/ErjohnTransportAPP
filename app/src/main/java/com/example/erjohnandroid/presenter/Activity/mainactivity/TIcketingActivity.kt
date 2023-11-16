@@ -1000,7 +1000,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 else
                                 {
                                     getExceedAmount= KMdiff!! * 2.35
-                                   // getExceedAmount= KMdiff!! * 100.00
+                                   // getExceedAmount= KMdiff!! * 150.00
                                     total = getExceedAmount
                                     total= total * qty
                                 }

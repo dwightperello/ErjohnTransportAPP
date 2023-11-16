@@ -636,6 +636,7 @@ class DispatchActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver: ${GlobalVariable.driver}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24,  callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Start Ticket: 000${GlobalVariable.ticketnumber}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************",
                     "ST",

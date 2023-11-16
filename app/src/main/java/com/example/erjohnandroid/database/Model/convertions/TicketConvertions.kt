@@ -40,7 +40,9 @@ object TicketConvertions {
             KMOrigin = kmorigin,
             qty = qty,
             ingressoRefId = ingressorefid,
-            time = "${formattedTime}"
+            time = "${formattedTime}",
+            totalAmount = null,
+            totalQty = null
 
         )
       method

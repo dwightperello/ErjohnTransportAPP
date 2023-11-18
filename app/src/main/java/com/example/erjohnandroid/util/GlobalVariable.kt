@@ -7,8 +7,8 @@ import com.example.erjohnandroid.database.Model.TripWitholdingTable
 import com.paymaya.sdk.android.checkout.models.Item
 
 object GlobalVariable {
-   //const val API_BASE_URL="http://10.0.0.9:8084/api/"
-   const val API_BASE_URL="http://192.168.0.100:8084/api/"
+   const val API_BASE_URL="http://10.0.0.9:8084/api/"
+  // const val API_BASE_URL="http://192.168.0.100:8084/api/"
    //const val API_BASE_URL="http://bfh6183-001-site1.ctempurl.com/api/"
 
     var token:String?= null

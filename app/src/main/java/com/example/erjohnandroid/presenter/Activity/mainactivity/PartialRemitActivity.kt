@@ -103,10 +103,10 @@ class PartialRemitActivity : AppCompatActivity() {
 
            // printText("Erjohn & Almark Transit Corp ")
             printText()
-//            finish()
-//            overridePendingTransition(
-//                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-//            );
+            finish()
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
         }
 
         _binding.btnclose.setOnClickListener {
@@ -444,6 +444,9 @@ class PartialRemitActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Partial Remit\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Cashier Name: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Bus #: ${GlobalVariable.bus}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Conductor #: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",

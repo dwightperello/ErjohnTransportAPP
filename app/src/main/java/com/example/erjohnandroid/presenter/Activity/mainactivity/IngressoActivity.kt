@@ -309,7 +309,7 @@ class IngressoActivity : AppCompatActivity() {
         }
 
         _binding.btnigressoreprint.setOnClickListener {
-            printText("Erjohn & Almark Transit Corp")
+            printText()
         }
 
     }
@@ -741,12 +741,17 @@ class IngressoActivity : AppCompatActivity() {
                 val decimalVat = DecimalFormat("#.00")
                 val ans = decimalVat.format(a.toDouble())
                 gross=ans
-                printText("Erjohn & Almark Transit Corp")
+                printText()
                dbViewmodel.insert_synch_witholding(withodling)
 //               dbViewmodel.truncatetables()
                // resetALl()
                 _binding.btnigressoreprint.isEnabled=true
                 _binding.btnigresso.isEnabled=false
+                _binding.btnAddmanual.isEnabled=false
+                _binding.btnCancelledticket.isEnabled=false
+                _binding.btnExpenses.isEnabled=false
+                _binding.btnWitholding.isEnabled=false
+                _binding.btncomputefinalremit.isEnabled=false
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
             }
@@ -793,6 +798,12 @@ class IngressoActivity : AppCompatActivity() {
         destinationcounter=1
         origincounter=0
 
+
+        _binding.btnAddmanual.isEnabled=true
+        _binding.btnCancelledticket.isEnabled=true
+        _binding.btnExpenses.isEnabled=true
+        _binding.btnWitholding.isEnabled=true
+        _binding.btncomputefinalremit.isEnabled=true
 
     }
 
@@ -1208,7 +1219,7 @@ class IngressoActivity : AppCompatActivity() {
 
 
 
-    fun printText(amount:String) {
+    fun printText() {
         ThreadPoolManager.getInstance().executeTask {
 
             try {

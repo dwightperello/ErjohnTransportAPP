@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.externalDispatch.SavedDispatchInfo
@@ -97,6 +98,9 @@ class GetSynchingActivity : AppCompatActivity() {
           state->ProcessHotspot(state)
         })
 
+        viewModel.mpadunits.observe(this, Observer {
+            state -> ProcessMpadUnits(state)
+        })
     }
 
     private var linesegment:ArrayList<LineSegment>?= ArrayList<LineSegment>()
@@ -113,6 +117,7 @@ class GetSynchingActivity : AppCompatActivity() {
     private var dbPassengertype:ArrayList<PassengerTypeTable>?= arrayListOf()
     private var dbWitholdingtype:ArrayList<WitholdingTypeTable>?= arrayListOf()
     private var dbHotspots:ArrayList<HotSpotsTable>?= arrayListOf()
+    private var dbMpadUnits:ArrayList<mPadUnitsTable>?= arrayListOf()
 
     private fun ProcessLines(state: ResultState<ArrayList<LinesItem>>?){
         when(state){
@@ -406,6 +411,43 @@ class GetSynchingActivity : AppCompatActivity() {
                     }
 
                     Log.d("hotspots",dbWitholdingtype?.size.toString())
+                    //InsertDB()
+                    viewModel.getMpadUnits(GlobalVariable.token!!)
+                }
+
+            }
+            is ResultState.Error->{
+                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
+
+
+            }
+            else -> {}
+        }
+    }
+
+    private fun ProcessMpadUnits(state: ResultState<ArrayList<mPadUnitsItem>>?){
+        when(state){
+            is ResultState.Loading ->{
+                _binding!!.txtGetsynchingtext.append("\nGetting MpadUnits....")
+            }
+            is ResultState.Success-> {
+
+                if (state.data != null) {
+                    Log.d("hsize",state.data.size.toString())
+                    state.data.forEach {
+                        var method= mPadUnitsTable(
+                            id = it.id,
+                            machineName = it.machineName,
+                            name = it.name,
+                            permit = it.permit,
+                            permitNumber = it.permitNumber,
+                            serialNumber = it.serialNumber,
+                            tag = it.tag
+                        )
+                        dbMpadUnits?.add(method)
+                    }
+
+                    Log.d("hotspots",dbWitholdingtype?.size.toString())
                     InsertDB()
                 }
 
@@ -432,6 +474,7 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertPassengerTypeBUlk(dbPassengertype!!)
             dbViewmodel.insertWitholdingtypebulk(dbWitholdingtype!!)
             dbViewmodel.insertAllHotspots(dbHotspots!!)
+            dbViewmodel.insertMpadUnits(dbMpadUnits!!)
 
             var method= TicketCounterTable(
                 ticketnumber = 1,
@@ -453,7 +496,10 @@ class GetSynchingActivity : AppCompatActivity() {
                 reverse = 0,
                 orginalTicketnumber = 0,
                 direction = "nothing",
-                ingressoRefId = 0
+                ingressoRefId = 0,
+                machineName = "0",
+                permitNumber = "0",
+                serialNumber = "0"
 
             )
 

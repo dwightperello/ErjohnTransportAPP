@@ -14,7 +14,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
                                          private val tripTicketDao: TripTicketDao,private val tripWitholdingDao: TripWitholdingDao,private val witholdingTypeDao: WitholdingTypeDao,
                                          private val partialRemitDao: PartialRemitDao, private val ingressoDao: IngressoDao,private val synchTripticketdao: Synch_TripticketDao,
                                          private val synchInspectionreportdao: Synch_InspectionReportDao, private val synchMpadassignmentdao: Synch_mPadAssignmentDao, private val ticketnumberdao: TicketNumDAO,
-                                         private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,private val synchTripwitholdingdao: Synch_TripwitholdingDao,private val hotSpotDAO: HotSpotDAO) {
+                                         private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,private val synchTripwitholdingdao: Synch_TripwitholdingDao,private val hotSpotDAO: HotSpotDAO,private val mPadUnitsDao: mPadUnitsDao) {
 
     //region
 
@@ -39,6 +39,14 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun insertBusinfoBulk(entity:List<BusInfoTableItem>){
         return busInfoDao.insertBusinfoBulk(entity)
+    }
+
+    fun insertMpadunitsBulk(entity:List<mPadUnitsTable>){
+        return mPadUnitsDao.insertMpadUnitsBUlk(entity)
+    }
+
+    fun getMpadUnits():List<mPadUnitsTable>{
+        return mPadUnitsDao.getMpadUnits()
     }
 
     fun insertHotspotBulk(entity:List<HotSpotsTable>){
@@ -314,6 +322,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun getAllTripTicketForReverse():List<TotalAmountAndTicketNumbersPerReverse>{
         return  tripTicketDao.getAllTicketsForReverse()
+    }
+
+    fun getGross():TripGross{
+        return  tripTicketDao.getGross()
     }
 
 

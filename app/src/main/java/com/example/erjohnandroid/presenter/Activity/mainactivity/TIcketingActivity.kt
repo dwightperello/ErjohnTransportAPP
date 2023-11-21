@@ -24,6 +24,7 @@ import com.example.erjohnandroid.database.Model.LineSegmentTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TicketConvertions
 import com.example.erjohnandroid.database.Model.convertions.TripAmountPerReverse
+import com.example.erjohnandroid.database.Model.convertions.TripGross
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.database.viewmodel.sd_viewmodel
@@ -111,6 +112,7 @@ class TIcketingActivity : AppCompatActivity() {
         }
        // dbViewmodel.getPassengerType()
         dbViewmodel.getLinesegment(GlobalVariable.lineid!!)
+       // dbViewmodel.getGross()
         initView()
        // passengerTypeAdapter = PassengerTypeAdapter(this)
 
@@ -161,6 +163,10 @@ class TIcketingActivity : AppCompatActivity() {
         dbViewmodel.tripamountperreverse.observe(this,Observer{
             state-> ProcessAmountPerReverse(state)
         })
+
+        dbViewmodel.tripgross.observe(this,Observer{
+            state -> ProcessGross(state)
+        })
     }
 
     val ProcessAmountPerReverse:(state: TripAmountPerReverse?) ->Unit={
@@ -173,6 +179,19 @@ class TIcketingActivity : AppCompatActivity() {
         }else{
             _binding.txtonhand.text = "CASH: 0.0"
             _binding.txtticketcountperreverse.text= " TICKET COUNT: 0"
+        }
+    }
+
+    val ProcessGross:(state: TripGross?) ->Unit={
+
+        if(it?.sumamount!=null){
+            val decimalVat = DecimalFormat("#.00")
+            val ans = decimalVat.format(it.sumamount)
+            _binding.txtgross.text = "GROSS: ${ans}"
+           // _binding.txtticketcountperreverse.text= "TICKET COUNT: ${it.ticket_count.toString()}"
+        }else{
+            _binding.txtgross.text = "GROSS: 0.0"
+
         }
     }
 
@@ -720,6 +739,7 @@ class TIcketingActivity : AppCompatActivity() {
             }
 
                 dbViewmodel.getTripAmountPerReverse(GlobalVariable.tripreverse!!)
+                dbViewmodel.getGross()
 
            // printText("Erjohn & Almark Transit Corp")
                 printText()
@@ -947,6 +967,8 @@ class TIcketingActivity : AppCompatActivity() {
                         if(GlobalVariable.direction.equals("South")) KMdiff = destination?.kmPoint!! - origin?.kmPoint!!
                         else KMdiff = origin?.kmPoint!! - destination?.kmPoint!!
                         total= amountfromHspot
+                       _binding.btnPrintticke.isVisible=true
+
                     }
                     else
                     {
@@ -1139,7 +1161,7 @@ class TIcketingActivity : AppCompatActivity() {
             _binding.btnMinusqty.setBackgroundColor(Color.DKGRAY)
         }
         dbViewmodel.getTripAmountPerReverse(GlobalVariable.tripreverse!!)
-
+        dbViewmodel.getGross()
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         registerReceiver(batteryReceiver, filter)
     }
@@ -1463,9 +1485,9 @@ class TIcketingActivity : AppCompatActivity() {
                 val formattedDateTime = getCurrentDateInFormat()
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("TIN # 207 904 409 000\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Machine #: 00000\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Permit #: 00000\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Serial #: 00000\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Machine: ${GlobalVariable.machineName}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Per: ${GlobalVariable.permitNumber}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Serial: ${GlobalVariable.serialNumber}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
@@ -1485,17 +1507,17 @@ class TIcketingActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver: ${GlobalVariable.driver}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, callback)
                // mIPosPrinterService!!.printSpecifiedTypeText("Device: ${GlobalVariable.deviceName}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+              //  mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
                     "ST",
                     24,
                     callback
                 )
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("FARE: ${totalfare.toString()} ${pesoSign}\n", "ST", 32, 1,callback)
+               // mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.PrintSpecFormatText("FARE: ${totalfare.toString()} ${pesoSign}\n", "ST", 24, 1,callback)
 
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+              //  mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
                     "ST",
@@ -1503,14 +1525,14 @@ class TIcketingActivity : AppCompatActivity() {
                     callback
                 )
 
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+               // mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Ticket #: 000${GlobalVariable.ticketnumber}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Passenger Type: ${passtype}\n", "ST", 24,callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("QTY: ${qty}\n", "ST", 24,callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Fare KM: ${kmdiffprint}\n", "ST", 24,callback)
+               // mIPosPrinterService!!.printSpecifiedTypeText("QTY: ${qty}\n", "ST", 24,callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Distance KM: ${kmdiffprint}\n", "ST", 24,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Fm: ${_binding.txtoriginKM.text.toString()}km~${_binding.etOrigin.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("To: ${_binding.txtDestination.text.toString()}km~${_binding.etDestination.text.toString()}\n", "ST", 24,  callback)
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+               // mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
                     "********************************\n",
                     "ST",
@@ -1530,7 +1552,7 @@ class TIcketingActivity : AppCompatActivity() {
 //                    24,
 //                    callback
 //                )
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+               // mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 
 

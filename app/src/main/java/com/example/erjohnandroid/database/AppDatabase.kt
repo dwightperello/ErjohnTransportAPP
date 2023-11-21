@@ -11,11 +11,11 @@ import com.example.erjohnandroid.database.dao.*
     CompaniesTable::class,CompanyRolesTable::class,EmployeesTable::class,
     ExpensesTypeTable::class,InspectionReportTable::class,mPadAssignmentsTable::class,PassengerTypeTable::class,
     TripCostTable::class,TripTicketTable::class,TripWitholdingTable::class,WitholdingTypeTable::class,HotSpotsTable::class,TicketCounterTable::class,
-    PartialRemitTable::class,Sycn_TripticketTable::class,Sycnh_InspectionReportTable::class,Synch_mpadAssignmentsTable::class,Synch_partialremitTable::class,Synch_TripCostTable::class,Synch_TripwitholdingTable::class, IngressoTable::class], version = 1, exportSchema = false)
+    PartialRemitTable::class,Sycn_TripticketTable::class,Sycnh_InspectionReportTable::class,Synch_mpadAssignmentsTable::class,Synch_partialremitTable::class,Synch_TripCostTable::class,Synch_TripwitholdingTable::class, IngressoTable::class,mPadUnitsTable::class], version = 1, exportSchema = false)
 abstract class AppDatabase:RoomDatabase() {
 
     abstract fun getLineDao(): LineDao
-
+    abstract fun getMpadunitsDao(): mPadUnitsDao
     abstract fun getHotspotDao(): HotSpotDAO
     abstract fun getLinesegmentdao(): LineSegmentDao
     abstract fun getBusinfoDao():BusInfoDao

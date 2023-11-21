@@ -1,7 +1,10 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
+import android.Manifest
 import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.content.*
+import android.content.pm.PackageManager
 import android.os.*
 import android.util.Log
 import android.view.View
@@ -11,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.database.Model.*
@@ -68,9 +72,11 @@ class DispatchActivity : AppCompatActivity() {
         dbViewmodel.getBusinfo(2)
         dbViewmodel.getAllLines()
         externalViewModel.getTicketnumber()
+        dbViewmodel.getMpadUnits()
+        GlobalVariable.deviceName=getBluetoothName(this)
         initsearch()
         initCheckbox()
-
+       // getBluetoothName(this)
         _binding.btnSave.setOnClickListener {
 
             if(GlobalVariable.bus.isNullOrEmpty() ||GlobalVariable.conductor.isNullOrEmpty() ||GlobalVariable.employeeName.isNullOrEmpty() ||GlobalVariable.driver.isNullOrEmpty() ||GlobalVariable.direction.isNullOrEmpty() ||GlobalVariable.line.isNullOrEmpty() ){
@@ -79,7 +85,7 @@ class DispatchActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             var dispatch:ArrayList<mPadAssignmentsTable>?= ArrayList<mPadAssignmentsTable>()
-            GlobalVariable.deviceName=getDeviceName()
+
             val formattedDateTime = getCurrentDateInFormat()
             var method= mPadAssignmentsTable(
                 busNumber = GlobalVariable.bus,
@@ -94,7 +100,7 @@ class DispatchActivity : AppCompatActivity() {
             )
             dispatch?.add(method)
             try {
-                externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId)
+                externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
                 dbViewmodel.insertmPadAssignmentBulk(dispatch!!)
                 val resultIntent = Intent()
                 setResult(Activity.RESULT_OK, resultIntent)
@@ -126,6 +132,26 @@ class DispatchActivity : AppCompatActivity() {
         return dateFormat.format(currentDate)
     }
 
+
+
+
+    fun getBluetoothName(context: Context): String {
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+
+        // Check if permission is granted
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.BLUETOOTH
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // If permission is not granted, return an empty string or handle it accordingly
+            // You may consider requesting permission here using requestPermissions if required
+            // This snippet returns an empty string if permission is not granted
+            return "Bluetooth permission not granted"
+        }
+
+        return bluetoothAdapter?.name ?: "Bluetooth is not supported on this device"
+    }
     fun getDeviceName(): String {
         val manufacturer = Build.MANUFACTURER
         val model = Build.MODEL
@@ -157,6 +183,10 @@ class DispatchActivity : AppCompatActivity() {
 
         dbViewmodel.allLines.observe(this, Observer {
             state -> ProcessLines(state)
+        })
+
+        dbViewmodel.allMpadUnits.observe(this,Observer{
+            state -> ProcessMpadUnits(state)
         })
     }
 
@@ -211,6 +241,17 @@ class DispatchActivity : AppCompatActivity() {
             _binding.rvLine.adapter= lineAdapter
             _binding.rvLine.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
             lineAdapter.showLines(linelist!!)
+        }
+    }
+
+    private fun ProcessMpadUnits(state: List<mPadUnitsTable>?){
+        if(!state.isNullOrEmpty()){
+            val filteredList =state?.filter { it.name == GlobalVariable.deviceName }
+            if(filteredList?.size != 0){
+                GlobalVariable.machineName= filteredList?.firstOrNull()?.machineName
+                GlobalVariable.permitNumber = filteredList?.firstOrNull()?.permitNumber
+                GlobalVariable.serialNumber = filteredList?.firstOrNull()?.serialNumber
+            }
         }
     }
 
@@ -631,6 +672,7 @@ class DispatchActivity : AppCompatActivity() {
                // mIPosPrinterService!!.printBlankLines(1, 16, callback)
               //  mIPosPrinterService!!.printBitmap(1, 12, mBitmap, callback)
               //  mIPosPrinterService!!.printBlankLines(1, 16, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Device: ${GlobalVariable.deviceName}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Direction: ${GlobalVariable.direction}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Bus Number: ${GlobalVariable.bus}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24,  callback)

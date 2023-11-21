@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     val PARTIAL_ACTIVITY=5
     val SETTINGS_ACTIVITY=10
     val TRIP_REPORT_ACTIVITY=11
+    val REVERSE_ACTIVITY=12
 
 
 
@@ -197,6 +198,9 @@ class MainActivity : AppCompatActivity() {
             GlobalVariable.tripreverse= state.reverse
             GlobalVariable.deviceName=state.mPadUnit
             GlobalVariable.ingressoRefId=state.ingressoRefId
+            GlobalVariable.machineName=state.machineName
+            GlobalVariable.permitNumber=state.permitNumber
+            GlobalVariable.serialNumber=state.serialNumber
         }else{
 
         }
@@ -247,11 +251,20 @@ class MainActivity : AppCompatActivity() {
 
         _binding!!.btnReverse.setOnClickListener {
 //            startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
-            showReverseDialog()
+            //showReverseDialog()
+            val intent = Intent(this, SharedLoginActivity::class.java)
+            intent.putExtra("activity", REVERSE_ACTIVITY)
+            startActivity(intent)
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+
         }
 
         _binding!!.btnSynch.setOnClickListener {
+            if(!GlobalVariable.isDispatched)
             startActivityWithAnimation<SycnhLogin>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+            else  Toast.makeText(this,"INGRESSO NOT FOUND",Toast.LENGTH_SHORT).show()
         }
 
         _binding!!.btnSettings.setOnClickListener {

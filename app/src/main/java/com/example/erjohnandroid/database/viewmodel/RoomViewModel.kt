@@ -57,6 +57,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _allLines: MutableLiveData<List<LinesTable>> = MutableLiveData()
     val allLines: LiveData<List<LinesTable>> get() = _allLines
 
+    private var _allMpadUnits: MutableLiveData<List<mPadUnitsTable>> = MutableLiveData()
+    val allMpadUnits: LiveData<List<mPadUnitsTable>> get() = _allMpadUnits
+
     private var _linesegment:MutableLiveData<List<LineSegmentTable>> = MutableLiveData()
     val linesegment:LiveData<List<LineSegmentTable>> = _linesegment
 
@@ -137,6 +140,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _alltripticketforreverse:MutableLiveData<List<TotalAmountAndTicketNumbersPerReverse>> = MutableLiveData()
     val alltripticketforreverse:LiveData<List<TotalAmountAndTicketNumbersPerReverse>> = _alltripticketforreverse
 
+    private var _tripgross:MutableLiveData<TripGross> = MutableLiveData()
+    val tripgross:LiveData<TripGross> = _tripgross
+
     //region OTHER METHODS
 
 //    fun getTicketnumber(){
@@ -170,6 +176,20 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.insertBusinfoBulk(entity)
 
+        }
+    }
+
+    fun insertMpadUnits(entity: List<mPadUnitsTable>){
+        viewModelScope.launch() {
+            val records=  repository.insertMpadunitsBulk(entity)
+
+        }
+    }
+
+    fun getMpadUnits(){
+        viewModelScope.launch() {
+            val records=  repository.getMpadUnits()
+            _allMpadUnits.value=records
         }
     }
 
@@ -617,6 +637,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.getAllTripTicketForReverse()
             _alltripticketforreverse.value=records
+        }
+    }
+
+    fun getGross(){
+        viewModelScope.launch() {
+            val records=  repository.getGross()
+            _tripgross.value=records
         }
     }
     //endregion

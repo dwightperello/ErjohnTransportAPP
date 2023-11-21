@@ -31,6 +31,16 @@ class NetworkRepositoryImpl (private val networkService: NetworkService):Network
         }
     }
 
+    override suspend fun getMpadUnits(token: String): Flow<ResultState<ArrayList<mPadUnitsItem>>> = flow {
+        emit(ResultState.Loading)
+        try {
+            val response = networkService.getMpadUnits(token)
+            emit(ResultState.Success(response))
+        }catch (e:Exception) {
+            emit((ResultState.Error(e)))
+        }
+    }
+
     override suspend fun getAllHotspots(token: String): Flow<ResultState<ArrayList<HotSpotItem>>> = flow {
         emit(ResultState.Loading)
         try {

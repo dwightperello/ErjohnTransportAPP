@@ -77,7 +77,7 @@ class IngressoActivity : AppCompatActivity() {
     var drivercommision:String="0.0"
     var conductorcommision:String="0.0"
     val bonus = 100.0
-    var infault:String?= null
+    var infault:String?= ""
     var expensesTotal:String?= "0.0"
     var witholdingTotal:String="0.0"
 //    var manualticket:Double=0.0
@@ -108,14 +108,14 @@ class IngressoActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         val window = window
-//        window.decorView.systemUiVisibility = (
-//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                )
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
 
 
         initPrinter()
@@ -219,13 +219,13 @@ class IngressoActivity : AppCompatActivity() {
         _binding.cbshortdriver.setOnClickListener {
             if(_binding.cbshortconductor.isChecked) _binding.cbshortconductor.isChecked=false
             _binding.cbshortdriver.isChecked=true
-            infault="driver"
+            infault=GlobalVariable.driver
         }
 
         _binding.cbshortconductor.setOnClickListener {
             if(_binding.cbshortdriver.isChecked) _binding.cbshortdriver.isChecked=false
             _binding.cbshortconductor.isChecked=true
-            infault="conductor"
+            infault=GlobalVariable.conductor
         }
 
         _binding.btnigresso.setOnClickListener {
@@ -312,6 +312,10 @@ class IngressoActivity : AppCompatActivity() {
             printText()
         }
 
+        _binding.btnclose.setOnClickListener {
+            showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
+        }
+
     }
 
     override fun onStart() {
@@ -341,9 +345,9 @@ class IngressoActivity : AppCompatActivity() {
 
 
 
-    override fun onBackPressed() {
-       showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
-    }
+//    override fun onBackPressed() {
+//       showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -484,6 +488,7 @@ class IngressoActivity : AppCompatActivity() {
 
             AllTripCost.forEach {
                 expensesamount += it.amount!!
+                _binding.txtExpensesText.append("\n${it.costType}~ ${it.amount}")
             }
 
             expenses = decimalVat.format(expensesamount)
@@ -508,6 +513,7 @@ class IngressoActivity : AppCompatActivity() {
 
             AllWitholding.forEach {
                 withold += it.amount!!
+                _binding.txtWithodlingtext.append("\n${it.witholdingType}~${it.amount}")
             }
 
             witholding = decimalVat.format(withold)
@@ -746,7 +752,10 @@ class IngressoActivity : AppCompatActivity() {
 //               dbViewmodel.truncatetables()
                // resetALl()
                 _binding.btnigressoreprint.isEnabled=true
+                _binding.btnigresso.isVisible=false
                 _binding.btnigresso.isEnabled=false
+                _binding.btnclose.isVisible=true
+                _binding.btnclose.isEnabled=true
                 _binding.btnAddmanual.isEnabled=false
                 _binding.btnCancelledticket.isEnabled=false
                 _binding.btnExpenses.isEnabled=false
@@ -1248,6 +1257,8 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.printSpecifiedTypeText("Expenses: ${expensesTotal}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Bonus Expenses: ${finalbonusIfAny}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Witholding: ${witholdingTotal}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Short: ${_binding.etshortover.text.toString()}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Charge to: ${infault}\n", "ST", 24, callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(

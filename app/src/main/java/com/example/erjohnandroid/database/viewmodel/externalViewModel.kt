@@ -60,10 +60,10 @@ class externalViewModel @Inject constructor(private val externalrepository: exte
         }
     }
 
-    fun updateSavedDispatched(busnumber: String,conductorName: String,isDispatched: Boolean,dispatcherName: String,driverName: String,line: String,LineId: Int,mPadUnit: String,reverse:Int,orginalTicketnumber:Int,direction:String,ingressoRefId:Int){
+    fun updateSavedDispatched(busnumber: String,conductorName: String,isDispatched: Boolean,dispatcherName: String,driverName: String,line: String,LineId: Int,mPadUnit: String,reverse:Int,orginalTicketnumber:Int,direction:String,ingressoRefId:Int,machinename:String,permitnumber:String,serialnumber:String){
         viewModelScope.launch() {
             try {
-                val records=  externalrepository.updateSavedDispatched(busnumber,conductorName,isDispatched,dispatcherName,driverName,line, LineId,mPadUnit,reverse,orginalTicketnumber,direction,ingressoRefId)
+                val records=  externalrepository.updateSavedDispatched(busnumber,conductorName,isDispatched,dispatcherName,driverName,line, LineId,mPadUnit,reverse,orginalTicketnumber,direction,ingressoRefId,machinename,permitnumber,serialnumber)
             }catch (e:Exception){
                 Log.e("erro",e.localizedMessage)
             }

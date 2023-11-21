@@ -16,6 +16,9 @@ interface NetworkService {
     @GET("Lines")
     suspend fun getAllLines(@Header("Authorization")token:String):ArrayList<LinesItem>
 
+    @GET("mPadUnits")
+    suspend fun getMpadUnits(@Header("Authorization")token:String):ArrayList<mPadUnitsItem>
+
     @GET("Hotspots")
     suspend fun getAllHotspots(@Header("Authorization")token:String):ArrayList<HotSpotItem>
 

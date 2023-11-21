@@ -117,6 +117,8 @@ object ApplicationModule {
         return appdb.getmPadAssignmentDao()
     }
 
+
+
     @Provides
     @Singleton
     fun ProvidePartialremit(appdb: AppDatabase):PartialRemitDao{
@@ -223,6 +225,12 @@ object ApplicationModule {
     @Singleton
     fun ProvideTicketnumber(appdb: AppDatabase):TicketNumDAO{
         return appdb.getTicketnumberDao()
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidempadUnits(appdb: AppDatabase):mPadUnitsDao{
+        return appdb.getMpadunitsDao()
     }
 
 }

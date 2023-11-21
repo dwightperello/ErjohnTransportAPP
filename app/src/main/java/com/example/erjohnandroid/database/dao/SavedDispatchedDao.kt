@@ -12,8 +12,8 @@ interface SavedDispatchedDao {
     @Query("SELECT * FROM SavedDispatch ")
     fun checkIfalreadyDispatch(): SavedDispatchInfo
 
-    @Query("UPDATE SavedDispatch SET busNumber = :busnumber, conductorName = :conductorName, isDispatched =:isDispatched, dispatcherName =:dispatcherName, driverName =:driverName, line =:line, LineId =:LineId, mPadUnit =:mPadUnit, reverse =:reverse,orginalTicketnumber =:orginalTicketnumber, direction =:direction, ingressoRefId =:ingressoRefId  WHERE SavedDispatchId = 1")
-    fun updateTSavedDispatch(busnumber: String, conductorName: String,isDispatched:Boolean,dispatcherName:String,driverName:String,line:String,LineId:Int, mPadUnit:String,reverse:Int,orginalTicketnumber:Int,direction:String,ingressoRefId:Int)
+    @Query("UPDATE SavedDispatch SET busNumber = :busnumber, conductorName = :conductorName, isDispatched =:isDispatched, dispatcherName =:dispatcherName, driverName =:driverName, line =:line, LineId =:LineId, mPadUnit =:mPadUnit, reverse =:reverse,orginalTicketnumber =:orginalTicketnumber, direction =:direction, ingressoRefId =:ingressoRefId,machineName =:machineName,permitNumber =:permitNumber, serialNumber =:serialNumber  WHERE SavedDispatchId = 1")
+    fun updateTSavedDispatch(busnumber: String, conductorName: String,isDispatched:Boolean,dispatcherName:String,driverName:String,line:String,LineId:Int, mPadUnit:String,reverse:Int,orginalTicketnumber:Int,direction:String,ingressoRefId:Int,machineName:String,permitNumber:String,serialNumber:String)
 
     @Query("UPDATE SavedDispatch SET  direction =:direction, reverse =:reverse  WHERE SavedDispatchId = 1")
     fun updateTSavedDispatchdirection(direction:String, reverse:Int)

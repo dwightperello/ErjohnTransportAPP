@@ -7,6 +7,7 @@ import com.example.erjohnandroid.database.Model.TripCostTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.Model.convertions.TicketTotal
 import com.example.erjohnandroid.database.Model.convertions.TripAmountPerReverse
+import com.example.erjohnandroid.database.Model.convertions.TripGross
 import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
 import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
 
@@ -59,5 +60,8 @@ interface TripTicketDao {
 
     @Query("SELECT  COUNT(amount) AS ticket_count, sum(amount) as sumamount FROM TripTickets where tripReverse = :reverse")
     fun getPerTripAmount(reverse:Int): TripAmountPerReverse
+
+    @Query("SELECT sum(amount) as sumamount FROM TripTickets")
+    fun getGross(): TripGross
 
 }

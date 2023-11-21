@@ -6,602 +6,646 @@
     android:layout_height="match_parent"
     tools:context=".presenter.Activity.mainactivity.IngressoActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:background="@color/posbg"-->
-<!--            android:layout_weight=".3">-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_gravity="center">-->
-<!--            -->
-<!--            -->
-<!--             <TextView-->
-<!--                 android:layout_width="match_parent"-->
-<!--                 android:layout_height="wrap_content"-->
-<!--                 android:text="INGRESSO"-->
-<!--                 android:textColor="@color/white"-->
-<!--                 android:textSize="@dimen/_15sdp"-->
-<!--                 android:gravity="center"/>-->
-
-
-
-<!--            </LinearLayout>-->
-<!--        </LinearLayout>-->
-
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="TOTAL COLLECTION:"/>
+            <!--        <LinearLayout-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="0dp"-->
+            <!--            android:background="@color/posbg"-->
+            <!--            android:layout_weight=".3">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="horizontal"-->
+            <!--                android:layout_gravity="center">-->
+            <!--            -->
+            <!--            -->
+            <!--             <TextView-->
+            <!--                 android:layout_width="match_parent"-->
+            <!--                 android:layout_height="wrap_content"-->
+            <!--                 android:text="INGRESSO"-->
+            <!--                 android:textColor="@color/white"-->
+            <!--                 android:textSize="@dimen/_15sdp"-->
+            <!--                 android:gravity="center"/>-->
 
-              <TextView
 
-                  android:gravity="center"
-                  android:layout_gravity="center"
-                  android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:layout_weight="1"
-                  android:textStyle="bold"
-                  android:text="100"
 
-                  android:textSize="@dimen/_12sdp"
-                  android:id="@+id/txttotalcollection"/>
-            </LinearLayout>
+            <!--            </LinearLayout>-->
+            <!--        </LinearLayout>-->
 
             <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="MANUAL TICKET:"/>
+                android:layout_height="match_parent"
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/_18sdp"
-                    android:inputType="numberDecimal"
-                    android:hint="0.0"
-                    android:background="@drawable/edittextbackground"
-                    android:id="@+id/etmanualticket"/>
+                android:orientation="vertical">
 
-                <Button
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttondrawable"
-                    android:id="@+id/btn_addmanual"
-                    android:textColor="@color/white"
-                    android:inputType="number"
-                    android:text="ADD"/>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="GROSS:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:text="100"
+                        android:textSize="@dimen/_15sdp"
+                        android:id="@+id/txttotalcollection"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textStyle="bold"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="MANUAL TICKET:"/>
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_18sdp"
+                        android:inputType="numberDecimal"
+                        android:hint="0.0"
+                        android:background="@drawable/edittextbackground"
+                        android:id="@+id/etmanualticket"/>
+
+                    <Button
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/buttondrawable"
+                        android:id="@+id/btn_addmanual"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:text="ADD"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="CANCELLED TICKET:"/>
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_width="0dp"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:inputType="numberDecimal"
+                        android:hint="0.0"
+                        android:background="@drawable/edittextbackground"
+                        android:id="@+id/etCancelledticket"/>
+
+                    <Button
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/buttondrawable"
+                        android:id="@+id/btn_cancelledticket"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:text="DEDUCT"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="TOTAL GROSS:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="100:"
+                        android:textStyle="bold"
+                        android:id="@+id/txttotalgross"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="EXPENSES:"/>
+
+                    <TextView
+                        android:visibility="gone"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_12sdp"
+                        android:id="@+id/txtExpensesText"
+                       />
+
+                    <Button
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/buttondrawable"
+                        android:id="@+id/btn_expenses"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="ENTER"/>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="WITHOLDING:"/>
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/txtWithodlingtext"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_12sdp"
+                        />
+
+                    <Button
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/buttondrawable"
+                        android:id="@+id/btn_witholding"
+                        android:textColor="@color/white"
+                        android:inputType="number"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="ENTER"/>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="TOTAL COMMISION:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:hint="0.0"
+                        android:textStyle="bold"
+                        android:id="@+id/txttotalcommision"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:id="@+id/txtdrivername"
+                        android:text="DRV COMMISION:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:hint="0.0"
+                        android:textStyle="bold"
+                        android:id="@+id/txtdrivercommision"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:id="@+id/txtconductorname"
+                        android:text="COND COMMISION:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:hint="0.0"
+                        android:textStyle="bold"
+                        android:id="@+id/txtconductorcommision"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="NET COLLECTION:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="100"
+                        android:textStyle="bold"
+                        android:id="@+id/txtnetcollection"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewdriverbonus"
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="DRIVER BONUS:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="0.0"
+                        android:textStyle="bold"
+                        android:id="@+id/txtdriverbonus"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:id="@+id/viewconductorbonus"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="COND BONUS:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="0.0"
+                        android:textStyle="bold"
+                        android:id="@+id/txtconductorbonus"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="PARTIAL REMIT:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:hint="0.0"
+                        android:textStyle="bold"
+                        android:id="@+id/txtpartialremit"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="REMIT:"/>
+
+                    <EditText
+                        android:id="@+id/etfinalremit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittextbackground"
+                        android:gravity="center"
+                        android:hint="0.0"
+                        android:textSize="@dimen/_18sdp"
+                        android:inputType="numberDecimal"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Compute"
+                        android:background="@drawable/buttondrawable"
+                        android:id="@+id/btncomputefinalremit"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:text="SHORT/OVER:"/>
+
+                    <TextView
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/_15sdp"
+                        android:hint="0.0"
+                        android:textStyle="bold"
+                        android:inputType="number"
+                        android:background="@drawable/edittextbackground"
+                        android:id="@+id/etshortover"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:id="@+id/viewshort"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                    <CheckBox
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="DRIVER"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        android:id="@+id/cbshortdriver"/>
+
+                    <CheckBox
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="CONDUCTOR"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold"
+                        android:id="@+id/cbshortconductor"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_9sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+                    <Button
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/btnigresso"
+                        android:background="@drawable/buttondrawable"
+                        android:text="SUBMIT INGRESSO"/>
+
+                    <Button
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/btnclose"
+                        android:background="@drawable/buttondrawable"
+                        android:backgroundTint="@color/red_connectify"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        android:text="Close"/>
+
+                    <Button
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/btnigressoreprint"
+                        android:background="@drawable/ripple_login"
+                        android:textColor="@color/white"
+                        android:text="COPY INGRESSO"/>
+
+
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="CANCELLED TICKET:"/>
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_width="0dp"
-                    android:gravity="center"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_18sdp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:inputType="numberDecimal"
-                    android:hint="0.0"
-                    android:background="@drawable/edittextbackground"
-                    android:id="@+id/etCancelledticket"/>
-
-                <Button
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttondrawable"
-                    android:id="@+id/btn_cancelledticket"
-                    android:textColor="@color/white"
-                    android:inputType="number"
-                    android:text="DEDUCT"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="TOTAL GROSS:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="100:"
-                    android:textStyle="bold"
-                    android:id="@+id/txttotalgross"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="EXPENSES:"/>
-
-                <Button
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttondrawable"
-                    android:id="@+id/btn_expenses"
-                    android:textColor="@color/white"
-                    android:inputType="number"
-                    android:text="ENTER"/>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="WITHOLDING:"/>
-
-                <Button
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttondrawable"
-                    android:id="@+id/btn_witholding"
-                    android:textColor="@color/white"
-                    android:inputType="number"
-                    android:text="ENTER"/>
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="TOTAL COMMISION:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:hint="0.0"
-                    android:textStyle="bold"
-                    android:id="@+id/txttotalcommision"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:id="@+id/txtdrivername"
-                    android:text="DRIVER COMMISION:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:hint="0.0"
-                    android:textStyle="bold"
-                    android:id="@+id/txtdrivercommision"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:id="@+id/txtconductorname"
-                    android:text="CONDUCTOR COMMISION:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:hint="0.0"
-                    android:textStyle="bold"
-                    android:id="@+id/txtconductorcommision"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="NET COLLECTION:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="100"
-                    android:textStyle="bold"
-                    android:id="@+id/txtnetcollection"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/viewdriverbonus"
-
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="DRIVER BONUS:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="0.0"
-                    android:textStyle="bold"
-                    android:id="@+id/txtdriverbonus"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:id="@+id/viewconductorbonus"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="CONDUCTOR BONUS:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="0.0"
-                    android:textStyle="bold"
-                    android:id="@+id/txtconductorbonus"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="PARTIAL REMIT:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:hint="0.0"
-                    android:textStyle="bold"
-                    android:id="@+id/txtpartialremit"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="FINAL REMIT:"/>
-
-                <EditText
-                    android:id="@+id/etfinalremit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittextbackground"
-                    android:gravity="center"
-                    android:hint="0.0"
-                    android:textSize="@dimen/_18sdp"
-                    android:inputType="numberDecimal"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Compute"
-                    android:background="@drawable/buttondrawable"
-                    android:id="@+id/btncomputefinalremit"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-                <TextView
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:text="SHORT/OVER:"/>
-
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="@dimen/_12sdp"
-                    android:hint="0.0"
-                    android:textStyle="bold"
-                    android:inputType="number"
-                    android:background="@drawable/edittextbackground"
-                    android:id="@+id/etshortover"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:id="@+id/viewshort"
-                android:visibility="gone"
-                android:orientation="horizontal">
-               <CheckBox
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:text="DRIVER"
-                   android:textSize="@dimen/_10sdp"
-                   android:textStyle="bold"
-                   android:id="@+id/cbshortdriver"/>
-
-                <CheckBox
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="CONDUCTOR"
-                    android:textSize="@dimen/_10sdp"
-                    android:textStyle="bold"
-                    android:id="@+id/cbshortconductor"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_9sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-               <Button
-                   android:gravity="center"
-                   android:layout_gravity="center"
-                   android:layout_width="0dp"
-                   android:layout_height="wrap_content"
-                   android:layout_weight="1"
-                   android:id="@+id/btnigresso"
-                   android:background="@drawable/buttondrawable"
-                   android:text="SUBMIT INGRESSO"/>
-
-                <Button
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/btnigressoreprint"
-                    android:background="@drawable/ripple_login"
-                    android:textColor="@color/white"
-                    android:text="COPY INGRESSO"/>
-
-
-
-            </LinearLayout>
 
         </LinearLayout>
+    </ScrollView>
 
 
-    </LinearLayout>
 
 </LinearLayout>

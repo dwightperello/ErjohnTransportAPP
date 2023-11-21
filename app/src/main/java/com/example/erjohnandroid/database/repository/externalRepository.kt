@@ -25,8 +25,8 @@ class externalRepository  @Inject constructor(private val externalticketnum: Ext
         return savedDispatchedDao.checkIfalreadyDispatch()
     }
 
-    fun updateSavedDispatched(busnumber: String,conductorName: String,isDispatched: Boolean,dispatcherName: String,driverName: String,line: String,lineId:Int,mPadUnit: String,reverse:Int, orginalTicketnumber:Int,direction:String,ingressoRefId:Int){
-        return savedDispatchedDao.updateTSavedDispatch(busnumber,conductorName,isDispatched,dispatcherName,driverName,line,lineId,mPadUnit,reverse,orginalTicketnumber,direction,ingressoRefId)
+    fun updateSavedDispatched(busnumber: String,conductorName: String,isDispatched: Boolean,dispatcherName: String,driverName: String,line: String,lineId:Int,mPadUnit: String,reverse:Int, orginalTicketnumber:Int,direction:String,ingressoRefId:Int,machinename:String,permitnumber:String,serialnumber:String){
+        return savedDispatchedDao.updateTSavedDispatch(busnumber,conductorName,isDispatched,dispatcherName,driverName,line,lineId,mPadUnit,reverse,orginalTicketnumber,direction,ingressoRefId,machinename,permitnumber,serialnumber)
     }
 
     fun updateSavedDispatchedReverse(direction:String , reverse: Int){

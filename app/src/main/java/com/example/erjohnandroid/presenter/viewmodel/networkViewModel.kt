@@ -26,6 +26,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private  var _allLines:MutableLiveData<ResultState<ArrayList<LinesItem>>> = MutableLiveData()
     val allLines:LiveData<ResultState<ArrayList<LinesItem>>> get() = _allLines
 
+    private  var _mpadunits:MutableLiveData<ResultState<ArrayList<mPadUnitsItem>>> = MutableLiveData()
+    val mpadunits:LiveData<ResultState<ArrayList<mPadUnitsItem>>> get() = _mpadunits
+
     private  var _allHotspots:MutableLiveData<ResultState<ArrayList<HotSpotItem>>> = MutableLiveData()
     val allHotspots:LiveData<ResultState<ArrayList<HotSpotItem>>> get() = _allHotspots
 
@@ -87,6 +90,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.getAllLines("Bearer ${token}")
                 .onEach { _allLines.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun getMpadUnits(token:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.getMpadUnits("Bearer ${token}")
+                .onEach { _mpadunits.value=it }.launchIn(viewModelScope)
         }
     }
 

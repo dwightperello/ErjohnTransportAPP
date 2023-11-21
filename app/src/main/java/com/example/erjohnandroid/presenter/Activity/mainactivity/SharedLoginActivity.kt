@@ -123,10 +123,20 @@ class SharedLoginActivity : AppCompatActivity() {
                         finish()
                     } else Toast(this).showCustomToast("Check Pin",this)
                 }
-//                else if(activity==10) {
-//
-//                }
-
+                else if(activity==12){
+                    if(state.companyRolesId==3 || state.companyRolesId==4){
+                        if(!GlobalVariable.isDispatched){
+                            // Toast.makeText(this,"Please Dispatch", Toast.LENGTH_LONG).show()
+                            Toast(this).showCustomToast("PLEASE DISPATCH",this)
+                            return
+                        }
+                        if (activity!!.equals(12)){
+                            GlobalVariable.inspectorname=state.name
+                            startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+                            finish()
+                        }
+                    } else Toast(this).showCustomToast("Check Pin",this)
+                }
 
             }
             else{

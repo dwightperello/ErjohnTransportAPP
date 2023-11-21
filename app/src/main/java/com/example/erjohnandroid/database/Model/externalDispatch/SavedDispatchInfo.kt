@@ -17,5 +17,8 @@ data class SavedDispatchInfo(
     val ingressoRefId:Int,
     val reverse: Int,
     val orginalTicketnumber:Int,
+    val machineName:String,
+    val permitNumber:String,
+    val serialNumber:String,
     val direction:String
 )

@@ -23,6 +23,7 @@ data class IngressoTable(
     val ShororOver:Double?,
     var InFault:String?,
     val DateTimeStamp:String?,
-    val ingressoRefId:Int?
+    val ingressoRefId:Int?,
+    val terminal:String?
 
 )

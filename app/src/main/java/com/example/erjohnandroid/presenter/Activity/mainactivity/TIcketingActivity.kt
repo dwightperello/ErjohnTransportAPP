@@ -985,8 +985,13 @@ class TIcketingActivity : AppCompatActivity() {
 //                                val discountamount:Double=20.0
                                 val discountamount:Double=0.20
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
-                                    discount=  (discountamount / 100) * fare
+                                    discount= fare *  discountamount
                                     amountafterdiscount= fare - discount
+
+
+
+                                  //  discount=  (discountamount / 100) * fare
+                                  //  amountafterdiscount= fare - discount
                                     total= amountafterdiscount * qty
                                 }else{
                                     total= fare.toDouble() * qty
@@ -1164,6 +1169,7 @@ class TIcketingActivity : AppCompatActivity() {
         dbViewmodel.getGross()
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         registerReceiver(batteryReceiver, filter)
+        computeAmount()
     }
 
     override fun onPause() {
@@ -1495,7 +1501,7 @@ class TIcketingActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+               // mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Line: ${GlobalVariable.line}\n", "ST", 24,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Bus Number: ${GlobalVariable.bus}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
@@ -1595,7 +1601,7 @@ class TIcketingActivity : AppCompatActivity() {
 //                    callback
 //                )
                 //  bitmapRecycle(mBitmap)
-                mIPosPrinterService!!.printerPerformPrint(160, callback)
+                mIPosPrinterService!!.printerPerformPrint(100, callback)
                 runOnUiThread {
                    // ticketnumber +=1
                     passtype = "Regular"

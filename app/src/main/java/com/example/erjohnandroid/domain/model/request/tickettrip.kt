@@ -13,5 +13,6 @@ data class tickettrip(
     val origin: String,
     val passengerType: String,
     val qty: Int,
-    val titcketNumber: String
+    val titcketNumber: String,
+    val reverse:Int
 )

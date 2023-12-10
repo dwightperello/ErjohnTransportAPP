@@ -28,9 +28,13 @@ interface NetworkRepository {
 
     suspend fun getWitholdingType(token: String):Flow<ResultState<ArrayList<WitholdingTypesItem>>>
 
+    suspend fun getTerminals(token: String):Flow<ResultState<ArrayList<TerminalsItem>>>
+
     //SYNCHING
 
     suspend fun postIngresso(token: String,ingresso:List<Ingresso>) : Flow<ResultState<ResponseBody>>
+
+    suspend fun postTripReverse(token: String,tripreverse:List<TripReverseItem>) : Flow<ResultState<ResponseBody>>
 
     suspend fun postIngressoALL(token: String,ingresso:postAllItem) : Flow<ResultState<ResponseBody>>
 

@@ -25,8 +25,9 @@ data class TripTicketTable(
     val tripReverse:Int?,
     val ingressoRefId:Int?,
 
-    val totalAmount:Double?,
-    val totalQty:Int?,
+//    val totalAmount:Double?,
+//    val totalQty:Int?,
+    val reverse:Int
 
 
 

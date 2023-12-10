@@ -39,6 +39,7 @@ class SynchActivity : AppCompatActivity() {
     private var tripcost:ArrayList<costtrip>?= arrayListOf()
     private var tripwitholding:ArrayList<Tripwitholding>?= arrayListOf()
     private var triptickets:ArrayList<tickettrip>?= arrayListOf()
+    private var tripReverse:ArrayList<TripReverse>?= arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,6 +113,7 @@ class SynchActivity : AppCompatActivity() {
                 dbViewmodel.get_synch_trip_cost(it)
                 dbViewmodel.get_synch_trip_witholding(it)
                 dbViewmodel.getTicketsForSynch(it)
+                dbViewmodel.getTripReverseForSynch(it)
                 var method= postAllItem(
                     totalCollection = ingresso?.totalCollection ?:0.0,
                     manualTicket = ingresso?.manualTicket ?: 0.0,
@@ -135,7 +137,10 @@ class SynchActivity : AppCompatActivity() {
                     inspectionreport = inspection?.toList() ,
                     tripcost = tripcost!!.toList() ,
                     triptickets = triptickets?.toList() ,
-                    tripwitholding = tripwitholding?.toList()
+                    tripwitholding = tripwitholding?.toList(),
+                    terminal =ingresso?.terminal ?:"None Selected",
+                    tripreverse = tripReverse?.toList()
+
                 )
 
 //            val gson = Gson()
@@ -148,6 +153,7 @@ class SynchActivity : AppCompatActivity() {
                tripcost= arrayListOf()
                tripwitholding=arrayListOf()
                triptickets= arrayListOf()
+               tripReverse= arrayListOf()
 
            }
 
@@ -199,6 +205,10 @@ class SynchActivity : AppCompatActivity() {
 
         viewModel.postIngressoALL.observe(this, Observer {
             state -> Processadding(state)
+        })
+
+        dbViewmodel.tripreversesycnh.observe(this,Observer{
+            state->ProcessTripReverseAll(state)
         })
 
 
@@ -415,7 +425,8 @@ class SynchActivity : AppCompatActivity() {
                    dateTimeStamp = it.dateTimeStamp!!,
                    conductorName = it.conductorName!!,
                    driverName = it.driverName!!,
-                   qty = it.qty
+                   qty = it.qty,
+                   reverse = it.reverse!!
                )
                var method2 = tickettrip(
                  amount = method.amount,
@@ -430,7 +441,8 @@ class SynchActivity : AppCompatActivity() {
                    origin = method.origin,
                    passengerType = method.passengerType,
                    qty = method.qty,
-                   titcketNumber = method.titcketNumber
+                   titcketNumber = method.titcketNumber,
+                   reverse = method.reverse
 
 
 
@@ -444,6 +456,44 @@ class SynchActivity : AppCompatActivity() {
         }
         else{
             Toast(this).showCustomToast("NO TRIP TICKETS FOUND",this)
+            return
+        }
+    }
+
+    private fun ProcessTripReverseAll(state: List<Synch_TripReverseTable>?){
+        if(!state.isNullOrEmpty()){
+
+
+            state.forEach {
+                var method= TripReverseItem(
+                    amount = it.amount!!,
+                    dateTimeStamp = it.dateTimeStamp,
+                    deviceName = it.deviceName,
+                    direction = it.direction,
+                    reverseId = it.reverseId,
+                    terminal = it.terminal
+                )
+
+
+                var method2 = TripReverse(
+                   id = 0,
+                    deviceName = method.deviceName,
+                    amount = method.amount,
+                    direction = method.direction,
+                    dateTimeStamp = method.dateTimeStamp,
+                    reverseId = method.reverseId,
+                    terminal = method.terminal,
+                    ingId = 0
+                )
+                tripReverse?.add(method2)
+               // triptickets?.add(method2)
+                _binding!!.txtPostsynching.text="\n\n FETCH TRIP REVERSE...."
+
+            }
+            // dbViewmodel.getAllIngresso()
+        }
+        else{
+            Toast(this).showCustomToast("NO TRIP REVERSE FOUND",this)
             return
         }
     }
@@ -470,7 +520,8 @@ class SynchActivity : AppCompatActivity() {
                   shororOver = it.ShororOver!!,
                   inFault = it.InFault!!,
                   dateTimeStamp = it.DateTimeStamp!!,
-                  finalRemit = it.FinalRemit!!
+                  finalRemit = it.FinalRemit!!,
+                    terminal = it.terminal!!
                 )
             ingresso=method
                 _binding!!.txtPostsynching.append("\n\n FETCH INGRESSO DATA....")
@@ -536,7 +587,8 @@ class SynchActivity : AppCompatActivity() {
                     busNumber = it.busNumber!!,
                     dispatcherName = it.dispatcherName!!,
                     conductorName = it.conductorName!!,
-                    driverName = it.driverName!!
+                    driverName = it.driverName!!,
+                    terminal = it.terminal!!
                 )
                 var method2= Mpadassignment(
                     busNumber = method.busNumber,
@@ -547,7 +599,8 @@ class SynchActivity : AppCompatActivity() {
                     id = 0,
                     ingressoId = 0,
                     line = method.line,
-                    mPadUnit = method.mPadUnit
+                    mPadUnit = method.mPadUnit,
+                    terminal = method.terminal
 
 
                 )
@@ -571,7 +624,8 @@ class SynchActivity : AppCompatActivity() {
                    amountRemited = it.AmountRemited!!,
                    cashierName = it.CashierName!!,
                    line = it.Line!!,
-                   dateTimeStamp = it.DateTimeStamp!!
+                   dateTimeStamp = it.DateTimeStamp!!,
+                   terminal = it.terminal!!
                )
                 var method2 = Partialremitsdetail(
                     amount = method.amount,
@@ -580,7 +634,8 @@ class SynchActivity : AppCompatActivity() {
                     dateTimeStamp = method.dateTimeStamp,
                     id = 0,
                     ingressId = 0,
-                    line = method.line
+                    line = method.line,
+                    terminal = method.terminal
 
 
                 )

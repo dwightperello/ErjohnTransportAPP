@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.LinesTable
+import com.example.erjohnandroid.database.Model.TripReverseTable
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityChangeRouteBinding
@@ -18,6 +20,9 @@ import com.example.erjohnandroid.presenter.adapter.LineAdapter
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ChangeRouteActivity : AppCompatActivity() {
@@ -25,7 +30,7 @@ class ChangeRouteActivity : AppCompatActivity() {
     private  lateinit var changeRouteAdapter: ChangeRouteAdapter
     private val dbViewmodel: RoomViewModel by viewModels()
     private val externalViewModel:externalViewModel by viewModels()
-
+    private var tripreverse:ArrayList<TripReverseTable> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding= ActivityChangeRouteBinding.inflate(layoutInflater)
@@ -53,6 +58,19 @@ class ChangeRouteActivity : AppCompatActivity() {
 //                Toast(this).showCustomToast("Select Direction",this)
 //                return@setOnClickListener
 //            }
+            val formattedDateTime = getdate()
+            var method= TripReverseTable(
+                Id = 0,
+                amount = GlobalVariable.ReverseTotalAmount,
+                dateTimeStamp = formattedDateTime,
+                deviceName = GlobalVariable.deviceName!!,
+                direction = GlobalVariable.direction!!,
+                reverseId = GlobalVariable.tripreverse!!,
+                terminal = GlobalVariable.terminal!!,
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+            tripreverse.add(method)
+            dbViewmodel.insertTripReverse(tripreverse)
 
             GlobalVariable.remainingPass=0
             GlobalVariable.destinationcounter=1
@@ -60,7 +78,7 @@ class ChangeRouteActivity : AppCompatActivity() {
             GlobalVariable.tripreverse = GlobalVariable.tripreverse?.plus(1)
 
             externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
-
+            GlobalVariable.ReverseTotalAmount=0.0
             finish()
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
@@ -124,5 +142,9 @@ class ChangeRouteActivity : AppCompatActivity() {
         super.onDestroy()
         _binding= null
     }
-
+    private fun getdate():String{
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
+    }
 }

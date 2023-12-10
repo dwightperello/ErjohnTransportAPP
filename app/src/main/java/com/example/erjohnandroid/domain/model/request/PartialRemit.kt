@@ -5,5 +5,6 @@ data class PartialRemit(
     val amountRemited: Double,
     val cashierName: String,
     val dateTimeStamp: String,
-    val line: String
+    val line: String,
+    val terminal:String
 )

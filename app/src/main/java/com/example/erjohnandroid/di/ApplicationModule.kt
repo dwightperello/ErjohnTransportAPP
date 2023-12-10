@@ -233,4 +233,23 @@ object ApplicationModule {
         return appdb.getMpadunitsDao()
     }
 
+    @Provides
+    @Singleton
+    fun ProvideTerminal(appdb: AppDatabase):TerminalDao{
+        return appdb.getTerminalsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun ProvideTripreverse(appdb: AppDatabase):TripReverseDao{
+        return appdb.getTripReverseDao()
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidesynchTripreverse(appdb: AppDatabase):Synch_TripReverseDao{
+        return appdb.getsynchTripReversetDao()
+    }
+
+
 }

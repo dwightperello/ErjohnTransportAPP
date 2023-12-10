@@ -41,8 +41,9 @@ object TicketConvertions {
             qty = qty,
             ingressoRefId = ingressorefid,
             time = "${formattedTime}",
-            totalAmount = null,
-            totalQty = null
+//            totalAmount = null,
+//            totalQty = null,
+            reverse = reverse
 
         )
       method

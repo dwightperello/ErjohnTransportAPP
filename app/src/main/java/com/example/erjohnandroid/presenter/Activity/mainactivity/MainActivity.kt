@@ -1,6 +1,5 @@
 package com.example.erjohnandroid.presenter.Activity.mainactivity
 
-import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.*
 import android.graphics.Bitmap
@@ -13,11 +12,10 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.LinesTable
@@ -37,15 +35,11 @@ import com.example.erjohnandroid.util.startActivityWithAnimation
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
-import net.nyx.printerservice.print.IPrinterService
-import net.nyx.printerservice.print.PrintTextFormat
-import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.Executors
 
 
 @AndroidEntryPoint
@@ -156,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         externalviewmodel.ticketnumberstart.observe(this, Observer {
                 state -> ProcessTicketnumbers(state)
         })
+
     }
 
     private fun ProcessTicketnumbers(state: TicketCounterTable){
@@ -324,6 +319,8 @@ class MainActivity : AppCompatActivity() {
         var baggage:Int=0
 
         if(it!=null) {
+
+
             alltickets=it
 
             groupbyreverse = alltickets.groupBy { it.tripReverse }
@@ -525,9 +522,10 @@ class MainActivity : AppCompatActivity() {
           val text = input.text.toString()
           if(text=="99999"){
               roomviewmodel.getTripticket()
-              roomviewmodel.tripticket.observe(this, Observer {
+              roomviewmodel.tripticket.observeOnce(this, Observer {
                       state->ProcessTriptickets(state)
               })
+
           }else{
               Toast.makeText(this,"PLEASE ENTER CORRECT PIN",Toast.LENGTH_SHORT).show()
           }
@@ -538,7 +536,14 @@ class MainActivity : AppCompatActivity() {
       builder.show()
 
   }
-
+    fun <T> LiveData<T>.observeOnce(observer1: MainActivity, observer: Observer<T>) {
+        observeForever(object : Observer<T> {
+            override fun onChanged(value: T) {
+                observer.onChanged(value)
+                removeObserver(this)
+            }
+        })
+    }
     fun showReverseDialog(){
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle("Enter Pin")
@@ -921,7 +926,7 @@ class MainActivity : AppCompatActivity() {
                     mIPosPrinterService!!.PrintSpecFormatText("Trip #: ${key}\n", "ST", 24, 1,callback)
                     mIPosPrinterService!!.printBlankLines(1, 8, callback)
                     for (ticket in value){
-                        mIPosPrinterService!!.printSpecifiedTypeText("${ticket.time}  000${ticket.titcketNumber}  ${ticket.KMOrigin}  ${ticket.KmDestination}  ${ticket.amount}\n", "ST", 24, callback)
+                        mIPosPrinterService!!.printSpecifiedTypeText("${ticket.time} 000${ticket.titcketNumber} ${ticket.KMOrigin} ${ticket.KmDestination} ${ticket.amount} ${ticket.passengerType}\n", "ST", 24, callback)
                         amount +=ticket.amount!!
                     }
                     val decimalVat = DecimalFormat("#.00")

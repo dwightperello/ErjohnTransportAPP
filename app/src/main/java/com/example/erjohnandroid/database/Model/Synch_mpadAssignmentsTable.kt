@@ -13,5 +13,6 @@ data class Synch_mpadAssignmentsTable(
     val driverName: String?,
     val line: String?,
     val mPadUnit: String?,
-    val ingressoRefId:Int?
+    val ingressoRefId:Int?,
+    val terminal:String?
 )

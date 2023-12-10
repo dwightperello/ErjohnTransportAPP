@@ -17,15 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.InspectionReportTable
 import com.example.erjohnandroid.database.Model.PartialRemitTable
+import com.example.erjohnandroid.database.Model.TerminalTable
 import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityPartialRemitBinding
 import com.example.erjohnandroid.databinding.ActivityReverseBinding
 import com.example.erjohnandroid.presenter.adapter.ReverseAdapter
+import com.example.erjohnandroid.presenter.adapter.TerminalAdapter
 import com.example.erjohnandroid.printer.ThreadPoolManager
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
+import com.google.android.gms.common.internal.GmsLogger
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +48,7 @@ class PartialRemitActivity : AppCompatActivity() {
     lateinit var _binding: ActivityPartialRemitBinding
     private val dbViewmodel: RoomViewModel by viewModels()
     private  lateinit var reverseAdapter: ReverseAdapter
+    private lateinit var terminalAdapter: TerminalAdapter
     var image:Bitmap?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +70,15 @@ class PartialRemitActivity : AppCompatActivity() {
                 )
 
         dbViewmodel.getReverse()
+
+        GlobalVariable.terminal= null
        // bindService()
         initPrinter()
         _binding.btnSaveremit.setOnClickListener {
+            if(GlobalVariable.terminal.isNullOrEmpty()){
+                Toast(this).showCustomToast("Select Terminal",this)
+                return@setOnClickListener
+            }
 
             val signatureBitmap = _binding.inspectionsignature.isSignaturePresent()
              val text= _binding.etCashremited.text.toString()
@@ -93,7 +103,8 @@ class PartialRemitActivity : AppCompatActivity() {
                 AmountRemited = stringWithoutSpaces.toDouble(),
                 Line = GlobalVariable.line,
                 DateTimeStamp = formattedDateTime,
-                ingressoRefId = GlobalVariable.ingressoRefId
+                ingressoRefId = GlobalVariable.ingressoRefId,
+                terminal = GlobalVariable.terminal
             )
             try {
                 dbViewmodel.insertPartialremit(method)
@@ -124,7 +135,29 @@ class PartialRemitActivity : AppCompatActivity() {
                 state-> ProcesJson(state)
         })
 
+        dbViewmodel.terminals.observe(this,Observer{
+                state -> ProcessTerminals(state)
+        })
 
+    }
+
+    fun partialTerminals(role: TerminalTable) {
+        GlobalVariable.terminal= role.name
+
+       // _binding!!.txtTerminal.text=("\nTerminal: ${GlobalVariable.terminal}")
+        // _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
+        Toast(this).showCustomToast("${GlobalVariable.terminal}",this)
+    }
+
+    private fun ProcessTerminals(state: List<TerminalTable>?){
+        if(!state.isNullOrEmpty()){
+            // linelist=state
+           // GlobalVariable.terminalList=state
+            terminalAdapter = TerminalAdapter(this)
+            _binding.rvTerminal.adapter= terminalAdapter
+            _binding.rvTerminal.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+            terminalAdapter.showterminal(state)
+        }
     }
 
     private fun ProcesJson(state: List<TripTicketGroupCount>?){
@@ -145,6 +178,7 @@ class PartialRemitActivity : AppCompatActivity() {
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(amount)
             _binding.txttotalcash.text=ans.toString()
+            dbViewmodel.getAllTerminal()
         }
     }
 
@@ -445,6 +479,7 @@ class PartialRemitActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Cashier Name: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Bus #: ${GlobalVariable.bus}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Terminal: ${GlobalVariable.terminal}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Conductor #: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
@@ -465,11 +500,11 @@ class PartialRemitActivity : AppCompatActivity() {
                 )
 
                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-               mIPosPrinterService!!.printBitmap(0, 4,mBitmap , callback)
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//               mIPosPrinterService!!.printBitmap(0, 4,mBitmap , callback)
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
 
 
-                mIPosPrinterService!!.printerPerformPrint(160, callback)
+                mIPosPrinterService!!.printerPerformPrint(100, callback)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
@@ -491,6 +526,8 @@ class PartialRemitActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         return outputStream.toByteArray().inputStream()
     }
+
+
 
     //endregion
 

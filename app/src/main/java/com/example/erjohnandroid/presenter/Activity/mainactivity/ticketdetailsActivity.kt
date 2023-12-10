@@ -397,7 +397,7 @@ class ticketdetailsActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Ticket Details - Reverse\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Reverse: ${GlobalVariable.inspectorname}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Trip #: ${GlobalVariable.tripreverse}\n", "ST", 24, 1,callback)
@@ -431,7 +431,7 @@ class ticketdetailsActivity : AppCompatActivity() {
                 }
 
 
-                mIPosPrinterService!!.printerPerformPrint(160, callback)
+                mIPosPrinterService!!.printerPerformPrint(100, callback)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }

@@ -19,5 +19,6 @@ data class Ingresso(
     val shororOver: Double,
     val totalCollection: Double,
     val totalExpenses: Double,
-    val totalWitholding: Double
+    val totalWitholding: Double,
+    val terminal:String
 ):Parcelable

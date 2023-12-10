@@ -14,7 +14,9 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
                                          private val tripTicketDao: TripTicketDao,private val tripWitholdingDao: TripWitholdingDao,private val witholdingTypeDao: WitholdingTypeDao,
                                          private val partialRemitDao: PartialRemitDao, private val ingressoDao: IngressoDao,private val synchTripticketdao: Synch_TripticketDao,
                                          private val synchInspectionreportdao: Synch_InspectionReportDao, private val synchMpadassignmentdao: Synch_mPadAssignmentDao, private val ticketnumberdao: TicketNumDAO,
-                                         private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,private val synchTripwitholdingdao: Synch_TripwitholdingDao,private val hotSpotDAO: HotSpotDAO,private val mPadUnitsDao: mPadUnitsDao) {
+                                         private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,
+                                         private val synchTripwitholdingdao: Synch_TripwitholdingDao,
+                                         private val hotSpotDAO: HotSpotDAO,private val mPadUnitsDao: mPadUnitsDao, private val terminal:TerminalDao,private val tripReverseDao: TripReverseDao,private val synchTripreversedao: Synch_TripReverseDao) {
 
     //region
 
@@ -69,9 +71,27 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return companyRoleDao.insertCompanyrrolBulk(entity)
     }
 
+    fun insertTerminalsBulk(entity: List<TerminalTable>){
+        return terminal.insertTerminalBulk(entity)
+    }
+
+    fun insertTripTeverseBulk(entity: List<TripReverseTable>){
+        return tripReverseDao.insertTripReverseBulk(entity)
+    }
+
     fun getEmployees(id:Int):List<EmployeesTable>{
         return employeesDao.getEmployees(id)
     }
+
+    fun getTerminals():List<TerminalTable>{
+        return terminal.getTerminals()
+    }
+
+    fun getTripReverseAll():List<TripReverseTable>{
+        return tripReverseDao.getTripreverse()
+    }
+
+
 
     fun selectEmployee(pin:Int): EmployeesTable{
         return  employeesDao.selectEmployee(pin)
@@ -219,8 +239,16 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return  synchTripticketdao.getAllsynctickets(refid)
     }
 
+    fun getallsynchTripReverse(refid: Int):List<Synch_TripReverseTable>{
+        return  synchTripreversedao.get_synch_TripReverse(refid)
+    }
+
     fun insert_synch_inspection(entity:List<Sycnh_InspectionReportTable>){
         return synchInspectionreportdao.insertsynch_inspection(entity)
+    }
+
+    fun insert_synch_TripReverse(entity:List<Synch_TripReverseTable>){
+        return synchTripreversedao.insert_synch_TripReverse(entity)
     }
 
     fun get_synch_inspection(refid: Int):List<Sycnh_InspectionReportTable>{
@@ -270,6 +298,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         tripCostDao.truncateTripcost()
         tripTicketDao.truncateTripticket()
         tripWitholdingDao.truncatetripWitholding()
+        tripReverseDao.truncateTripReverse()
     }
 
     fun truncateCopyTables(){
@@ -280,6 +309,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         synchTripcostdao.truncatecopytripcost()
         synchTripticketdao.truncatecopytripticket()
         synchTripwitholdingdao.truncatecopywitholdings()
+        synchTripreversedao.truncatecopyTripReverse()
     }
 
     fun truncateForUpdate(){
@@ -293,6 +323,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         lineSegmentDao.truncateLineSegment()
         passengerTypeDao.truncatePassengertype()
         witholdingTypeDao.truncatewitholdingType()
+        terminal.truncateTerminals()
     }
 
     fun insertTripticketBulkTwo(entity:List<TripTicketTable>){

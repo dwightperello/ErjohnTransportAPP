@@ -101,6 +101,10 @@ class GetSynchingActivity : AppCompatActivity() {
         viewModel.mpadunits.observe(this, Observer {
             state -> ProcessMpadUnits(state)
         })
+        viewModel.allTerminals.observe(this,Observer{
+            state -> ProcessTerminals(state)
+
+        })
     }
 
     private var linesegment:ArrayList<LineSegment>?= ArrayList<LineSegment>()
@@ -118,6 +122,7 @@ class GetSynchingActivity : AppCompatActivity() {
     private var dbWitholdingtype:ArrayList<WitholdingTypeTable>?= arrayListOf()
     private var dbHotspots:ArrayList<HotSpotsTable>?= arrayListOf()
     private var dbMpadUnits:ArrayList<mPadUnitsTable>?= arrayListOf()
+    private var dbTerminals:ArrayList<TerminalTable>?= arrayListOf()
 
     private fun ProcessLines(state: ResultState<ArrayList<LinesItem>>?){
         when(state){
@@ -448,6 +453,43 @@ class GetSynchingActivity : AppCompatActivity() {
                     }
 
                     Log.d("hotspots",dbWitholdingtype?.size.toString())
+                    viewModel.getAllTerminals(GlobalVariable.token!!)
+                    //InsertDB()
+                }
+
+            }
+            is ResultState.Error->{
+                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
+
+
+            }
+            else -> {}
+        }
+    }
+
+    private fun ProcessTerminals(state: ResultState<ArrayList<TerminalsItem>>?){
+        when(state){
+            is ResultState.Loading ->{
+                _binding!!.txtGetsynchingtext.append("\nGetting Terminals....")
+            }
+            is ResultState.Success-> {
+
+                if (state.data != null) {
+                    Log.d("hsize",state.data.size.toString())
+                    state.data.forEach {
+                        var method= TerminalTable(
+                            id = it.id!!,
+                            name = it.name!!,
+                            description= it.description ?:"null",
+                            TerminalId= 0
+
+                        )
+
+                        dbTerminals?.add(method)
+                    }
+
+                    Log.d("hotspots",dbWitholdingtype?.size.toString())
+
                     InsertDB()
                 }
 
@@ -475,6 +517,7 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertWitholdingtypebulk(dbWitholdingtype!!)
             dbViewmodel.insertAllHotspots(dbHotspots!!)
             dbViewmodel.insertMpadUnits(dbMpadUnits!!)
+            dbViewmodel.insertTerminalsBulk(dbTerminals!!)
 
             var method= TicketCounterTable(
                 ticketnumber = 1,

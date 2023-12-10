@@ -11,5 +11,6 @@ data class PartialRemitTable (
     val AmountRemited: Double?,
     val Line: String?,
     val DateTimeStamp :String,
-    val ingressoRefId:Int?
+    val ingressoRefId:Int?,
+    val terminal:String?
         )

@@ -65,5 +65,9 @@ interface NetworkService {
     @POST("TripWitholdings/PostTripWitholdingBulk")
     suspend fun  postWitholdingsBULK(@Header("Authorization")token:String,@Body tripWitholdings:List<TripWitholdings>) : ResponseBody
 
+    @GET("Terminals")
+    suspend fun  getTerminals(@Header("Authorization")token:String) : ArrayList<TerminalsItem>
 
+    @POST("TripReverse")
+    suspend fun  postTripReverseBULK(@Header("Authorization")token:String,@Body tripreverse:List<TripReverseItem>) : ResponseBody
 }

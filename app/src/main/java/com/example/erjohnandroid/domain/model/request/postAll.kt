@@ -24,7 +24,9 @@ data class postAllItem(
     val totalWitholding: Double,
     val tripcost: List<costtrip>?,
     val triptickets: List<tickettrip>?,
-    val tripwitholding: List<Tripwitholding>?
+    val tripwitholding: List<Tripwitholding>?,
+    val tripreverse:List<TripReverse>?,
+    val terminal:String
 )
 
 data class Inspectionreport(
@@ -50,7 +52,8 @@ data class Mpadassignment(
     val id: Int,
     val ingressoId: Int,
     val line: String,
-    val mPadUnit: String
+    val mPadUnit: String,
+    val terminal: String
 )
 
 data class Partialremitsdetail(
@@ -60,7 +63,8 @@ data class Partialremitsdetail(
     val dateTimeStamp: String,
     val id: Int,
     val ingressId: Int,
-    val line: String
+    val line: String,
+    val terminal: String
 )
 
 
@@ -73,4 +77,15 @@ data class Tripwitholding(
     val mPadUnit: String,
     val name: String,
     val witholdingType: String
+)
+
+data class TripReverse(
+    val id:Int,
+    val deviceName:String,
+    val amount:Double,
+    val direction:String,
+    val dateTimeStamp: String,
+    val reverseId:Int,
+    val terminal: String,
+    val ingId:Int
 )

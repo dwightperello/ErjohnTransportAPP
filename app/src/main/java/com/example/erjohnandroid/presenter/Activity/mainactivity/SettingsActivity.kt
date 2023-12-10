@@ -111,8 +111,10 @@ class SettingsActivity : AppCompatActivity() {
                     tripReverse = it.tripReverse,
                     ingressoRefId = GlobalVariable.ingressoRefId,
                     time = it.time,
-                    totalQty = null,
-                    totalAmount = null
+//                    totalQty = null,
+//                    totalAmount = null,
+                    reverse = it.reverse
+
                 )
                 tripticket?.add(method)
             }

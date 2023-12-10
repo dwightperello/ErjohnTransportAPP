@@ -21,10 +21,7 @@ import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityDispatchBinding
-import com.example.erjohnandroid.presenter.adapter.BusAdapter
-import com.example.erjohnandroid.presenter.adapter.DriverAdapter
-import com.example.erjohnandroid.presenter.adapter.LineAdapter
-import com.example.erjohnandroid.presenter.adapter.RoleAdapter
+import com.example.erjohnandroid.presenter.adapter.*
 import com.example.erjohnandroid.printer.ThreadPoolManager
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
@@ -34,6 +31,7 @@ import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
 @AndroidEntryPoint
@@ -46,6 +44,7 @@ class DispatchActivity : AppCompatActivity() {
     private  lateinit var driverAdapter: DriverAdapter
     private  lateinit var busAdapter: BusAdapter
     private  lateinit var lineAdapter: LineAdapter
+    private lateinit var terminalAdapter: TerminalAdapter
     private  var isNorthAllowed:Boolean=false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +72,21 @@ class DispatchActivity : AppCompatActivity() {
         dbViewmodel.getAllLines()
         externalViewModel.getTicketnumber()
         dbViewmodel.getMpadUnits()
+        dbViewmodel.getAllTerminal()
         GlobalVariable.deviceName=getBluetoothName(this)
         initsearch()
         initCheckbox()
        // getBluetoothName(this)
         _binding.btnSave.setOnClickListener {
+
+            val anotherDate = LocalDate.of(2023, 12, 20)
+            val currentDate = LocalDate.now()
+            if (currentDate.isEqual(anotherDate)) {
+                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS TODAY",this)
+            } else if (currentDate.isAfter(anotherDate)) {
+                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS",this)
+                return@setOnClickListener
+            }
 
             if(GlobalVariable.bus.isNullOrEmpty() ||GlobalVariable.conductor.isNullOrEmpty() ||GlobalVariable.employeeName.isNullOrEmpty() ||GlobalVariable.driver.isNullOrEmpty() ||GlobalVariable.direction.isNullOrEmpty() ||GlobalVariable.line.isNullOrEmpty() ){
                // Toast.makeText(this ,"PLEASE CHECK ENTRY",Toast.LENGTH_LONG).show()
@@ -96,7 +105,8 @@ class DispatchActivity : AppCompatActivity() {
                 line = GlobalVariable.line,
                 mPadUnit = GlobalVariable.deviceName,
                 mPadAssignmentId = 0,
-                ingressoRefId = GlobalVariable.ingressoRefId
+                ingressoRefId = GlobalVariable.ingressoRefId,
+                terminal = GlobalVariable.terminal
             )
             dispatch?.add(method)
             try {
@@ -188,6 +198,10 @@ class DispatchActivity : AppCompatActivity() {
         dbViewmodel.allMpadUnits.observe(this,Observer{
             state -> ProcessMpadUnits(state)
         })
+
+        dbViewmodel.terminals.observe(this,Observer{
+                state -> ProcessTerminals(state)
+        })
     }
 
     private var conductorList:List<EmployeesTable>?= null
@@ -244,6 +258,17 @@ class DispatchActivity : AppCompatActivity() {
         }
     }
 
+    private fun ProcessTerminals(state: List<TerminalTable>?){
+        if(!state.isNullOrEmpty()){
+           // linelist=state
+
+            terminalAdapter = TerminalAdapter(this)
+            _binding.rvTerminal.adapter= terminalAdapter
+            _binding.rvTerminal.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+            terminalAdapter.showterminal(state)
+        }
+    }
+
     private fun ProcessMpadUnits(state: List<mPadUnitsTable>?){
         if(!state.isNullOrEmpty()){
             val filteredList =state?.filter { it.name == GlobalVariable.deviceName }
@@ -292,6 +317,14 @@ class DispatchActivity : AppCompatActivity() {
         _binding!!.txtDirection.text=("\nDIRECTION: ${GlobalVariable.direction}")
         _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
         Toast(this).showCustomToast("${GlobalVariable.line}",this)
+    }
+
+    fun terminals(role: TerminalTable) {
+        GlobalVariable.terminal= role.name
+
+        _binding!!.txtTerminal.text=("\nTerminal: ${GlobalVariable.terminal}")
+       // _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
+        Toast(this).showCustomToast("${GlobalVariable.terminal}",this)
     }
 
     fun COnductor(role: EmployeesTable) {
@@ -673,6 +706,7 @@ class DispatchActivity : AppCompatActivity() {
               //  mIPosPrinterService!!.printBitmap(1, 12, mBitmap, callback)
               //  mIPosPrinterService!!.printBlankLines(1, 16, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Device: ${GlobalVariable.deviceName}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Terminal: ${GlobalVariable.terminal}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Direction: ${GlobalVariable.direction}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Bus Number: ${GlobalVariable.bus}\n", "ST", 24,  callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24,  callback)
@@ -724,7 +758,8 @@ class DispatchActivity : AppCompatActivity() {
 //                    callback
 //                )
               //  bitmapRecycle(mBitmap)
-                mIPosPrinterService!!.printerPerformPrint(160, callback)
+//                mIPosPrinterService!!.printerPerformPrint(160, callback)
+                mIPosPrinterService!!.printerPerformPrint(100, callback)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }

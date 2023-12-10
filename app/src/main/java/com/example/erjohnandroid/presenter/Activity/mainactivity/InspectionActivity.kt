@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -242,7 +242,10 @@ class InspectionActivity : AppCompatActivity() {
             signatureView.draw(canvas)
 
 
-
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+            finish()
           //  printBitmap(ewan)
         }
 
@@ -666,7 +669,7 @@ class InspectionActivity : AppCompatActivity() {
 
 
 
-                mIPosPrinterService!!.printerPerformPrint(160, callback)
+                mIPosPrinterService!!.printerPerformPrint(100, callback)
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }

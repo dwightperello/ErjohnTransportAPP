@@ -26,6 +26,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private  var _allLines:MutableLiveData<ResultState<ArrayList<LinesItem>>> = MutableLiveData()
     val allLines:LiveData<ResultState<ArrayList<LinesItem>>> get() = _allLines
 
+    private  var _allTerminals:MutableLiveData<ResultState<ArrayList<TerminalsItem>>> = MutableLiveData()
+    val allTerminals:LiveData<ResultState<ArrayList<TerminalsItem>>> get() = _allTerminals
+
     private  var _mpadunits:MutableLiveData<ResultState<ArrayList<mPadUnitsItem>>> = MutableLiveData()
     val mpadunits:LiveData<ResultState<ArrayList<mPadUnitsItem>>> get() = _mpadunits
 
@@ -74,6 +77,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private var _postIngressoALL:MutableLiveData<ResultState<ResponseBody>> = MutableLiveData()
     val postIngressoALL:LiveData<ResultState<ResponseBody>> get() = _postIngressoALL
 
+    private var _postTripReverse:MutableLiveData<ResultState<ResponseBody>> = MutableLiveData()
+    val postTripReverse:LiveData<ResultState<ResponseBody>> get() = _postTripReverse
+
 
 
     fun login(loginCredentials: request_login){
@@ -90,6 +96,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.getAllLines("Bearer ${token}")
                 .onEach { _allLines.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun getAllTerminals(token:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.getTerminals("Bearer ${token}")
+                .onEach { _allTerminals.value=it }.launchIn(viewModelScope)
         }
     }
 
@@ -164,6 +177,8 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         }
     }
 
+
+
     fun postInspection(token: String,inspectionReports:List<InspectionReports>){
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.postInspection("Bearer ${token}",inspectionReports)
@@ -182,6 +197,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.postPartialRemits("Bearer ${token}",partialRemit)
                 .onEach { _postpartialremit.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun postTripReverseALL(token: String,tripreverse:List<TripReverseItem>){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.postTripReverse("Bearer ${token}",tripreverse)
+                .onEach { _postTripReverse.value=it }.launchIn(viewModelScope)
         }
     }
 

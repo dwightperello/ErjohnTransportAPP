@@ -103,6 +103,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _ticketsycnh:MutableLiveData<List<Sycn_TripticketTable>> = MutableLiveData()
     val ticketsycnh:LiveData<List<Sycn_TripticketTable>> = _ticketsycnh
 
+    private var _tripreversesycnh:MutableLiveData<List<Synch_TripReverseTable>> = MutableLiveData()
+    val tripreversesycnh:LiveData<List<Synch_TripReverseTable>> = _tripreversesycnh
+
     private var _synch_inspectionreport:MutableLiveData<List<Sycnh_InspectionReportTable>> = MutableLiveData()
     val synch_inspectionreport:LiveData<List<Sycnh_InspectionReportTable>> = _synch_inspectionreport
 
@@ -143,21 +146,14 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _tripgross:MutableLiveData<TripGross> = MutableLiveData()
     val tripgross:LiveData<TripGross> = _tripgross
 
+    private var _terminals:MutableLiveData<List<TerminalTable>> = MutableLiveData()
+    val terminals:LiveData<List<TerminalTable>> = _terminals
+
+    private var _AllTripReverse:MutableLiveData<List<TripReverseTable>> = MutableLiveData()
+    val AllTripReverse:LiveData<List<TripReverseTable>> = _AllTripReverse
+
     //region OTHER METHODS
 
-//    fun getTicketnumber(){
-//        viewModelScope.launch() {
-//            val records=  repository.getTicketnumbers()
-//            _ticketnumberstart.value=records
-//        }
-//    }
-
-//    fun updateTicketnumber(ticketnumber:Int,refid: Int, id: Int){
-//        viewModelScope.launch() {
-//            val records=  repository.updateTicketnumbers(ticketnumber,refid,id)
-//
-//        }
-//    }
     fun getBusinfo(id:Int){
         viewModelScope.launch() {
             val records=  repository.getAllBusinfo(id)
@@ -179,6 +175,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun insertTripReverse(entity: List<TripReverseTable>){
+        viewModelScope.launch() {
+            val records=  repository.insertTripTeverseBulk(entity)
+
+        }
+    }
+
     fun insertMpadUnits(entity: List<mPadUnitsTable>){
         viewModelScope.launch() {
             val records=  repository.insertMpadunitsBulk(entity)
@@ -190,6 +193,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.getMpadUnits()
             _allMpadUnits.value=records
+        }
+    }
+
+    fun getAllTripReverse(){
+        viewModelScope.launch() {
+            val records=  repository.getTripReverseAll()
+            _AllTripReverse.value=records
         }
     }
 
@@ -318,6 +328,14 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
             _allLines.value=records
         }
     }
+
+    fun getAllTerminal(){
+        viewModelScope.launch() {
+            val records=  repository.getTerminals()
+            _terminals.value=records
+        }
+    }
+
 
     fun insertAllLines(entity:List<LinesTable>){
         viewModelScope.launch(Dispatchers.IO) {
@@ -516,6 +534,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun getTripReverseForSynch(refid: Int){
+        viewModelScope.launch() {
+            val records = repository.getallsynchTripReverse(refid)
+            _tripreversesycnh.value = records
+        }
+    }
+
     fun insertticketsynch(entity:List<Sycn_TripticketTable>){
         viewModelScope.launch() {
             val records=  repository.insertTripTicketsynch(entity)
@@ -533,6 +558,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     fun insert_synch_inspection(entity: List<Sycnh_InspectionReportTable>){
         viewModelScope.launch() {
             val records=  repository.insert_synch_inspection(entity)
+
+        }
+    }
+
+    fun insert_synch_TripReverse(entity: List<Synch_TripReverseTable>){
+        viewModelScope.launch() {
+            val records=  repository.insert_synch_TripReverse(entity)
 
         }
     }
@@ -644,6 +676,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.getGross()
             _tripgross.value=records
+        }
+    }
+
+    fun insertTerminalsBulk(entity: List<TerminalTable>){
+        viewModelScope.launch() {
+            val records=  repository.insertTerminalsBulk(entity)
+
         }
     }
     //endregion

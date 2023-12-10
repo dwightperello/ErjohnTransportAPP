@@ -13,6 +13,7 @@ data class mPadAssignmentsTable(
     val driverName: String?,
     val line: String?,
     val mPadUnit: String?,
-    val ingressoRefId:Int?
+    val ingressoRefId:Int?,
+    val terminal:String?
 
 )

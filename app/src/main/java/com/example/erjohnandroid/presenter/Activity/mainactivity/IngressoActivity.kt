@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
@@ -24,6 +25,7 @@ import com.example.erjohnandroid.database.Model.convertions.WitholdingTotal
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
 import com.example.erjohnandroid.databinding.ActivityIngressoBinding
+import com.example.erjohnandroid.presenter.adapter.TerminalAdapter
 import com.example.erjohnandroid.printer.ThreadPoolManager
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
@@ -63,6 +65,7 @@ class IngressoActivity : AppCompatActivity() {
     lateinit var _binding:ActivityIngressoBinding
     private val dbViewmodel: RoomViewModel by viewModels()
     private val externalViewModel:externalViewModel by viewModels()
+    private lateinit var terminalAdapter: TerminalAdapter
 
     var alltickets:kotlin.collections.List<TripTicketTable> = arrayListOf()
 
@@ -119,8 +122,10 @@ class IngressoActivity : AppCompatActivity() {
 
 
         initPrinter()
+        GlobalVariable.terminal=null
         _binding.btnigresso.isEnabled=true
 
+        dbViewmodel.getAllTerminal()
         dbViewmodel.getPartialRemit()
         dbViewmodel.getTotalAmountTrip()
 
@@ -230,6 +235,10 @@ class IngressoActivity : AppCompatActivity() {
 
         _binding.btnigresso.setOnClickListener {
             //_binding.btnigressoreprint.isEnabled=true
+            if (GlobalVariable.terminal.isNullOrEmpty()){
+                Toast(this).showCustomToast("Select Terminal",this)
+                return@setOnClickListener
+            }
             if(_binding.etshortover.text.toString().isNullOrEmpty()) {
                 Toast(this).showCustomToast("PLEASE COMPUTE FINAL REMIT",this)
                 return@setOnClickListener
@@ -273,7 +282,8 @@ class IngressoActivity : AppCompatActivity() {
                 DateTimeStamp = formattedDateTime.toString(),
                 ingressoRefId = GlobalVariable.ingressoRefId,
                 DriverBonus = convertDecimal(_binding.txtdriverbonus.text.toString()),
-                ConductorBonus = convertDecimal(_binding.txtconductorbonus.text.toString())
+                ConductorBonus = convertDecimal(_binding.txtconductorbonus.text.toString()),
+                terminal = GlobalVariable.terminal
 
             )
 
@@ -284,7 +294,10 @@ class IngressoActivity : AppCompatActivity() {
                 dbViewmodel.tripticket.observe(this, Observer {
                         state->ProcessTriptickets(state)
                 })
-
+                dbViewmodel.getAllTripReverse()
+                dbViewmodel.AllTripReverse.observe(this,Observer{
+                        state -> ProcessAllTripReverse(state)
+                })
 
 
 
@@ -328,6 +341,10 @@ class IngressoActivity : AppCompatActivity() {
             state->ProcessPartialremit(state)
         })
 
+        dbViewmodel.terminals.observe(this,Observer{
+                state -> ProcessTerminals(state)
+        })
+
 
 
 //        dbViewmodel.totalTripcost?.observe(this,Observer{
@@ -342,7 +359,16 @@ class IngressoActivity : AppCompatActivity() {
     }
 
 
-
+    private fun ProcessTerminals(state: List<TerminalTable>?){
+        if(!state.isNullOrEmpty()){
+            // linelist=state
+            // GlobalVariable.terminalList=state
+            terminalAdapter = TerminalAdapter(this)
+            _binding.rvTerminal.adapter= terminalAdapter
+            _binding.rvTerminal.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+            terminalAdapter.showterminal(state)
+        }
+    }
 
 
 //    override fun onBackPressed() {
@@ -467,6 +493,8 @@ class IngressoActivity : AppCompatActivity() {
         }
     }
 
+
+
     val ProcessExpenses:(state:List<TripCostTable>) ->Unit={
         var expensesamount:Double=0.0
         var expenses="0.0"
@@ -586,6 +614,7 @@ class IngressoActivity : AppCompatActivity() {
     private var partialremit:ArrayList<Synch_partialremitTable> = arrayListOf()
     private var tripcost:ArrayList<Synch_TripCostTable> = arrayListOf()
     private var withodling:ArrayList<Synch_TripwitholdingTable> = arrayListOf()
+    private var TripReversesynching:ArrayList<Synch_TripReverseTable> = arrayListOf()
 
     val ProcessTriptickets:(state: List<TripTicketTable>) ->Unit={
         if(it!=null) {
@@ -604,7 +633,8 @@ class IngressoActivity : AppCompatActivity() {
                    titcketNumber = it.titcketNumber!!,
                    qty = it.qty,
                    Id = 0,
-                   ingressoRefId = GlobalVariable.ingressoRefId
+                   ingressoRefId = GlobalVariable.ingressoRefId,
+                   reverse = it.reverse
 
                )
                triptickets.add(method)
@@ -621,6 +651,31 @@ class IngressoActivity : AppCompatActivity() {
 
         }
     }
+    val ProcessAllTripReverse:(state:List<TripReverseTable>) ->Unit={
+        var partial:Double=0.0
+        val decimalVat = DecimalFormat("#.00")
+
+        if(it!=null) {
+
+            it.forEach {
+                var method= Synch_TripReverseTable(
+                    Id = 0,
+                    amount = it.amount!!,
+                    dateTimeStamp = it.dateTimeStamp,
+                    deviceName = it.deviceName,
+                    direction= it.direction,
+                    reverseId = it.reverseId,
+                    terminal = it.terminal,
+                    ingressoRefId = it.ingressoRefId!!
+
+                )
+                TripReversesynching.add(method)
+            }
+
+            dbViewmodel.insert_synch_TripReverse(TripReversesynching)
+        }
+    }
+
 
     val Processinspectionreport:(state: List<InspectionReportTable>) ->Unit={
         if(it!=null) {
@@ -665,7 +720,8 @@ class IngressoActivity : AppCompatActivity() {
                   line = it.line,
                   mPadUnit = it.mPadUnit!!,
                   Id = 0,
-                  ingressoRefId = GlobalVariable.ingressoRefId
+                  ingressoRefId = GlobalVariable.ingressoRefId,
+                  terminal = it.terminal
               )
                 mpadassignment.add(method)
             }
@@ -689,7 +745,8 @@ class IngressoActivity : AppCompatActivity() {
                    Line = it.Line,
                    DateTimeStamp = it.DateTimeStamp,
                    Id = 0,
-                   ingressoRefId = GlobalVariable.ingressoRefId
+                   ingressoRefId = GlobalVariable.ingressoRefId,
+                   terminal = it.terminal
 
                )
                 partialremit.add(method)
@@ -1239,6 +1296,7 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Line: ${GlobalVariable.line}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Bus #: ${GlobalVariable.bus}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("mPAD: ${GlobalVariable.deviceName}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Cashier: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Dispatcher: ${GlobalVariable.employeeName}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
@@ -1411,5 +1469,10 @@ class IngressoActivity : AppCompatActivity() {
         // Create and show the alert dialog
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    fun ingressoTerminals(role: TerminalTable) {
+        GlobalVariable.terminal= role.name
+        Toast(this).showCustomToast("${GlobalVariable.terminal}",this)
     }
 }

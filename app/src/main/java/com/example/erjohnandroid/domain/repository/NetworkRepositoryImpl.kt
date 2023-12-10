@@ -111,6 +111,16 @@ class NetworkRepositoryImpl (private val networkService: NetworkService):Network
         }
     }
 
+    override suspend fun getTerminals(token: String): Flow<ResultState<ArrayList<TerminalsItem>>> = flow {
+        emit(ResultState.Loading)
+        try {
+            val response = networkService.getTerminals(token)
+            emit(ResultState.Success(response))
+        }catch (e:Exception) {
+            emit((ResultState.Error(e)))
+        }
+    }
+
     override suspend fun postIngresso(
         token: String,
         ingresso:List<Ingresso>
@@ -118,6 +128,19 @@ class NetworkRepositoryImpl (private val networkService: NetworkService):Network
         emit(ResultState.Loading)
         try {
             val response = networkService.postIngresso(token,ingresso)
+            emit(ResultState.Success(response))
+        }catch (e:Exception) {
+            emit((ResultState.Error(e)))
+        }
+    }
+
+    override suspend fun postTripReverse(
+        token: String,
+        tripreverse: List<TripReverseItem>
+    ): Flow<ResultState<ResponseBody>> = flow {
+        emit(ResultState.Loading)
+        try {
+            val response = networkService.postTripReverseBULK(token,tripreverse)
             emit(ResultState.Success(response))
         }catch (e:Exception) {
             emit((ResultState.Error(e)))

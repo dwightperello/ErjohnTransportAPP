@@ -524,6 +524,7 @@ class TIcketingActivity : AppCompatActivity() {
 
 
                 origin= linesegment?.get(index)
+                origincounter = index
                 _binding.txtoriginKM.text= origin?.kmPoint.toString()
                 _binding.etOrigin.setText(origin?.name)
 
@@ -606,14 +607,17 @@ class TIcketingActivity : AppCompatActivity() {
                     -1
 
                 }
+
                 when(index){
                     -1 ->{
                         Toast(this@TIcketingActivity).showCustomToast("No route found",this@TIcketingActivity)
                         return
                     }
+
                 }
 
                 destination=linesegment?.get(index)
+                destinationcounter =index
                 _binding.txtDestination.text= destination?.kmPoint.toString()
                 _binding.etDestination.setText(destination?.name)
 
@@ -1545,62 +1549,22 @@ class TIcketingActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-//                mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+               mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
 //                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
-//
-////                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
-////
+                mIPosPrinterService!!.printQRCode("000${GlobalVariable.ticketnumber .toString()+ "-" + _binding.txtoriginKM.text.toString()+ "-" +_binding.txtDestination.text.toString() }\n", 6, 1, callback)
+//                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText(
+                    "********************************\n",
+                    "ST",
+                    24,
+                    callback
+                )
 //                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText(
-//                    "********************************\n",
-//                    "ST",
-//                    24,
-//                    callback
-//                )
-               // mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 
 
-//                mIPosPrinterService!!.printSpecifiedTypeText("这是一行16号字体\n", "ST", 16, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText("这是一行24号字体\n", "ST", 24, callback)
-//                mIPosPrinterService!!.PrintSpecFormatText("这是一行24号字体\n", "ST", 24, 2, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText("这是一行32号字体\n", "ST", 32, callback)
-//                mIPosPrinterService!!.PrintSpecFormatText("这是一行32号字体\n", "ST", 32, 2, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText("这是一行48号字体\n", "ST", 48, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText(
-//                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234\n",
-//                    "ST",
-//                    16,
-//                    callback
-//                )
-//                mIPosPrinterService!!.printSpecifiedTypeText(
-//                    "abcdefghijklmnopqrstuvwxyz56789\n",
-//                    "ST",
-//                    24,
-//                    callback
-//                )
-//                mIPosPrinterService!!.printSpecifiedTypeText(
-//                    "κρχκμνκλρκνκνμρτυφ\n",
-//                    "ST",
-//                    24,
-//                    callback
-//                )
-//                mIPosPrinterService!!.setPrinterPrintAlignment(0, callback)
-//                mIPosPrinterService!!.printQRCode("http://www.baidu.com\n", 10, 1, callback)
-//                mIPosPrinterService!!.printBlankLines(1, 16, callback)
-//                mIPosPrinterService!!.printBlankLines(1, 16, callback)
-//                for (i in 0..11) {
-//                    mIPosPrinterService!!.printRawData(BytesUtil.initLine1(384, i), callback)
-//                }
-//                mIPosPrinterService!!.PrintSpecFormatText("打印测试完成\n", "ST", 32, 1, callback)
-//                mIPosPrinterService!!.printSpecifiedTypeText(
-//                    "**********END***********\n\n",
-//                    "ST",
-//                    32,
-//                    callback
-//                )
-                //  bitmapRecycle(mBitmap)
                 mIPosPrinterService!!.printerPerformPrint(100, callback)
                 runOnUiThread {
                    // ticketnumber +=1

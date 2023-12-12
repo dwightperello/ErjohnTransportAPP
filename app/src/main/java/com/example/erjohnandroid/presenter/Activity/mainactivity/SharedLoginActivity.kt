@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.CompanyRolesTable
 import com.example.erjohnandroid.database.Model.EmployeesTable
+import com.example.erjohnandroid.database.Model.LogReport
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityMainBinding
 import com.example.erjohnandroid.databinding.ActivitySharedLoginBinding
@@ -24,6 +25,8 @@ import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.showCustomToast
 import com.example.erjohnandroid.util.startActivityWithAnimation
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class SharedLoginActivity : AppCompatActivity() {
@@ -80,7 +83,10 @@ class SharedLoginActivity : AppCompatActivity() {
                             R.anim.screenslideright, R.anim.screen_slide_out_left
                         );
                         finish()
-                    } else Toast(this).showCustomToast("Check Pin",this)
+                    } else{
+                        Toast(this).showCustomToast("Check Pin",this)
+                       // insertLogerror()
+                    }
                 }
                 else if(activity==9){
                     if(state.companyRolesId==3 || state.companyRolesId==4){
@@ -94,7 +100,10 @@ class SharedLoginActivity : AppCompatActivity() {
                             startActivityWithAnimation<InspectionActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                             finish()
                         }
-                    } else Toast(this).showCustomToast("Check Pin",this)
+                    } else{
+                        Toast(this).showCustomToast("Check Pin",this)
+                       // insertLogerror()
+                    }
                 }
                 else if(activity==4) {
                     if (state.companyRolesId == 5) {
@@ -114,14 +123,20 @@ class SharedLoginActivity : AppCompatActivity() {
                                 R.anim.screenslideright, R.anim.screen_slide_out_left
                             );
                         }
-                    } else Toast(this).showCustomToast("Check Pin",this)
+                    } else{
+                        Toast(this).showCustomToast("Check Pin",this)
+                       // insertLogerror()
+                    }
                 }
                 else if(activity==5) {
                     if(state.companyRolesId==5) {
                         GlobalVariable.cashiername=state.name
                         startActivityWithAnimation<PartialRemitActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                         finish()
-                    } else Toast(this).showCustomToast("Check Pin",this)
+                    } else {
+                        Toast(this).showCustomToast("Check Pin",this)
+                       // insertLogerror()
+                    }
                 }
                 else if(activity==12){
                     if(state.companyRolesId==3 || state.companyRolesId==4){
@@ -135,7 +150,10 @@ class SharedLoginActivity : AppCompatActivity() {
                             startActivityWithAnimation<ReverseActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                             finish()
                         }
-                    } else Toast(this).showCustomToast("Check Pin",this)
+                    } else {
+                        Toast(this).showCustomToast("Check Pin",this)
+                      //  insertLogerror()
+                    }
                 }
 
             }
@@ -148,18 +166,40 @@ class SharedLoginActivity : AppCompatActivity() {
                         _binding.etPin.setText("")
                         // Toast.makeText(this,"NO DATA FOUND", Toast.LENGTH_LONG).show()
                         Toast(this).showCustomToast("NO DATA FOUND",this)
+                       // insertLogerror()
                     }
+                }else
+                {
+                    Toast(this).showCustomToast("No user found",this)
+                  //  insertLogerror()
                 }
               //  Toast(this).showCustomToast("CHECK PIN",this)
 
             }
         }catch (e:java.lang.Exception){
-            //Toast.makeText(this,"NO EMPLOYEE",Toast.LENGTH_LONG).show()
+
             Toast(this).showCustomToast("NO EMPLOYEE FOUND",this)
+           // insertLogerror()
         }
 
     }
+    fun getCurrentDateInFormat(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
+    }
 
+    private fun insertLogerror(){
+        val formattedDateTime= getCurrentDateInFormat()
+        var logreport= LogReport(
+            LogReportId=0,
+            dateTimeStamp= formattedDateTime,
+            deviceName=GlobalVariable.deviceName!!,
+            description = "Error on Login",
+            ingressoRefId = GlobalVariable.ingressoRefId
+        )
+        dbViewmodel.insertLogReport(logreport)
+    }
     private fun computeWindowSizeClasses() {
         try {
             val layout: LinearLayout = findViewById(R.id.mainLinear)

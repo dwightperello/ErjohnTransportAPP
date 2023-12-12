@@ -121,6 +121,16 @@ class NetworkRepositoryImpl (private val networkService: NetworkService):Network
         }
     }
 
+    override suspend fun getFares(token: String, Id: Int): Flow<ResultState<Fares>> = flow {
+        emit(ResultState.Loading)
+        try {
+            val response = networkService.getFares(token,Id)
+            emit(ResultState.Success(response))
+        }catch (e:Exception) {
+            emit((ResultState.Error(e)))
+        }
+    }
+
     override suspend fun postIngresso(
         token: String,
         ingresso:List<Ingresso>

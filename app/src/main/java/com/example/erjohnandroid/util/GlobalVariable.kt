@@ -66,6 +66,16 @@ object GlobalVariable {
 
     var isFromDispatch:Boolean=false
 
+    var priorWitholdingAmount:Double=0.0
+
+    var witholds: java.util.ArrayList<TripWitholdingTable> = arrayListOf()
+
+
+    var discountAmount:Double=0.0
+    var basefair:Double=0.0
+    var exceedAmount:Double=0.0
+    var specialexceedAmount=0.0
+
 
 
 

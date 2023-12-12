@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
@@ -26,6 +27,7 @@ import com.example.erjohnandroid.util.startActivityWithAnimation
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GetSynchingActivity : AppCompatActivity() {
@@ -105,6 +107,10 @@ class GetSynchingActivity : AppCompatActivity() {
             state -> ProcessTerminals(state)
 
         })
+
+        viewModel.fare.observe(this , Observer {
+            state -> ProcessFares(state)
+        })
     }
 
     private var linesegment:ArrayList<LineSegment>?= ArrayList<LineSegment>()
@@ -123,6 +129,7 @@ class GetSynchingActivity : AppCompatActivity() {
     private var dbHotspots:ArrayList<HotSpotsTable>?= arrayListOf()
     private var dbMpadUnits:ArrayList<mPadUnitsTable>?= arrayListOf()
     private var dbTerminals:ArrayList<TerminalTable>?= arrayListOf()
+    private var dbfare:FareTable?= null
 
     private fun ProcessLines(state: ResultState<ArrayList<LinesItem>>?){
         when(state){
@@ -490,6 +497,57 @@ class GetSynchingActivity : AppCompatActivity() {
 
                     Log.d("hotspots",dbWitholdingtype?.size.toString())
 
+                    viewModel.getFares(GlobalVariable.token!!,1)
+
+                    //InsertDB()
+                }
+
+            }
+            is ResultState.Error->{
+                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
+
+
+            }
+            else -> {}
+        }
+    }
+
+    private fun ProcessFares(state: ResultState<Fares>?){
+        when(state){
+            is ResultState.Loading ->{
+                _binding!!.txtGetsynchingtext.append("\nGetting Fare....")
+            }
+            is ResultState.Success-> {
+
+                if (state.data != null) {
+                        var method= FareTable(
+                            FareId = 0,
+                            baseAmount = state.data.baseAmount,
+                            discountAmount = state.data.discountAmount,
+                            exceedAmount = state.data.exceedAmount,
+                            id = state.data.id,
+                            name = state.data.name,
+                            specialExceedAmount = state.data.specialExceedAmount
+
+                        )
+
+//                    Log.d("hsize",state.data.size.toString())
+//                    state.data.forEach {
+//                        var method= TerminalTable(
+//                            id = it.id!!,
+//                            name = it.name!!,
+//                            description= it.description ?:"null",
+//                            TerminalId= 0
+//
+//                        )
+//
+                         dbfare = method
+//                    }
+//
+//                    Log.d("hotspots",dbWitholdingtype?.size.toString())
+
+
+
                     InsertDB()
                 }
 
@@ -518,6 +576,10 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertAllHotspots(dbHotspots!!)
             dbViewmodel.insertMpadUnits(dbMpadUnits!!)
             dbViewmodel.insertTerminalsBulk(dbTerminals!!)
+            lifecycleScope.launch {
+                dbViewmodel.insertfare(dbfare!!)
+            }
+
 
             var method= TicketCounterTable(
                 ticketnumber = 1,

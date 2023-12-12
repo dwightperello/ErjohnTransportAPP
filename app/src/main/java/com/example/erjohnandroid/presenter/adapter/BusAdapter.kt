@@ -9,6 +9,7 @@ import com.example.erjohnandroid.database.Model.EmployeesTable
 import com.example.erjohnandroid.databinding.AdapterBusBinding
 import com.example.erjohnandroid.databinding.AdapterDriverBinding
 import com.example.erjohnandroid.presenter.Activity.mainactivity.DispatchActivity
+import com.example.erjohnandroid.presenter.Activity.mainactivity.SettingsActivity
 
 class BusAdapter(private val activity: Activity): RecyclerView.Adapter<BusAdapter.ViewHolder>() {
     private var products:List<BusInfoTableItem> = listOf()
@@ -37,6 +38,8 @@ class BusAdapter(private val activity: Activity): RecyclerView.Adapter<BusAdapte
 
                 if(activity is DispatchActivity){
                     activity.Bus(role)
+                }else if(activity is SettingsActivity){
+                    activity.changebus(role)
                 }
             }
 

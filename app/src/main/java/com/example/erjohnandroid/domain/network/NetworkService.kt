@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface NetworkService {
 
@@ -15,6 +16,9 @@ interface NetworkService {
 
     @GET("Lines")
     suspend fun getAllLines(@Header("Authorization")token:String):ArrayList<LinesItem>
+
+    @GET("Fares/{Id}")
+    suspend fun getFares(@Header("Authorization")token:String,@Path("Id")Id:Int):Fares
 
     @GET("mPadUnits")
     suspend fun getMpadUnits(@Header("Authorization")token:String):ArrayList<mPadUnitsItem>

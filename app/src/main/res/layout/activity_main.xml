@@ -220,7 +220,7 @@
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SD CARD"
+                    android:text="SD CARD / BUS"
                     android:textSize="@dimen/_12sdp"
                     android:gravity="center"/>
 

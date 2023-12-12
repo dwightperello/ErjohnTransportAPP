@@ -33,7 +33,7 @@ class WitholdingActivity : AppCompatActivity() {
     private val dbViewmodel: RoomViewModel by viewModels()
     private  lateinit var witholdingAdapter: WitholdingAdapter
 
-    private var witholds:ArrayList<TripWitholdingTable> = arrayListOf()
+   // private var witholds:ArrayList<TripWitholdingTable> = arrayListOf()
     var witholdingtype:String?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +71,31 @@ class WitholdingActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId
             )
 
-            witholds.add(method)
-            dbViewmodel.insertTripwitholdingbulk(witholds)
+            val containsWithType =GlobalVariable.witholds.any{it.witholdingType ==   method.witholdingType};
+            if(!containsWithType){
+               GlobalVariable.witholds.add(method)
+                dbViewmodel.insertTripwitholdingbulk(method)
+               // Toast(this).showCustomToast("Added witholding ${stringcount.toDouble()}",this)
+            }else{
+                var prior =GlobalVariable.witholds.find { it.witholdingType==method.witholdingType }
+              //  GlobalVariable.priorWitholdingAmount= prior?.amount!!
+                GlobalVariable.witholds.find { it.witholdingType==method.witholdingType }?.let {
+                    it.amount= stringcount.toDouble()
+                }
+                dbViewmodel.updateripwitholding(GlobalVariable.ingressoRefId,stringcount.toDouble(),witholdingtype!!)
+               // Toast(this).showCustomToast("Updated witholding ${stringcount.toDouble()}",this)
+            }
+
+//            if(!witholds.some(method.witholdingType)){
+//                witholds.add(method)
+//                dbViewmodel.insertTripwitholdingbulk(witholds)
+//
+//            }else{
+//               var prior =witholds.find { it==method }
+//                GlobalVariable.priorWitholdingAmount= prior?.amount!!
+//                dbViewmodel.updateripwitholding(GlobalVariable.ingressoRefId,stringcount.toDouble(),witholdingtype!!)
+//            }
+
 
             dbViewmodel.getTripwitholding()
             dbViewmodel.tripwitholding.distinctUntilChanged().observe(this, Observer {
@@ -108,6 +131,7 @@ class WitholdingActivity : AppCompatActivity() {
         if(!it.isNullOrEmpty()) {
             GlobalVariable.AllWitholding.addAll(it)
         }
+       // Toast(this).showCustomToast("Updated witholding",this)
         val resultIntent = Intent()
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

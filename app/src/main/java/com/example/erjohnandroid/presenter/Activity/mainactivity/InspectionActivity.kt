@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.InspectionReportTable
 import com.example.erjohnandroid.database.Model.LineSegmentTable
+import com.example.erjohnandroid.database.Model.LogReport
 import com.example.erjohnandroid.database.Model.TripTicketTable
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityInspectionBinding
@@ -145,6 +146,15 @@ class InspectionActivity : AppCompatActivity() {
 
 
         _binding.btnclose.setOnClickListener {
+            val formattedDateTime = getdate()
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Inspection Cancelled",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+            dbViewmodel.insertLogReport(logreport)
             super.onBackPressed()
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
@@ -217,10 +227,19 @@ class InspectionActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId
 
             )
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Inspection Made in ${origin?.name}",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+
             try {
                 _binding.btninspectionsave.isEnabled=false
                 printText()
                 dbViewmodel.insertInspectionReportBulk(method)
+                dbViewmodel.insertLogReport(logreport)
 //                onBackPressed()
 //                overridePendingTransition(
 //                    R.anim.screenslideleft, R.anim.screen_slide_out_right,
@@ -228,6 +247,14 @@ class InspectionActivity : AppCompatActivity() {
                // finish()
             }catch (e:java.lang.Exception){
                 Toast(this).showCustomToast("Error saving--"+e.localizedMessage,this)
+                var logreport= LogReport(
+                    LogReportId=0,
+                    dateTimeStamp= formattedDateTime,
+                    deviceName=GlobalVariable.deviceName!!,
+                    description = "error ${e.message}",
+                    ingressoRefId = GlobalVariable.ingressoRefId
+                )
+                dbViewmodel.insertLogReport(logreport)
             }
 
 
@@ -337,7 +364,7 @@ class InspectionActivity : AppCompatActivity() {
     }
 
     private fun getdate():String{
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Date()
         return dateFormat.format(currentDate)
     }

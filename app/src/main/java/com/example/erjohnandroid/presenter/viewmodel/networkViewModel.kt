@@ -23,6 +23,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private var _login: MutableLiveData<ResultState<response_login>> = MutableLiveData()
     val login: LiveData<ResultState<response_login>> get() = _login
 
+    private var _fare: MutableLiveData<ResultState<Fares>> = MutableLiveData()
+    val fare: LiveData<ResultState<Fares>> get() = _fare
+
     private  var _allLines:MutableLiveData<ResultState<ArrayList<LinesItem>>> = MutableLiveData()
     val allLines:LiveData<ResultState<ArrayList<LinesItem>>> get() = _allLines
 
@@ -103,6 +106,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.getTerminals("Bearer ${token}")
                 .onEach { _allTerminals.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun getFares(token:String,Id:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.getFares("Bearer ${token}",Id)
+                .onEach { _fare.value=it }.launchIn(viewModelScope)
         }
     }
 

@@ -30,6 +30,8 @@ interface NetworkRepository {
 
     suspend fun getTerminals(token: String):Flow<ResultState<ArrayList<TerminalsItem>>>
 
+    suspend fun getFares(token: String,Id:Int):Flow<ResultState<Fares>>
+
     //SYNCHING
 
     suspend fun postIngresso(token: String,ingresso:List<Ingresso>) : Flow<ResultState<ResponseBody>>

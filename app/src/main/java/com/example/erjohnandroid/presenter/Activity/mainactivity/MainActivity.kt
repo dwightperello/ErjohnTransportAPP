@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
+import com.example.erjohnandroid.database.Model.FareTable
 import com.example.erjohnandroid.database.Model.LinesTable
 import com.example.erjohnandroid.database.Model.TicketCounterTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
@@ -150,6 +151,8 @@ class MainActivity : AppCompatActivity() {
         externalviewmodel.ticketnumberstart.observe(this, Observer {
                 state -> ProcessTicketnumbers(state)
         })
+
+
 
     }
 

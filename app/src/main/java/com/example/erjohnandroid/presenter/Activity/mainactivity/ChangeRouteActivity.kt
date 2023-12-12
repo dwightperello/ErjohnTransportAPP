@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.LinesTable
+import com.example.erjohnandroid.database.Model.LogReport
 import com.example.erjohnandroid.database.Model.TripReverseTable
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
@@ -69,20 +70,40 @@ class ChangeRouteActivity : AppCompatActivity() {
                 terminal = GlobalVariable.terminal!!,
                 ingressoRefId = GlobalVariable.ingressoRefId
             )
-            tripreverse.add(method)
-            dbViewmodel.insertTripReverse(tripreverse)
 
-            GlobalVariable.remainingPass=0
-            GlobalVariable.destinationcounter=1
-            GlobalVariable.origincounter=0
-            GlobalVariable.tripreverse = GlobalVariable.tripreverse?.plus(1)
+            var logreport = LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Change route during operation",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
 
-            externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
-            GlobalVariable.ReverseTotalAmount=0.0
-            finish()
-            overridePendingTransition(
-                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-            );
+            try {
+                tripreverse.add(method)
+                dbViewmodel.insertTripReverse(tripreverse)
+                dbViewmodel.insertLogReport(logreport)
+                GlobalVariable.remainingPass=0
+                GlobalVariable.destinationcounter=1
+                GlobalVariable.origincounter=0
+                GlobalVariable.tripreverse = GlobalVariable.tripreverse?.plus(1)
+                externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
+                GlobalVariable.ReverseTotalAmount=0.0
+                finish()
+                overridePendingTransition(
+                    R.anim.screenslideleft, R.anim.screen_slide_out_right,
+                );
+            }catch (e:java.lang.Exception){
+                var logreport = LogReport(
+                    LogReportId=0,
+                    dateTimeStamp= formattedDateTime,
+                    deviceName=GlobalVariable.deviceName!!,
+                    description = "Error on change route ${e.message}",
+                    ingressoRefId = GlobalVariable.ingressoRefId
+                )
+                dbViewmodel.insertLogReport(logreport)
+            }
+
         }
 
         _binding!!.btnclose.setOnClickListener {

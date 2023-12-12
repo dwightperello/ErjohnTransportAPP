@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.PrimaryKey
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
@@ -109,18 +110,35 @@ class DispatchActivity : AppCompatActivity() {
                 terminal = GlobalVariable.terminal
             )
             dispatch?.add(method)
+
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Start Dispatch",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+
             try {
                 externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
                 dbViewmodel.insertmPadAssignmentBulk(dispatch!!)
                 val resultIntent = Intent()
                 setResult(Activity.RESULT_OK, resultIntent)
 
-
+                dbViewmodel.insertLogReport(logreport)
                 GlobalVariable.isDispatched=true
                 GlobalVariable.isFromDispatch=true
                 finish()
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
+                var logreport= LogReport(
+                    LogReportId=0,
+                    dateTimeStamp= formattedDateTime,
+                    deviceName=GlobalVariable.deviceName!!,
+                    description = "Error on Dispatch ${e.message}",
+                    ingressoRefId = GlobalVariable.ingressoRefId
+                )
+                dbViewmodel.insertLogReport(logreport)
             }
 
 

@@ -16,12 +16,22 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
                                          private val synchInspectionreportdao: Synch_InspectionReportDao, private val synchMpadassignmentdao: Synch_mPadAssignmentDao, private val ticketnumberdao: TicketNumDAO,
                                          private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,
                                          private val synchTripwitholdingdao: Synch_TripwitholdingDao,
-                                         private val hotSpotDAO: HotSpotDAO,private val mPadUnitsDao: mPadUnitsDao, private val terminal:TerminalDao,private val tripReverseDao: TripReverseDao,private val synchTripreversedao: Synch_TripReverseDao) {
+                                         private val hotSpotDAO: HotSpotDAO,private val mPadUnitsDao: mPadUnitsDao, private val terminal:TerminalDao,private val tripReverseDao: TripReverseDao,private val synchTripreversedao: Synch_TripReverseDao,
+                                         private val logReportDao: LogReportDao,private val synchLogreportdao: Synch_LogReportDao, private val fareDao: FareDao)
+{
 
     //region
 
     fun getTicketnumbers():TicketCounterTable{
         return ticketnumberdao.getTicketstart()
+    }
+
+  suspend  fun getFares():FareTable{
+        return fareDao.getFares()
+    }
+
+   suspend fun insertFare(entity:FareTable){
+        return fareDao.insertFare(entity)
     }
 
     fun updateTicketnumbers(ticketcounter:Int,refid: Int, id: Int){
@@ -49,6 +59,14 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun getMpadUnits():List<mPadUnitsTable>{
         return mPadUnitsDao.getMpadUnits()
+    }
+
+    fun insertLogReport(entity:LogReport){
+        return logReportDao.insertLogReport(entity)
+    }
+
+    fun getLogReports():List<LogReport>{
+        return logReportDao.getLogReport()
     }
 
     fun insertHotspotBulk(entity:List<HotSpotsTable>){
@@ -186,8 +204,12 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return tripWitholdingDao.gettripwitholding(GlobalVariable.ingressoRefId)
     }
 
-    fun insertTripWitholdingbulk(entity: List<TripWitholdingTable>){
+    fun insertTripWitholdingbulk(entity: TripWitholdingTable){
         return tripWitholdingDao.insertripwitholdingBulk(entity)
+    }
+
+    fun updateWitholding(refid: Int, amount: Double, witholdingtype: String){
+        return tripWitholdingDao.updateTripWitholding(refid,amount,witholdingtype)
     }
 
     fun getWitholdingtype():List<WitholdingTypeTable>{
@@ -287,6 +309,14 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return synchTripwitholdingdao.insert_synch_witholding(entity)
     }
 
+    fun insert_synch_LogReport(entity:List<Synch_LogReport>){
+        return synchLogreportdao.insert_synch_LogReport(entity)
+    }
+
+    fun get_synch_logreport(refid: Int):List<Synch_LogReport>{
+        return  synchLogreportdao.get_synch_LogReport(refid)
+    }
+
     fun getAllIngressoRefID():List<Int>{
         return ingressoDao.getAllIngressoreif()
     }
@@ -299,6 +329,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         tripTicketDao.truncateTripticket()
         tripWitholdingDao.truncatetripWitholding()
         tripReverseDao.truncateTripReverse()
+        logReportDao.truncateLogReport()
     }
 
     fun truncateCopyTables(){
@@ -310,6 +341,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         synchTripticketdao.truncatecopytripticket()
         synchTripwitholdingdao.truncatecopywitholdings()
         synchTripreversedao.truncatecopyTripReverse()
+        synchLogreportdao.truncatecopyLogReport()
     }
 
     fun truncateForUpdate(){

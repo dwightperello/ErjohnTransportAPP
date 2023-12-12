@@ -14,8 +14,16 @@ interface TripWitholdingDao {
     @Query("Select * from TripWitholding where ingressoRefId = :refid")
     fun gettripwitholding(refid:Int):List<TripWitholdingTable>
 
+    @Query("UPDATE TripWitholding SET amount = :amount WHERE ingressoRefId = :refid AND witholdingType = :witholdingtype")
+    fun updateTripWitholding(refid: Int, amount: Double, witholdingtype: String): Unit
+
+
+//    @Insert
+//    fun insertripwitholdingBulk(entity:List<TripWitholdingTable>)
     @Insert
-    fun insertripwitholdingBulk(entity:List<TripWitholdingTable>)
+    fun insertripwitholdingBulk(entity:TripWitholdingTable)
+
+
 
     @Query("DELETE FROM TripWitholding")
     fun truncatetripWitholding()

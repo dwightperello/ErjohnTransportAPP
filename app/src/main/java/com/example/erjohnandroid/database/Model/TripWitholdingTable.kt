@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "TripWitholding")
 data class TripWitholdingTable(
     @PrimaryKey(autoGenerate = true) val TripwitholdingId:Int,
-    val amount: Double?,
+    var amount: Double?,
     val dateTimeStamp: String?,
     val mPadUnit: String?,
     val name: String?,

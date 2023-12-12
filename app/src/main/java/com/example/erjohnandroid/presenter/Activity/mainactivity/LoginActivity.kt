@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
+import com.example.erjohnandroid.database.Model.LogReport
+import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.databinding.ActivityLoginBinding
 import com.example.erjohnandroid.databinding.ActivityMainBinding
 import com.example.erjohnandroid.domain.model.request.request_login
@@ -17,10 +19,13 @@ import com.example.erjohnandroid.util.ResultState
 import com.example.erjohnandroid.util.showCustomToast
 import com.example.erjohnandroid.util.startActivityWithAnimation
 import okhttp3.ResponseBody
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LoginActivity : BasedActivity() {
     private val networkViewModel:networkViewModel by viewModels()
     private  var _binding:ActivityLoginBinding?=null
+    private val dbViewmodel: RoomViewModel by viewModels()
     //private val networkViewModel: networkViewModel by viewModels()
 
 
@@ -59,13 +64,19 @@ class LoginActivity : BasedActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
     }
-
+    private fun getdate():String{
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentDate = Date()
+        return dateFormat.format(currentDate)
+    }
     private fun ProcessLogin(state: ResultState<response_login>?){
         when(state){
             is ResultState.Loading ->{
                 showCustomProgressDialog()
             }
             is ResultState.Success->{
+                val formattedDateTime = getdate()
+
 
                 GlobalVariable.token= state.data.token
                 hideProgressDialog()
@@ -74,6 +85,8 @@ class LoginActivity : BasedActivity() {
             is ResultState.Error->{
                 hideProgressDialog()
                 Toast(this).showCustomToast(state.exception.toString(),this)
+                val formattedDateTime = getdate()
+
 
             }
             else -> {}

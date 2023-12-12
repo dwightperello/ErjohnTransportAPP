@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.InspectionReportTable
+import com.example.erjohnandroid.database.Model.LogReport
 import com.example.erjohnandroid.database.Model.PartialRemitTable
 import com.example.erjohnandroid.database.Model.TerminalTable
 import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
@@ -106,13 +107,30 @@ class PartialRemitActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId,
                 terminal = GlobalVariable.terminal
             )
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Amount Remit ${stringWithoutSpaces.toDouble()}",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+
             try {
                 dbViewmodel.insertPartialremit(method)
+                dbViewmodel.insertLogReport(logreport)
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
+                var logreport= LogReport(
+                    LogReportId=0,
+                    dateTimeStamp= formattedDateTime,
+                    deviceName=GlobalVariable.deviceName!!,
+                    description = "Error on partial Remit ${e.message}}",
+                    ingressoRefId = GlobalVariable.ingressoRefId
+                )
+                dbViewmodel.insertLogReport(logreport)
             }
 
-           // printText("Erjohn & Almark Transit Corp ")
+
             printText()
             finish()
             overridePendingTransition(
@@ -121,7 +139,16 @@ class PartialRemitActivity : AppCompatActivity() {
         }
 
         _binding.btnclose.setOnClickListener {
+            val formattedDateTime = getdate()
             super.onBackPressed()
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Partial Remit Cancelled",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+            dbViewmodel.insertLogReport(logreport)
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );
@@ -201,7 +228,7 @@ class PartialRemitActivity : AppCompatActivity() {
 
 
     private fun getdate():String{
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Date()
         return dateFormat.format(currentDate)
     }

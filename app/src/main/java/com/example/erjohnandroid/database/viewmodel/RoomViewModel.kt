@@ -152,7 +152,20 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _AllTripReverse:MutableLiveData<List<TripReverseTable>> = MutableLiveData()
     val AllTripReverse:LiveData<List<TripReverseTable>> = _AllTripReverse
 
+    private var _Alllogreports:MutableLiveData<List<LogReport>> = MutableLiveData()
+    val Alllogreports:LiveData<List<LogReport>> = _Alllogreports
+
+    private var _synch_log_report:MutableLiveData<List<Synch_LogReport>> = MutableLiveData()
+    val synch_log_report:LiveData<List<Synch_LogReport>> = _synch_log_report
+
+    private var _fare:MutableLiveData<FareTable> = MutableLiveData()
+    val fare:LiveData<FareTable> = _fare
+
     //region OTHER METHODS
+
+    init {
+      getFare()
+    }
 
     fun getBusinfo(id:Int){
         viewModelScope.launch() {
@@ -168,9 +181,23 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun getFare(){
+        viewModelScope.launch() {
+            val records=  repository.getFares()
+            _fare.value=records
+        }
+    }
+
     fun insertBusinfo(entity: List<BusInfoTableItem>){
         viewModelScope.launch() {
             val records=  repository.insertBusinfoBulk(entity)
+
+        }
+    }
+
+    fun insertLogReport(entity: LogReport){
+        viewModelScope.launch() {
+            val records=  repository.insertLogReport(entity)
 
         }
     }
@@ -186,6 +213,12 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.insertMpadunitsBulk(entity)
 
+        }
+    }
+
+  suspend  fun insertfare(entity: FareTable){
+        viewModelScope.launch() {
+            val records=  repository.insertFare(entity)
         }
     }
 
@@ -447,9 +480,16 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun insertTripwitholdingbulk(entity: List<TripWitholdingTable>){
+    fun insertTripwitholdingbulk(entity: TripWitholdingTable){
         viewModelScope.launch() {
             val records=  repository.insertTripWitholdingbulk(entity)
+
+        }
+    }
+
+    fun updateripwitholding(refid: Int, amount: Double, witholdingtype: String){
+        viewModelScope.launch() {
+            val records=  repository.updateWitholding(refid,amount,witholdingtype)
 
         }
     }
@@ -576,6 +616,20 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun get_synch_logReport(refid: Int){
+        viewModelScope.launch() {
+            val records = repository.get_synch_logreport(refid)
+            _synch_log_report.value = records
+        }
+    }
+
+    fun get_logReport(){
+        viewModelScope.launch() {
+            val records = repository.getLogReports()
+            _Alllogreports.value = records
+        }
+    }
+
     fun insert_synch_mpad(entity: List<Synch_mpadAssignmentsTable>){
         viewModelScope.launch() {
             val records=  repository.insert_synch_mpad(entity)
@@ -628,6 +682,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     fun insert_synch_witholding(entity: List<Synch_TripwitholdingTable>){
         viewModelScope.launch() {
             val records=  repository.insert_synch_witholding(entity)
+
+        }
+    }
+
+    fun insert_synch_LogReport(entity: List<Synch_LogReport>){
+        viewModelScope.launch() {
+            val records=  repository.insert_synch_LogReport(entity)
 
         }
     }

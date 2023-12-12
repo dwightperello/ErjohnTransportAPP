@@ -19,9 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.erjohnandroid.R
-import com.example.erjohnandroid.database.Model.HotSpotsTable
-import com.example.erjohnandroid.database.Model.LineSegmentTable
-import com.example.erjohnandroid.database.Model.TripTicketTable
+import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.TicketConvertions
 import com.example.erjohnandroid.database.Model.convertions.TripAmountPerReverse
 import com.example.erjohnandroid.database.Model.convertions.TripGross
@@ -71,7 +69,7 @@ class TIcketingActivity : AppCompatActivity() {
     var postTripticket:TripTicketTable?= null
 
     private var qty:Int=1
-    val fare:Double=30.00
+
 //    var discountamount:Double=0.20
     val pesoSign = '\u20B1'
     var totalfare:Double=0.0
@@ -125,11 +123,30 @@ class TIcketingActivity : AppCompatActivity() {
         _binding.txtpesosign.text= pesoSign.toString()
 
         _binding.btnclose.setOnClickListener {
+            val formattedDateTime = getCurrentDateInFormat()
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Ticketing Close",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+            dbViewmodel.insertLogReport(logreport)
+
             super.onBackPressed()
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );
         }
+        val formattedDateTime = getCurrentDateInFormat()
+        var logreport= LogReport(
+            LogReportId=0,
+            dateTimeStamp= formattedDateTime,
+            deviceName=GlobalVariable.deviceName!!,
+            description = "Start Ticket",
+            ingressoRefId = GlobalVariable.ingressoRefId
+        )
+        dbViewmodel.insertLogReport(logreport)
 
 
 
@@ -167,7 +184,19 @@ class TIcketingActivity : AppCompatActivity() {
         dbViewmodel.tripgross.observe(this,Observer{
             state -> ProcessGross(state)
         })
+
+        dbViewmodel.fare.observe(this, Observer {
+                state -> ProcessFare(state)
+        })
     }
+
+    private fun ProcessFare(state: FareTable){
+        GlobalVariable.discountAmount= state.discountAmount
+        GlobalVariable.basefair=state.baseAmount
+        GlobalVariable.exceedAmount=state.exceedAmount
+        GlobalVariable.specialexceedAmount=state.specialExceedAmount
+    }
+
 
     val ProcessAmountPerReverse:(state: TripAmountPerReverse?) ->Unit={
 
@@ -791,7 +820,10 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     val computeAmount:()->String ={
-        val discountamount: Double = 0.20
+        val discountamount: Double = GlobalVariable.discountAmount
+        val fare:Double=GlobalVariable.basefair
+        val specialExceedamount:Double= GlobalVariable.specialexceedAmount
+        val exceedAmount:Double=GlobalVariable.exceedAmount
         var baggageamount:Double=0.0
         var KMdiff:Int=0
         var amount:String?=null
@@ -840,7 +872,7 @@ class TIcketingActivity : AppCompatActivity() {
                             }
 
                             else if (KMdiff > 10 && origin?.kmPoint!! <= 10) {
-                                val baseFare = KMdiff!! * 2.65
+                                val baseFare = KMdiff!! * specialExceedamount
                                 if (passtype in listOf("Senior", "Student", "PWD")) {
                                     val discount = baseFare * discountamount
                                     val amountAfterDiscount = baseFare - discount
@@ -861,7 +893,7 @@ class TIcketingActivity : AppCompatActivity() {
                             }
 
                             else if (origin?.kmPoint!! >= 10 &&  KMdiff > 9) {
-                                val baseFare = KMdiff!! * 2.65
+                                val baseFare = KMdiff!! * specialExceedamount
                                 if (passtype in listOf("Senior", "Student", "PWD"))
                                 {
                                     val discount = baseFare * discountamount
@@ -904,20 +936,20 @@ class TIcketingActivity : AppCompatActivity() {
                             }
 
                             else if (KMdiff >9) {
-                                val discountamount: Double = 0.20
+
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 {
 //                                    discount = (discountamount / 100) * 15.0 // IF KM ORIGIN IS ABOVE 10 but destination is below 16 fare =15.0
 //                                    amountafterdiscount = fare - discount
 //                                    total = amountafterdiscount * qty
                                     getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.65
+                                    getExceedAmount = getkmdiff * specialExceedamount
                                     discount = getExceedAmount * discountamount
                                     amountafterdiscount = getExceedAmount - discount
                                     total = amountafterdiscount
                                     total = total * qty
                                 } else {
-                                    getExceedAmount = KMdiff!! * 2.65
+                                    getExceedAmount = KMdiff!! * specialExceedamount
                                     total = getExceedAmount
                                     total = total * qty + 2
                                 }
@@ -987,7 +1019,7 @@ class TIcketingActivity : AppCompatActivity() {
                             }
                             if(KMdiff <= 13){
 //                                val discountamount:Double=20.0
-                                val discountamount:Double=0.20
+
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     discount= fare *  discountamount
                                     amountafterdiscount= fare - discount
@@ -1002,10 +1034,10 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                             }
                             else if(KMdiff > 13 && destination?.kmPoint!!<=35){
-                                val discountamount:Double=0.20
+//                                val discountamount:Double=0.20
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.35
+                                    getExceedAmount = getkmdiff * exceedAmount
                                     discount= getExceedAmount *   discountamount
                                     amountafterdiscount= getExceedAmount - discount
                                     total = amountafterdiscount
@@ -1013,16 +1045,16 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                                 else
                                 {
-                                    getExceedAmount= KMdiff!! * 2.35
+                                    getExceedAmount= KMdiff!! * exceedAmount
                                     total = getExceedAmount
                                     total= total * qty + 2
                                 }
                             }
                             else if(KMdiff>13 && destination?.kmPoint!!>35){
-                                val discountamount:Double=0.20
+
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.35
+                                    getExceedAmount = getkmdiff * exceedAmount
                                     discount= getExceedAmount *   discountamount
                                     amountafterdiscount= getExceedAmount - discount
                                     total = amountafterdiscount
@@ -1030,7 +1062,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                                 else
                                 {
-                                    getExceedAmount= KMdiff!! * 2.35
+                                    getExceedAmount= KMdiff!! * exceedAmount
                                    // getExceedAmount= KMdiff!! * 150.00
                                     total = getExceedAmount
                                     total= total * qty
@@ -1045,7 +1077,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 _binding.btnPrintticke.isVisible=false
                             }else _binding.btnPrintticke.isVisible= true
                             if(KMdiff!! <= 13){
-                                val discountamount:Double=0.20
+
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     discount= fare *  discountamount
                                     amountafterdiscount= fare - discount
@@ -1055,10 +1087,10 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                             }
                             else if(KMdiff > 13 && origin?.kmPoint!!<=35){
-                                val discountamount:Double=0.20
+
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.35
+                                    getExceedAmount = getkmdiff * exceedAmount
                                     discount= getExceedAmount *   discountamount
                                     amountafterdiscount= getExceedAmount - discount
                                     total = amountafterdiscount
@@ -1066,16 +1098,16 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                                 else
                                 {
-                                    getExceedAmount= KMdiff!! * 2.35
+                                    getExceedAmount= KMdiff!! * exceedAmount
                                     total = getExceedAmount
                                     total= total * qty + 2
                                 }
                             }
                             else if(KMdiff>13 && origin?.kmPoint!!>35){
-                                val discountamount:Double=0.20
+
                                 if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
                                     getkmdiff = KMdiff
-                                    getExceedAmount = getkmdiff * 2.35
+                                    getExceedAmount = getkmdiff * exceedAmount
                                     discount= getExceedAmount *   discountamount
                                     amountafterdiscount= getExceedAmount - discount
                                     total = amountafterdiscount
@@ -1083,7 +1115,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                                 else
                                 {
-                                    getExceedAmount= KMdiff!! * 2.35
+                                    getExceedAmount= KMdiff!! * exceedAmount
                                     total = getExceedAmount
                                     total= total * qty
                                 }
@@ -1174,6 +1206,8 @@ class TIcketingActivity : AppCompatActivity() {
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         registerReceiver(batteryReceiver, filter)
         computeAmount()
+
+
     }
 
     override fun onPause() {
@@ -1549,18 +1583,18 @@ class TIcketingActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-               mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
-//                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
-                mIPosPrinterService!!.printQRCode("000${GlobalVariable.ticketnumber .toString()+ "-" + _binding.txtoriginKM.text.toString()+ "-" +_binding.txtDestination.text.toString() }\n", 6, 1, callback)
-//                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
-                mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText(
-                    "********************************\n",
-                    "ST",
-                    24,
-                    callback
-                )
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//               mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
+////                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
+//                mIPosPrinterService!!.printQRCode("000${GlobalVariable.ticketnumber .toString()+ "-" + _binding.txtoriginKM.text.toString()+ "-" +_binding.txtDestination.text.toString() }\n", 6, 1, callback)
+////                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
+//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+//                mIPosPrinterService!!.printSpecifiedTypeText(
+//                    "********************************\n",
+//                    "ST",
+//                    24,
+//                    callback
+//                )
 //                mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 

@@ -83,11 +83,13 @@ class IngressoActivity : AppCompatActivity() {
     var infault:String?= ""
     var expensesTotal:String?= "0.0"
     var witholdingTotal:String="0.0"
-//    var manualticket:Double=0.0
-//    var cancelticket:Double=0.0
-//
-//
 
+
+    var previousmanualticket:Double=0.0
+    var previouscancelticket:Double=0.0
+//
+//
+    var canceledTickectamount:Double=0.0
 //
 //    var totalTripcost:Double=0.0
 //    var totalwitholding:Double=0.0
@@ -161,6 +163,9 @@ class IngressoActivity : AppCompatActivity() {
             manual = stringWithoutSpaces.replace(" ", "")
 
             if(totalamount<=manual.toDouble()) return@setOnClickListener
+            cancelticket= arrayListOf()
+            totalamount += previouscancelticket
+
 
             cancelticket.add(manual.toDouble())
             totalamount -= manual.toDouble()
@@ -169,6 +174,7 @@ class IngressoActivity : AppCompatActivity() {
 
             _binding.txttotalgross.text="${ans}"
             _binding.txtnetcollection.text="${ans}"
+            previouscancelticket = manual.toDouble()
 
         }
 
@@ -245,7 +251,7 @@ class IngressoActivity : AppCompatActivity() {
             }
             val formattedDateTime = getCurrentDateInFormat()
             var manualticketamount:Double=0.0
-            var canceledTickectamount:Double=0.0
+            canceledTickectamount=0.0
 
             if(manualticket.isNullOrEmpty()){
                 manualticketamount=0.0
@@ -299,6 +305,11 @@ class IngressoActivity : AppCompatActivity() {
                         state -> ProcessAllTripReverse(state)
                 })
 
+                dbViewmodel.get_logReport()
+                dbViewmodel.Alllogreports.observe(this, Observer {
+                    state -> ProcessLogReports(state)
+                })
+
 
 
                 Processpartialremit(AllPartialRemit)
@@ -327,6 +338,20 @@ class IngressoActivity : AppCompatActivity() {
 
         _binding.btnclose.setOnClickListener {
             showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
+        }
+
+        try {
+            val formattedDateTime = getCurrentDateInFormat()
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Start Ingresso",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+            dbViewmodel.insertLogReport(logreport)
+        }catch (e:java.lang.Exception){
+            Log.e("error",e.message.toString())
         }
 
     }
@@ -422,7 +447,7 @@ class IngressoActivity : AppCompatActivity() {
     }
 
     fun getCurrentDateInFormat(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Date()
         return dateFormat.format(currentDate)
     }
@@ -525,17 +550,47 @@ class IngressoActivity : AppCompatActivity() {
         }
     }
 
+    var totalwitholdingamount:Double=0.0
     val Processwitholding:(state:List<TripWitholdingTable>) ->Unit={
+        var amount:Double=0.0
         var withold:Double=0.0
         var witholding:String="0.0"
         if(!it.isNullOrEmpty()) {
-            it.forEach { witholding->
-                if(!AllWitholding.contains(witholding)){
-                    AllWitholding.add(witholding)
-                }
+            it.forEach {
+                amount += it.amount!!
             }
 
-            totalamount += AllWitholding.last().amount!! // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
+            totalamount -= totalwitholdingamount
+            totalamount += amount
+
+
+
+
+            it.forEach { witholding->
+                AllWitholding.add(witholding)
+//                val containsWithType = AllWitholding.any{it.witholdingType ==   witholding.witholdingType};
+//                if(!containsWithType){
+//                    AllWitholding.add(witholding)
+//                    totalamount += AllWitholding.last().amount!!
+//                }else{
+//                    var amount = witholding.amount
+//                    totalamount -= GlobalVariable.priorWitholdingAmount!!
+//                    totalamount += amount!!
+//                }
+
+
+//                if(!AllWitholding.contains(witholding)){
+//                    AllWitholding.add(witholding)
+//                    totalamount += AllWitholding.last().amount!!
+//                }else
+//                {
+//                    var amount = witholding.amount
+//                    totalamount -= GlobalVariable.priorWitholdingAmount!!
+//                    totalamount += amount!!
+//                }
+            }
+
+           // NEED TO CLARIFY IF WITHOLDING IS MINUS TO TOTAL SALES
             val decimalVat = DecimalFormat("#.00")
             _binding.txtnetcollection.text="${decimalVat.format(totalamount)}"
 
@@ -546,7 +601,9 @@ class IngressoActivity : AppCompatActivity() {
 
             witholding = decimalVat.format(withold)
             _binding.btnWitholding.text="ENTER / " +"${witholding}"
+           // _binding.btnWitholding.text="ENTER"
             witholdingTotal = witholding
+            totalwitholdingamount = amount
 
            // totalamount-=
         }
@@ -615,6 +672,7 @@ class IngressoActivity : AppCompatActivity() {
     private var tripcost:ArrayList<Synch_TripCostTable> = arrayListOf()
     private var withodling:ArrayList<Synch_TripwitholdingTable> = arrayListOf()
     private var TripReversesynching:ArrayList<Synch_TripReverseTable> = arrayListOf()
+    private var LogReportsynching:ArrayList<Synch_LogReport> = arrayListOf()
 
     val ProcessTriptickets:(state: List<TripTicketTable>) ->Unit={
         if(it!=null) {
@@ -673,6 +731,26 @@ class IngressoActivity : AppCompatActivity() {
             }
 
             dbViewmodel.insert_synch_TripReverse(TripReversesynching)
+        }
+    }
+
+    val ProcessLogReports:(state:List<LogReport>) ->Unit={
+
+
+        if(it!=null) {
+
+            it.forEach {
+                var method= Synch_LogReport(
+                    Id = 0,
+                    description= it.description,
+                    dateTimeStamp = it.dateTimeStamp,
+                    deviceName = it.deviceName,
+                    ingressoRefId = it.ingressoRefId!!
+                )
+                LogReportsynching.add(method)
+            }
+
+            dbViewmodel.insert_synch_LogReport(LogReportsynching)
         }
     }
 
@@ -836,6 +914,7 @@ class IngressoActivity : AppCompatActivity() {
         driver=null
         bus=null
         GlobalVariable.bonusArraylist = arrayListOf()
+        GlobalVariable.witholds= arrayListOf()
 
         tripreverse=1
 
@@ -1311,6 +1390,7 @@ class IngressoActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("SALES\n\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${gross}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Cancelled: ${canceledTickectamount}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Expenses: ${expensesTotal}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Bonus Expenses: ${finalbonusIfAny}\n", "ST", 24, callback)

@@ -40,6 +40,7 @@ class SynchActivity : AppCompatActivity() {
     private var tripwitholding:ArrayList<Tripwitholding>?= arrayListOf()
     private var triptickets:ArrayList<tickettrip>?= arrayListOf()
     private var tripReverse:ArrayList<TripReverse>?= arrayListOf()
+    private var logReport:ArrayList<LogReports>?= arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,6 +115,7 @@ class SynchActivity : AppCompatActivity() {
                 dbViewmodel.get_synch_trip_witholding(it)
                 dbViewmodel.getTicketsForSynch(it)
                 dbViewmodel.getTripReverseForSynch(it)
+                dbViewmodel.get_synch_logReport(it)
                 var method= postAllItem(
                     totalCollection = ingresso?.totalCollection ?:0.0,
                     manualTicket = ingresso?.manualTicket ?: 0.0,
@@ -139,7 +141,8 @@ class SynchActivity : AppCompatActivity() {
                     triptickets = triptickets?.toList() ,
                     tripwitholding = tripwitholding?.toList(),
                     terminal =ingresso?.terminal ?:"None Selected",
-                    tripreverse = tripReverse?.toList()
+                    tripreverse = tripReverse?.toList(),
+                    logreport =logReport!!.toList()
 
                 )
 
@@ -154,6 +157,7 @@ class SynchActivity : AppCompatActivity() {
                tripwitholding=arrayListOf()
                triptickets= arrayListOf()
                tripReverse= arrayListOf()
+               logReport= arrayListOf()
 
            }
 
@@ -209,6 +213,10 @@ class SynchActivity : AppCompatActivity() {
 
         dbViewmodel.tripreversesycnh.observe(this,Observer{
             state->ProcessTripReverseAll(state)
+        })
+
+        dbViewmodel.synch_log_report.observe(this,Observer{
+                state->ProcessNetworkLogreport(state)
         })
 
 
@@ -407,7 +415,37 @@ class SynchActivity : AppCompatActivity() {
 
 
 
+    private fun ProcessNetworkLogreport(state: List<Synch_LogReport>?){
+        if(!state.isNullOrEmpty()){
 
+
+            state.forEach {
+                var method= NetworkLogreportItem(
+                    dateTimeStamp = it.dateTimeStamp,
+                    deviceName = it.deviceName,
+                    description = it.description
+                )
+
+
+                var method2 = LogReports(
+                    id = 0,
+                    deviceName = method.deviceName,
+                    description = method.description,
+                    dateTimeStamp = method.dateTimeStamp,
+                    ingressoId = 0
+                )
+                logReport?.add(method2)
+                // triptickets?.add(method2)
+                _binding!!.txtPostsynching.text="\n\n FETCH TRIP LOGS...."
+
+            }
+            // dbViewmodel.getAllIngresso()
+        }
+        else{
+            Toast(this).showCustomToast("NO TRIP REVERSE FOUND",this)
+            return
+        }
+    }
 
     private fun Processtripticket(state: List<Sycn_TripticketTable>?){
         if(!state.isNullOrEmpty()){

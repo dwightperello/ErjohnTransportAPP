@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.PrimaryKey
 import com.example.erjohnandroid.R
+import com.example.erjohnandroid.database.Model.LogReport
 import com.example.erjohnandroid.database.Model.TerminalTable
 import com.example.erjohnandroid.database.Model.TripReverseTable
 import com.example.erjohnandroid.database.Model.TripTicketTable
@@ -91,6 +92,15 @@ class ReverseActivity : AppCompatActivity() {
             tripreverse.add(method)
 
             dbViewmodel.insertTripReverse(tripreverse)
+
+            var logreport= LogReport(
+                LogReportId=0,
+                dateTimeStamp= formattedDateTime,
+                deviceName=GlobalVariable.deviceName!!,
+                description = "Reverse from ${GlobalVariable.direction}",
+                ingressoRefId = GlobalVariable.ingressoRefId
+            )
+            dbViewmodel.insertLogReport(logreport)
 
             try {
                 if(GlobalVariable.direction.equals("South"))
@@ -228,7 +238,7 @@ class ReverseActivity : AppCompatActivity() {
     }
 
     private fun getdate():String{
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Date()
         return dateFormat.format(currentDate)
     }

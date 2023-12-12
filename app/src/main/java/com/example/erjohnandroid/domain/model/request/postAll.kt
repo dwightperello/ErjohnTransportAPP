@@ -26,6 +26,7 @@ data class postAllItem(
     val triptickets: List<tickettrip>?,
     val tripwitholding: List<Tripwitholding>?,
     val tripreverse:List<TripReverse>?,
+    val logreport: List<LogReports>,
     val terminal:String
 )
 
@@ -88,4 +89,12 @@ data class TripReverse(
     val reverseId:Int,
     val terminal: String,
     val ingId:Int
+)
+
+data class LogReports(
+    val dateTimeStamp: String,
+    val description: String,
+    val deviceName: String,
+    val id: Int,
+    val ingressoId: Int
 )

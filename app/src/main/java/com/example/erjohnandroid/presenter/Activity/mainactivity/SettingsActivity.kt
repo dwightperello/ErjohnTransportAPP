@@ -23,6 +23,10 @@ import kotlin.collections.ArrayList
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.erjohnandroid.database.Model.BusInfoTableItem
+import com.example.erjohnandroid.database.viewmodel.externalViewModel
+import com.example.erjohnandroid.presenter.adapter.BusAdapter
 import com.example.erjohnandroid.util.GlobalVariable
 
 @AndroidEntryPoint
@@ -30,7 +34,8 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var _binding:ActivitySettingsBinding
     private val sdviemodel: sd_viewmodel by viewModels()
     private val dbViewmodel:RoomViewModel by viewModels()
-
+    private  lateinit var busAdapter: BusAdapter
+    private val externalViewModel: externalViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding= ActivitySettingsBinding.inflate(layoutInflater)
@@ -40,6 +45,8 @@ class SettingsActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+        dbViewmodel.getBusinfo(2)
+
 
         _binding.btnReloadtickets.setOnClickListener {
             _binding!!.txtReload.text="PLEASE WAIT WHILE SYSTEM FETCH DATA FROM SD-CARD DATABASE \n FETCH TRIP TICKETS...."
@@ -73,6 +80,7 @@ class SettingsActivity : AppCompatActivity() {
             datePickerDialog.show()
         }
 
+
         _binding.btnSaveurl.setOnClickListener {
             if(_binding.etChangeurl.text.toString().isNullOrEmpty()){
                 Toast(this).showCustomToast("Please enter new URL",this)
@@ -85,8 +93,34 @@ class SettingsActivity : AppCompatActivity() {
             editor.apply()
 
         }
+
+        _binding.btnChangebus.setOnClickListener {
+            externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
+
+            Toast(this).showCustomToast("Success on bus change",this)
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
+            finish()
+        }
     }
 
+    override fun onStart() {
+        super.onStart()
+        dbViewmodel.businfo.observe(this, androidx.lifecycle.Observer {
+            state -> ProcessBus(state)
+        })
+    }
+    private var busList:List<BusInfoTableItem>?= null
+    private fun ProcessBus(state: List<BusInfoTableItem>?){
+        if(!state.isNullOrEmpty()){
+            busList=state
+            busAdapter = BusAdapter(this)
+            _binding.rvChangeBUs.adapter= busAdapter
+            _binding.rvChangeBUs.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+            busAdapter.showNumber(busList!!)
+        }
+    }
     var tripticket:ArrayList<TripTicketTable> = arrayListOf()
     private fun Processreload(state: List<TripTicketTable>?){
         if(!state.isNullOrEmpty()){
@@ -140,4 +174,13 @@ class SettingsActivity : AppCompatActivity() {
         );
         finish()
     }
+
+    fun changebus(role: BusInfoTableItem) {
+        GlobalVariable.bus= role.busNumber.toString()
+        // _binding!!.txtConfirmdispatch.text="BUS #: ${GlobalVariable.bus}"
+      //  _binding!!.txtBus.text=("\nBUS #: ${GlobalVariable.bus}")
+        Toast(this).showCustomToast("${GlobalVariable.bus}",this)
+    }
+
+
 }

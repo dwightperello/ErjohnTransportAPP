@@ -251,5 +251,22 @@ object ApplicationModule {
         return appdb.getsynchTripReversetDao()
     }
 
+    @Provides
+    @Singleton
+    fun ProvidesLogreport(appdb: AppDatabase):LogReportDao{
+        return appdb.getLogReportDao()
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidesynchLogReport(appdb: AppDatabase):Synch_LogReportDao{
+        return appdb.getsynchLogReportDao()
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidesFare(appdb: AppDatabase):FareDao{
+        return appdb.getFaredao()
+    }
 
 }

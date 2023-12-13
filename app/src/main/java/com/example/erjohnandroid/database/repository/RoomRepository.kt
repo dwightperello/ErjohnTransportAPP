@@ -41,7 +41,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return ticketnumberdao.insertticketnum(entity)
     }
 
-    fun getAllBusinfo(id:Int):List<BusInfoTableItem>{
+  suspend  fun getAllBusinfo(id:Int):List<BusInfoTableItem>{
         return busInfoDao.getBusinfo(id)
     }
 
@@ -49,7 +49,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return  hotSpotDAO.getHotspots(id)
     }
 
-    fun insertBusinfoBulk(entity:List<BusInfoTableItem>){
+   suspend fun insertBusinfoBulk(entity:List<BusInfoTableItem>){
         return busInfoDao.insertBusinfoBulk(entity)
     }
 
@@ -348,7 +348,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         synchLogreportdao.truncatecopyLogReport()
     }
 
-    fun truncateForUpdate(){
+  suspend  fun truncateForUpdate(){
         lineDao.truncateLines()
         busInfoDao.truncateBusinfo()
         companiesDao.truncateCopaniesDao()

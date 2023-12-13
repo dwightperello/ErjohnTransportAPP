@@ -9,11 +9,11 @@ import com.example.erjohnandroid.database.Model.BusInfoTableItem
 interface BusInfoDao {
 
     @Insert
-    fun insertBusinfoBulk(entity:List<BusInfoTableItem>)
+   suspend fun insertBusinfoBulk(entity:List<BusInfoTableItem>)
 
     @Query("SELECT * FROM BusInfo where companyId = :id")
-    fun getBusinfo(id:Int): List<BusInfoTableItem>
+   suspend fun getBusinfo(id:Int): List<BusInfoTableItem>
 
     @Query("DELETE FROM BusInfo")
-    fun truncateBusinfo()
+   suspend fun truncateBusinfo()
 }

@@ -15,11 +15,15 @@ interface TripCostDao {
     fun getTripCost(refid:Int):List<TripCostTable>
 
     @Insert
-    fun inserTripcostBulk(entity:List<TripCostTable>)
+    fun inserTripcostBulk(entity:TripCostTable)
 
     @Query("DELETE FROM TripCost")
     fun truncateTripcost()
 
     @Query("SELECT sum(amount) as total FROM TripCost")
     fun getTotalAmountTripcost(): TripCostTotal
+
+    @Query("UPDATE TripCost SET amount = :amount WHERE ingressoRefId = :refid AND costType = :costType")
+    fun updateExpenses(refid: Int, amount: Double, costType: String): Unit
+
 }

@@ -425,7 +425,7 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun inserTirpcostBUlk(entity: List<TripCostTable>){
+    fun inserTirpcostBUlk(entity: TripCostTable){
         viewModelScope.launch() {
             val records=  repository.inserttripcostBUlk(entity)
 
@@ -490,6 +490,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     fun updateripwitholding(refid: Int, amount: Double, witholdingtype: String){
         viewModelScope.launch() {
             val records=  repository.updateWitholding(refid,amount,witholdingtype)
+
+        }
+    }
+
+    fun updaterExprenses(refid: Int, amount: Double, costype: String){
+        viewModelScope.launch() {
+            val records=  repository.updateExpenses(refid,amount,costype)
 
         }
     }

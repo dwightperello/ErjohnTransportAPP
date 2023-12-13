@@ -77,6 +77,7 @@ class IngressoActivity : AppCompatActivity() {
     var cancelticket:ArrayList<Double> = arrayListOf()
 
     var totalamount:Double=0.0
+    var totalAmountGross:Double=0.0
     var drivercommision:String="0.0"
     var conductorcommision:String="0.0"
     val bonus = 100.0
@@ -113,14 +114,14 @@ class IngressoActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         val window = window
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                )
+//        window.decorView.systemUiVisibility = (
+//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                )
 
 
         initPrinter()
@@ -137,44 +138,87 @@ class IngressoActivity : AppCompatActivity() {
         _binding.btnAddmanual.setOnClickListener {
             var manual= _binding.etmanualticket.text.toString()
 
-            if(manual.isEmpty()) return@setOnClickListener
+            if(manual.isEmpty()){
+                Toast(this).showCustomToast("CHECK INPUT AMOUNT",this)
+                return@setOnClickListener
+            }
 
             val stringWithoutSpaces = manual.replace(" ", "")
             manual= stringWithoutSpaces.replace(" ", "")
-
+//            if(totalamount<=manual.toDouble()){
+//                Toast(this).showCustomToast("CHECK INPUT AMOUNT",this)
+//                return@setOnClickListener
+//            }
+           // manualticket= arrayListOf()
             manualticket.add(manual.toDouble())
 
-            totalamount += manual.toDouble()
+            totalAmountGross += manual.toDouble()
+
 
             val decimalVat = DecimalFormat("#.00")
-            val ans = decimalVat.format(totalamount)
+            val ans = decimalVat.format(totalAmountGross)
 
             _binding.txttotalgross.text="${ans}"
+            totalamount=ans.toDouble()
+           // _binding.txtnetcollection.text="${ans}"
+            commisionamount= computeCommissions(totalamount)
 
-            _binding.txtnetcollection.text="${ans}"
+//            val remit = decimalVat.format(totalamount)
+//            _binding.txtnetcollection.text="${remit}"
+
+            if(totalamount>=14000){
+                _binding.viewconductorbonus.isVisible=true
+                _binding.viewdriverbonus.isVisible=true
+                calculateBonus(totalamount)
+            }
+            totalamount -= commisionamount!!.toDouble()
+            totalamount -= partial
+            val remit = decimalVat.format(totalamount)
+            _binding.txtnetcollection.text="${remit}"
         }
 
         _binding.btnCancelledticket.setOnClickListener {
             var manual= _binding.etCancelledticket.text.toString()
 
-            if(manual.isEmpty()) return@setOnClickListener
+            if(manual.isEmpty()){
+                Toast(this).showCustomToast("CHECK INPUT AMOUNT",this)
+                return@setOnClickListener
+            }
 
             val stringWithoutSpaces = manual.replace(" ", "")
             manual = stringWithoutSpaces.replace(" ", "")
 
-            if(totalamount<=manual.toDouble()) return@setOnClickListener
+            if(totalAmountGross<=manual.toDouble()){
+                Toast(this).showCustomToast("CHECK INPUT AMOUNT",this)
+                return@setOnClickListener
+            }
             cancelticket= arrayListOf()
-            totalamount += previouscancelticket
-
+            totalAmountGross += previouscancelticket
+//            totalamount=totalAmountGross
 
             cancelticket.add(manual.toDouble())
-            totalamount -= manual.toDouble()
+            totalAmountGross -= manual.toDouble()
             val decimalVat = DecimalFormat("#.00")
-            val ans = decimalVat.format(totalamount)
+            val ans = decimalVat.format(totalAmountGross)
 
             _binding.txttotalgross.text="${ans}"
-            _binding.txtnetcollection.text="${ans}"
+            totalamount=ans.toDouble()
+           // _binding.txtnetcollection.text="${ans}"
+            commisionamount= computeCommissions(totalamount)
+
+//            val remit = decimalVat.format(totalamount)
+//            _binding.txtnetcollection.text="${remit}"
+
+            if(totalamount>=14000){
+                _binding.viewconductorbonus.isVisible=true
+                _binding.viewdriverbonus.isVisible=true
+                calculateBonus(totalamount)
+            }
             previouscancelticket = manual.toDouble()
+            totalamount -= commisionamount!!.toDouble()
+            totalamount -= partial
+            val remit = decimalVat.format(totalamount)
+            _binding.txtnetcollection.text="${remit}"
 
         }
 
@@ -440,9 +484,9 @@ class IngressoActivity : AppCompatActivity() {
         _binding.txttotalcommision.text=ans.toString()
 
         drivercommision = decimalVat.format(driver)
-        _binding.txtdrivercommision.text=drivercommision.toString()
+        _binding.txtdrivercommision.text=drivercommision
         conductorcommision=decimalVat.format(conductor)
-        _binding.txtconductorcommision.text=conductorcommision.toString()
+        _binding.txtconductorcommision.text=conductorcommision
         ans.toString()
     }
 
@@ -466,11 +510,13 @@ class IngressoActivity : AppCompatActivity() {
 
         if(it!=null) {
             totalamount=it.total
+            totalAmountGross= it.total
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
+            val ansGross= decimalVat.format(totalAmountGross)
 
             _binding.txttotalcollection.text="${ans}"
-            _binding.txttotalgross.text="${ans}"
+            _binding.txttotalgross.text="${ansGross}"
             _binding.txtnetcollection.text="${ans}"
 
           commisionamount= computeCommissions(totalamount)
@@ -494,9 +540,9 @@ class IngressoActivity : AppCompatActivity() {
 //            totalwitholding= it?.total!!
 //        }else totalwitholding=0.0
 //    }
-
+    var partial:Double=0.0
     val ProcessPartialremit:(state:List<PartialRemitTable>) ->Unit={
-        var partial:Double=0.0
+
         val decimalVat = DecimalFormat("#.00")
 
         if(it!=null) {
@@ -519,22 +565,27 @@ class IngressoActivity : AppCompatActivity() {
     }
 
 
-
+    var totalexpensesamount:Double=0.0
     val ProcessExpenses:(state:List<TripCostTable>) ->Unit={
         var expensesamount:Double=0.0
         var expenses="0.0"
+        var amount:Double=0.0
         if(!it.isNullOrEmpty()) {
 
-            it.forEach {expenses->
-
-                if(!AllTripCost.contains(expenses)){
-                    AllTripCost.add(expenses)
-                }
-
+            it.forEach {
+                amount +=it.amount!!
             }
 
 
-            totalamount -= AllTripCost.last().amount!!
+            totalamount += totalexpensesamount
+            totalamount -= amount
+
+            it.forEach {expenses->
+                    AllTripCost.add(expenses)
+            }
+
+
+           // totalamount -= AllTripCost.last().amount!!
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(totalamount)
             _binding.txtnetcollection.text="${ans}"
@@ -547,6 +598,7 @@ class IngressoActivity : AppCompatActivity() {
             expenses = decimalVat.format(expensesamount)
             _binding.btnExpenses.text="ENTER / " +"${expenses}"
             expensesTotal = expenses
+            totalexpensesamount =amount
         }
     }
 
@@ -915,7 +967,7 @@ class IngressoActivity : AppCompatActivity() {
         bus=null
         GlobalVariable.bonusArraylist = arrayListOf()
         GlobalVariable.witholds= arrayListOf()
-
+        GlobalVariable.expenses= arrayListOf()
         tripreverse=1
 
         GlobalVariable.AllWitholding= arrayListOf()

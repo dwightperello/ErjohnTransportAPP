@@ -38,7 +38,7 @@ class ExpensesActivity : AppCompatActivity() {
 
     private var expensestype:String?= null
 
-    private var expenses:ArrayList<TripCostTable> = arrayListOf()
+   // private var expenses:ArrayList<TripCostTable> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +74,21 @@ class ExpensesActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId
             )
 
-            expenses.add(method)
-            dbViewmodel.inserTirpcostBUlk(expenses)
+            val containsexpenses =GlobalVariable.expenses.any{it.costType ==   method.costType}
+            if(!containsexpenses){
+                GlobalVariable.expenses.add(method)
+                dbViewmodel.inserTirpcostBUlk(method)
+            }
+            else
+            {
+                var prior =GlobalVariable.expenses.find { it.costType==method.costType }
+                GlobalVariable.expenses.find { it.costType==method.costType }?.let {
+                    it.amount= stringcount.toDouble()
+                }
+                dbViewmodel.updaterExprenses(GlobalVariable.ingressoRefId,stringcount.toDouble(),expensestype!!)
+            }
+           // expenses.add(method)
+
 
             dbViewmodel.getTripcost()
             dbViewmodel.tripcost.distinctUntilChanged().observe(this, Observer {
@@ -90,9 +103,6 @@ class ExpensesActivity : AppCompatActivity() {
        GlobalVariable.AllTripCost= arrayListOf()
 
         if(!it.isNullOrEmpty()) {
-
-
-
           GlobalVariable.AllTripCost.addAll(it)
         }
         val resultIntent = Intent()

@@ -180,7 +180,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return tripCostDao.getTripCost(GlobalVariable.ingressoRefId)
     }
 
-    fun inserttripcostBUlk(entity: List<TripCostTable>){
+    fun inserttripcostBUlk(entity: TripCostTable){
         return tripCostDao.inserTripcostBulk(entity)
     }
 
@@ -210,6 +210,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun updateWitholding(refid: Int, amount: Double, witholdingtype: String){
         return tripWitholdingDao.updateTripWitholding(refid,amount,witholdingtype)
+    }
+
+    fun updateExpenses(refid: Int, amount: Double, costype: String){
+        return tripCostDao.updateExpenses(refid,amount,costype)
     }
 
     fun getWitholdingtype():List<WitholdingTypeTable>{

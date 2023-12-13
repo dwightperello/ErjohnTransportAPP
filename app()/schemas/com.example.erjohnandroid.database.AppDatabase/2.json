@@ -1,0 +1,1920 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "5a93bc4cd4fd0a945f167feea4ca3627",
+    "entities": [
+      {
+        "tableName": "Lines",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Lineid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER, `name` TEXT, `remarks` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Lineid",
+            "columnName": "Lineid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remarks",
+            "columnName": "remarks",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Lineid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "LineSegment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`LineSegmentid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER, `kmPoint` INTEGER, `lineId` INTEGER, `name` TEXT, `remarks` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "LineSegmentid",
+            "columnName": "LineSegmentid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "kmPoint",
+            "columnName": "kmPoint",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lineId",
+            "columnName": "lineId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remarks",
+            "columnName": "remarks",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "LineSegmentid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "BusInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`BusInfoId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `busNumber` INTEGER, `busTypeId` INTEGER, `id` INTEGER, `plateNumber` TEXT, `companyId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "BusInfoId",
+            "columnName": "BusInfoId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "busNumber",
+            "columnName": "busNumber",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "busTypeId",
+            "columnName": "busTypeId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "plateNumber",
+            "columnName": "plateNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "companyId",
+            "columnName": "companyId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "BusInfoId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Companies",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`CompaniesId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `companyName` TEXT, `id` INTEGER, `remarks` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "CompaniesId",
+            "columnName": "CompaniesId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "companyName",
+            "columnName": "companyName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remarks",
+            "columnName": "remarks",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "CompaniesId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "EmployeeRoles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`EmployeeroleId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER, `name` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "EmployeeroleId",
+            "columnName": "EmployeeroleId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "EmployeeroleId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Employees",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`EmployeeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `companyRolesId` INTEGER, `id` INTEGER, `lastName` TEXT, `name` TEXT, `pin` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "EmployeeId",
+            "columnName": "EmployeeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "companyRolesId",
+            "columnName": "companyRolesId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "lastName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pin",
+            "columnName": "pin",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "EmployeeId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ExpensesTypes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ExpensesTypeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER, `name` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "ExpensesTypeId",
+            "columnName": "ExpensesTypeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "ExpensesTypeId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "InspectionReport",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`InspectionReportId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `actualPassengerCount` INTEGER, `dateTimeStamp` TEXT, `difference` INTEGER, `direction` TEXT, `inspectorName` TEXT, `line` TEXT, `lineSegment` TEXT, `mPadUnit` TEXT, `qty` INTEGER, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "InspectionReportId",
+            "columnName": "InspectionReportId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actualPassengerCount",
+            "columnName": "actualPassengerCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "difference",
+            "columnName": "difference",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "direction",
+            "columnName": "direction",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "inspectorName",
+            "columnName": "inspectorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lineSegment",
+            "columnName": "lineSegment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "qty",
+            "columnName": "qty",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "InspectionReportId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "mPadAssignments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mPadAssignmentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `busNumber` TEXT, `conductorName` TEXT, `dataTimeStamp` TEXT, `dispatcherName` TEXT, `driverName` TEXT, `line` TEXT, `mPadUnit` TEXT, `ingressoRefId` INTEGER, `terminal` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "mPadAssignmentId",
+            "columnName": "mPadAssignmentId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "busNumber",
+            "columnName": "busNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "conductorName",
+            "columnName": "conductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataTimeStamp",
+            "columnName": "dataTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dispatcherName",
+            "columnName": "dispatcherName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverName",
+            "columnName": "driverName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "mPadAssignmentId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PassengerType",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`PassengerTypeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discount` REAL, `id` INTEGER, `name` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "PassengerTypeId",
+            "columnName": "PassengerTypeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "discount",
+            "columnName": "discount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "PassengerTypeId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TripCost",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`TripCostId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `costType` TEXT, `dateTimeStamp` TEXT, `driverConductorName` TEXT, `line` TEXT, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "TripCostId",
+            "columnName": "TripCostId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "costType",
+            "columnName": "costType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverConductorName",
+            "columnName": "driverConductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "TripCostId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TripTickets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`TripTicketId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `conductorName` TEXT, `dateTimeStamp` TEXT, `destination` TEXT, `driverName` TEXT, `line` TEXT, `mPadUnit` TEXT, `origin` TEXT, `passengerType` TEXT, `titcketNumber` TEXT, `KMOrigin` INTEGER, `KmDestination` INTEGER NOT NULL, `qty` INTEGER NOT NULL, `time` TEXT NOT NULL, `tripReverse` INTEGER, `ingressoRefId` INTEGER, `reverse` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "TripTicketId",
+            "columnName": "TripTicketId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "conductorName",
+            "columnName": "conductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destination",
+            "columnName": "destination",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverName",
+            "columnName": "driverName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passengerType",
+            "columnName": "passengerType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "titcketNumber",
+            "columnName": "titcketNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "KMOrigin",
+            "columnName": "KMOrigin",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "KmDestination",
+            "columnName": "KmDestination",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "qty",
+            "columnName": "qty",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tripReverse",
+            "columnName": "tripReverse",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reverse",
+            "columnName": "reverse",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "TripTicketId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TripWitholding",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`TripwitholdingId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `dateTimeStamp` TEXT, `mPadUnit` TEXT, `name` TEXT, `witholdingType` TEXT, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "TripwitholdingId",
+            "columnName": "TripwitholdingId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "witholdingType",
+            "columnName": "witholdingType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "TripwitholdingId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "WitholdingType",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`WitholdingTypeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER, `type` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "WitholdingTypeId",
+            "columnName": "WitholdingTypeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "WitholdingTypeId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "HotSpots",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`HotSpotsId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fare` REAL NOT NULL, `id` INTEGER NOT NULL, `lineid` INTEGER NOT NULL, `modeid` INTEGER, `namE2` TEXT, `name` TEXT, `pointfrom` INTEGER NOT NULL, `pointto` INTEGER NOT NULL, `tag` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "HotSpotsId",
+            "columnName": "HotSpotsId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fare",
+            "columnName": "fare",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineid",
+            "columnName": "lineid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "modeid",
+            "columnName": "modeid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "namE2",
+            "columnName": "namE2",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pointfrom",
+            "columnName": "pointfrom",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pointto",
+            "columnName": "pointto",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "HotSpotsId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TicketCounter",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ticketnumber` INTEGER NOT NULL, `ingressoRefId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ticketnumber",
+            "columnName": "ticketnumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PartialRemit",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`PartialremitId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `CashierName` TEXT, `Amount` REAL, `AmountRemited` REAL, `Line` TEXT, `DateTimeStamp` TEXT NOT NULL, `ingressoRefId` INTEGER, `terminal` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "PartialremitId",
+            "columnName": "PartialremitId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "CashierName",
+            "columnName": "CashierName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Amount",
+            "columnName": "Amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "AmountRemited",
+            "columnName": "AmountRemited",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Line",
+            "columnName": "Line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "DateTimeStamp",
+            "columnName": "DateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "PartialremitId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyTriptickets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `conductorName` TEXT, `dateTimeStamp` TEXT, `destination` TEXT, `driverName` TEXT, `line` TEXT, `mPadUnit` TEXT, `origin` TEXT, `passengerType` TEXT, `titcketNumber` TEXT, `qty` INTEGER NOT NULL, `ingressoRefId` INTEGER, `reverse` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "conductorName",
+            "columnName": "conductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destination",
+            "columnName": "destination",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverName",
+            "columnName": "driverName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passengerType",
+            "columnName": "passengerType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "titcketNumber",
+            "columnName": "titcketNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "qty",
+            "columnName": "qty",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reverse",
+            "columnName": "reverse",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyInspectionReport",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `actualPassengerCount` INTEGER, `dateTimeStamp` TEXT, `difference` INTEGER, `direction` TEXT, `inspectorName` TEXT, `line` TEXT, `lineSegment` TEXT, `mPadUnit` TEXT, `qty` INTEGER, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actualPassengerCount",
+            "columnName": "actualPassengerCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "difference",
+            "columnName": "difference",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "direction",
+            "columnName": "direction",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "inspectorName",
+            "columnName": "inspectorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lineSegment",
+            "columnName": "lineSegment",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "qty",
+            "columnName": "qty",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopymPadAssignments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `busNumber` TEXT, `conductorName` TEXT, `dataTimeStamp` TEXT, `dispatcherName` TEXT, `driverName` TEXT, `line` TEXT, `mPadUnit` TEXT, `ingressoRefId` INTEGER, `terminal` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "busNumber",
+            "columnName": "busNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "conductorName",
+            "columnName": "conductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dataTimeStamp",
+            "columnName": "dataTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dispatcherName",
+            "columnName": "dispatcherName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverName",
+            "columnName": "driverName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyPartialRemit",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `CashierName` TEXT, `Amount` REAL, `AmountRemited` REAL, `Line` TEXT, `DateTimeStamp` TEXT, `ingressoRefId` INTEGER, `terminal` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "CashierName",
+            "columnName": "CashierName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Amount",
+            "columnName": "Amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "AmountRemited",
+            "columnName": "AmountRemited",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "Line",
+            "columnName": "Line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "DateTimeStamp",
+            "columnName": "DateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyTripCost",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `costType` TEXT, `dateTimeStamp` TEXT, `driverConductorName` TEXT, `line` TEXT, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "costType",
+            "columnName": "costType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverConductorName",
+            "columnName": "driverConductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyTripWitholding",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `dateTimeStamp` TEXT NOT NULL, `mPadUnit` TEXT, `name` TEXT, `witholdingType` TEXT, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "witholdingType",
+            "columnName": "witholdingType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Ingresso",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `TotalCollection` REAL, `ManualTicket` REAL, `CancelledTicket` REAL, `TotalExpenses` REAL, `TotalWitholding` REAL, `DriverName` TEXT, `DriverCommission` REAL, `DriverBonus` REAL, `ConductorName` TEXT, `ConductorCommission` REAL, `ConductorBonus` REAL NOT NULL, `Net` REAL, `PartialRemit` REAL, `FinalRemit` REAL, `ShororOver` REAL, `InFault` TEXT, `DateTimeStamp` TEXT, `ingressoRefId` INTEGER, `terminal` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "TotalCollection",
+            "columnName": "TotalCollection",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ManualTicket",
+            "columnName": "ManualTicket",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "CancelledTicket",
+            "columnName": "CancelledTicket",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "TotalExpenses",
+            "columnName": "TotalExpenses",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "TotalWitholding",
+            "columnName": "TotalWitholding",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "DriverName",
+            "columnName": "DriverName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "DriverCommission",
+            "columnName": "DriverCommission",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "DriverBonus",
+            "columnName": "DriverBonus",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ConductorName",
+            "columnName": "ConductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ConductorCommission",
+            "columnName": "ConductorCommission",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ConductorBonus",
+            "columnName": "ConductorBonus",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Net",
+            "columnName": "Net",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "PartialRemit",
+            "columnName": "PartialRemit",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "FinalRemit",
+            "columnName": "FinalRemit",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ShororOver",
+            "columnName": "ShororOver",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "InFault",
+            "columnName": "InFault",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "DateTimeStamp",
+            "columnName": "DateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "mPadUnits",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mpadUnitsId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER NOT NULL, `machineName` TEXT, `name` TEXT, `permit` TEXT, `permitNumber` TEXT, `serialNumber` TEXT, `tag` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "mpadUnitsId",
+            "columnName": "mpadUnitsId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "machineName",
+            "columnName": "machineName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "permit",
+            "columnName": "permit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "permitNumber",
+            "columnName": "permitNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "serialNumber",
+            "columnName": "serialNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "mpadUnitsId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Terminals",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`TerminalId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `description` TEXT NOT NULL, `id` INTEGER NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "TerminalId",
+            "columnName": "TerminalId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "TerminalId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "TripReverse",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL NOT NULL, `dateTimeStamp` TEXT NOT NULL, `deviceName` TEXT NOT NULL, `direction` TEXT NOT NULL, `reverseId` INTEGER NOT NULL, `terminal` TEXT NOT NULL, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceName",
+            "columnName": "deviceName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "direction",
+            "columnName": "direction",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reverseId",
+            "columnName": "reverseId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyTripReverse",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL NOT NULL, `dateTimeStamp` TEXT NOT NULL, `deviceName` TEXT NOT NULL, `direction` TEXT NOT NULL, `reverseId` INTEGER NOT NULL, `terminal` TEXT NOT NULL, `ingressoRefId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceName",
+            "columnName": "deviceName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "direction",
+            "columnName": "direction",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reverseId",
+            "columnName": "reverseId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "terminal",
+            "columnName": "terminal",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "LogReport",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`LogReportId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dateTimeStamp` TEXT NOT NULL, `description` TEXT NOT NULL, `deviceName` TEXT NOT NULL, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "LogReportId",
+            "columnName": "LogReportId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceName",
+            "columnName": "deviceName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "LogReportId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CopyLogReport",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dateTimeStamp` TEXT NOT NULL, `description` TEXT NOT NULL, `deviceName` TEXT NOT NULL, `ingressoRefId` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceName",
+            "columnName": "deviceName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Fares",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`FareId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `baseAmount` REAL NOT NULL, `discountAmount` REAL NOT NULL, `exceedAmount` REAL NOT NULL, `id` INTEGER NOT NULL, `name` TEXT NOT NULL, `specialExceedAmount` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "FareId",
+            "columnName": "FareId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baseAmount",
+            "columnName": "baseAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "discountAmount",
+            "columnName": "discountAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exceedAmount",
+            "columnName": "exceedAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "specialExceedAmount",
+            "columnName": "specialExceedAmount",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "FareId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tae",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`taeid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `description` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "taeid",
+            "columnName": "taeid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "taeid"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5a93bc4cd4fd0a945f167feea4ca3627')"
+    ]
+  }
+}

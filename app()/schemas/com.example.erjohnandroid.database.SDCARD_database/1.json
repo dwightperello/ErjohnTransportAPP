@@ -1,0 +1,136 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "4715cc5ce5c0d885c1286d72f6fc8022",
+    "entities": [
+      {
+        "tableName": "TripTickets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`TripTicketId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL, `conductorName` TEXT, `dateTimeStamp` TEXT, `destination` TEXT, `driverName` TEXT, `line` TEXT, `mPadUnit` TEXT, `origin` TEXT, `passengerType` TEXT, `titcketNumber` TEXT, `KMOrigin` INTEGER, `KmDestination` INTEGER NOT NULL, `qty` INTEGER NOT NULL, `time` TEXT NOT NULL, `tripReverse` INTEGER, `ingressoRefId` INTEGER, `reverse` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "TripTicketId",
+            "columnName": "TripTicketId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "conductorName",
+            "columnName": "conductorName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateTimeStamp",
+            "columnName": "dateTimeStamp",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destination",
+            "columnName": "destination",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "driverName",
+            "columnName": "driverName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "origin",
+            "columnName": "origin",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passengerType",
+            "columnName": "passengerType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "titcketNumber",
+            "columnName": "titcketNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "KMOrigin",
+            "columnName": "KMOrigin",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "KmDestination",
+            "columnName": "KmDestination",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "qty",
+            "columnName": "qty",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tripReverse",
+            "columnName": "tripReverse",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "reverse",
+            "columnName": "reverse",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "TripTicketId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4715cc5ce5c0d885c1286d72f6fc8022')"
+    ]
+  }
+}

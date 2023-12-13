@@ -1,0 +1,156 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "fca6136f846ff91a03b5af1c50364742",
+    "entities": [
+      {
+        "tableName": "TicketCounter",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ticketnumber` INTEGER NOT NULL, `ingressoRefId` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "Id",
+            "columnName": "Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ticketnumber",
+            "columnName": "ticketnumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "Id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "SavedDispatch",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`SavedDispatchId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `busNumber` TEXT NOT NULL, `conductorName` TEXT NOT NULL, `isDispatched` INTEGER NOT NULL, `dispatcherName` TEXT NOT NULL, `driverName` TEXT NOT NULL, `line` TEXT NOT NULL, `LineId` INTEGER NOT NULL, `mPadUnit` TEXT NOT NULL, `ingressoRefId` INTEGER NOT NULL, `reverse` INTEGER NOT NULL, `orginalTicketnumber` INTEGER NOT NULL, `machineName` TEXT NOT NULL, `permitNumber` TEXT NOT NULL, `serialNumber` TEXT NOT NULL, `direction` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "SavedDispatchId",
+            "columnName": "SavedDispatchId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "busNumber",
+            "columnName": "busNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conductorName",
+            "columnName": "conductorName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDispatched",
+            "columnName": "isDispatched",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dispatcherName",
+            "columnName": "dispatcherName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "driverName",
+            "columnName": "driverName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "line",
+            "columnName": "line",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "LineId",
+            "columnName": "LineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mPadUnit",
+            "columnName": "mPadUnit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingressoRefId",
+            "columnName": "ingressoRefId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reverse",
+            "columnName": "reverse",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "orginalTicketnumber",
+            "columnName": "orginalTicketnumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "machineName",
+            "columnName": "machineName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "permitNumber",
+            "columnName": "permitNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "serialNumber",
+            "columnName": "serialNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "direction",
+            "columnName": "direction",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "SavedDispatchId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fca6136f846ff91a03b5af1c50364742')"
+    ]
+  }
+}

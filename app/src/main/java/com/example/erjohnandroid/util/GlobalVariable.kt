@@ -4,7 +4,7 @@ import com.example.erjohnandroid.database.Model.*
 import com.paymaya.sdk.android.checkout.models.Item
 
 object GlobalVariable {
-   // const val API_BASE_URL="http://10.0.0.9:8084/api/"
+   //const val API_BASE_URL="http://10.0.0.9:8084/api/"
    //const val API_BASE_URL="http://192.168.0.100:8084/api/"
     // const val API_BASE_URL="http://192.168.1.70:8085/api/"
      const val API_BASE_URL="http://192.168.0.102:8085/api/"

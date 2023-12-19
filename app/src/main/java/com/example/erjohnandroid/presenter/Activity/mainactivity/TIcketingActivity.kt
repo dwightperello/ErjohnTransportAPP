@@ -72,7 +72,7 @@ class TIcketingActivity : AppCompatActivity() {
 
 //    var discountamount:Double=0.20
     val pesoSign = '\u20B1'
-    var totalfare:Double=0.0
+    var totalfare:String="0.0"
     var kmdiffprint:Int=0
 
 
@@ -124,14 +124,7 @@ class TIcketingActivity : AppCompatActivity() {
 
         _binding.btnclose.setOnClickListener {
             val formattedDateTime = getCurrentDateInFormat()
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Ticketing Close",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-            dbViewmodel.insertLogReport(logreport)
+            GlobalVariable.saveLogreport("Ticketing screen closed")
 
             super.onBackPressed()
             overridePendingTransition(
@@ -139,14 +132,7 @@ class TIcketingActivity : AppCompatActivity() {
             );
         }
         val formattedDateTime = getCurrentDateInFormat()
-        var logreport= LogReport(
-            LogReportId=0,
-            dateTimeStamp= formattedDateTime,
-            deviceName=GlobalVariable.deviceName!!,
-            description = "Start Ticket",
-            ingressoRefId = GlobalVariable.ingressoRefId
-        )
-        dbViewmodel.insertLogReport(logreport)
+        GlobalVariable.saveLogreport("start ticketing")
 
 
 
@@ -1160,8 +1146,10 @@ class TIcketingActivity : AppCompatActivity() {
             postTripticket=TicketConvertions.convertTripTickets(amount!!.toDouble(),GlobalVariable.conductor!!,destination?.name!!,GlobalVariable.driver!!,
                 GlobalVariable.line!!,GlobalVariable.deviceName!!,origin?.name!!,passtype!!,ticketnumber.toString(),GlobalVariable.tripreverse!!,destination?.kmPoint!!,origin?.kmPoint!!,qty,GlobalVariable.ingressoRefId)
 
-            totalfare=postTripticket?.amount!!
+            //totalfare=postTripticket?.amount!!
+            totalfare=amount
             qty=postTripticket?.qty
+
 
 //            dbViewmodel.insertTripTicketBulk(postTripticket!!)
 //            sdViewmodel.insertTripTicketBulk(postTripticket!!)
@@ -1206,7 +1194,7 @@ class TIcketingActivity : AppCompatActivity() {
         val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
         registerReceiver(batteryReceiver, filter)
         computeAmount()
-
+        GlobalVariable.saveLogreport("ticketing resumed")
 
     }
 

@@ -76,7 +76,7 @@ class LoginActivity : BasedActivity() {
             }
             is ResultState.Success->{
                 val formattedDateTime = getdate()
-
+                GlobalVariable.saveLogreportlogin("login success for synching")
 
                 GlobalVariable.token= state.data.token
                 hideProgressDialog()
@@ -86,7 +86,7 @@ class LoginActivity : BasedActivity() {
                 hideProgressDialog()
                 Toast(this).showCustomToast(state.exception.toString(),this)
                 val formattedDateTime = getdate()
-
+                GlobalVariable.saveLogreportlogin("error on login for synch, ${state.exception}")
 
             }
             else -> {}

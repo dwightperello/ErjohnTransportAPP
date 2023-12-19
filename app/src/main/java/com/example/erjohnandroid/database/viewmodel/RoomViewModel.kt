@@ -161,6 +161,12 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _fare:MutableLiveData<FareTable> = MutableLiveData()
     val fare:LiveData<FareTable> = _fare
 
+    private var _readysycnh:MutableLiveData<Int> = MutableLiveData()
+    val readysycnh:LiveData<Int> = _readysycnh
+
+    private var _patialremitsum:MutableLiveData<Double> = MutableLiveData()
+    val patialremitsum:LiveData<Double> = _patialremitsum
+
     //region OTHER METHODS
 
     init {
@@ -171,6 +177,20 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.getAllBusinfo(id)
             _businfo.value=records
+        }
+    }
+
+    fun getTotalPartialremit(refid: Int){
+        viewModelScope.launch() {
+            val records=  repository.gettotalpartialremit(refid)
+            _patialremitsum.value=records
+        }
+    }
+
+    fun getreadysynch(){
+        viewModelScope.launch() {
+            val records=  repository.getreadyforsynch()
+            _readysycnh.value=records
         }
     }
 
@@ -191,6 +211,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     fun insertBusinfo(entity: List<BusInfoTableItem>){
         viewModelScope.launch() {
             val records=  repository.insertBusinfoBulk(entity)
+
+        }
+    }
+
+    fun insertLogreportbulk(entity: List<LogReport>){
+        viewModelScope.launch() {
+            val records=  repository.insertLogreportbulk(entity)
 
         }
     }

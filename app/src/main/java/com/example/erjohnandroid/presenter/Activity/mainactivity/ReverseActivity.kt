@@ -93,14 +93,7 @@ class ReverseActivity : AppCompatActivity() {
 
             dbViewmodel.insertTripReverse(tripreverse)
 
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Reverse from ${GlobalVariable.direction}",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-            dbViewmodel.insertLogReport(logreport)
+
 
             try {
                 if(GlobalVariable.direction.equals("South"))
@@ -115,12 +108,14 @@ class ReverseActivity : AppCompatActivity() {
                 externalViewModel.updateSavedDispatchedReverse(GlobalVariable.direction!!,GlobalVariable.tripreverse!!)
                 GlobalVariable.ReverseTotalAmount=0.0
                 Toast(this).showCustomToast("Reverse Success",this)
+                GlobalVariable.saveLogreport("reverse success")
                 finish()
                 overridePendingTransition(
                     R.anim.screenslideleft, R.anim.screen_slide_out_right,
                 );
             }catch (e:Exception){
                 Toast(this).showCustomToast("${e}",this)
+                GlobalVariable.saveLogreport("error on reverse. ${e.message}")
             }
 
         }
@@ -130,6 +125,7 @@ class ReverseActivity : AppCompatActivity() {
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );
+            GlobalVariable.saveLogreport("reverse closed")
             finish()
         }
 

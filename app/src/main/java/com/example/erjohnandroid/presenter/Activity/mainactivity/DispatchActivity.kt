@@ -80,14 +80,14 @@ class DispatchActivity : AppCompatActivity() {
        // getBluetoothName(this)
         _binding.btnSave.setOnClickListener {
 
-            val anotherDate = LocalDate.of(2023, 12, 20)
-            val currentDate = LocalDate.now()
-            if (currentDate.isEqual(anotherDate)) {
-                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS TODAY",this)
-            } else if (currentDate.isAfter(anotherDate)) {
-                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS",this)
-                return@setOnClickListener
-            }
+//            val anotherDate = LocalDate.of(2023, 12, 15)
+//            val currentDate = LocalDate.now()
+//            if (currentDate.isEqual(anotherDate)) {
+//                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS TODAY",this)
+//            } else if (currentDate.isAfter(anotherDate)) {
+//                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS",this)
+//                return@setOnClickListener
+//            }
 
             if(GlobalVariable.bus.isNullOrEmpty() ||GlobalVariable.conductor.isNullOrEmpty() ||GlobalVariable.employeeName.isNullOrEmpty() ||GlobalVariable.driver.isNullOrEmpty() ||GlobalVariable.direction.isNullOrEmpty() ||GlobalVariable.line.isNullOrEmpty() ){
                // Toast.makeText(this ,"PLEASE CHECK ENTRY",Toast.LENGTH_LONG).show()
@@ -110,35 +110,18 @@ class DispatchActivity : AppCompatActivity() {
                 terminal = GlobalVariable.terminal
             )
             dispatch?.add(method)
-
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Start Dispatch",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-
             try {
                 externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
                 dbViewmodel.insertmPadAssignmentBulk(dispatch!!)
                 val resultIntent = Intent()
                 setResult(Activity.RESULT_OK, resultIntent)
-
-                dbViewmodel.insertLogReport(logreport)
                 GlobalVariable.isDispatched=true
                 GlobalVariable.isFromDispatch=true
+                GlobalVariable.saveLogreport("Dispatch Success")
                 finish()
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
-                var logreport= LogReport(
-                    LogReportId=0,
-                    dateTimeStamp= formattedDateTime,
-                    deviceName=GlobalVariable.deviceName!!,
-                    description = "Error on Dispatch ${e.message}",
-                    ingressoRefId = GlobalVariable.ingressoRefId
-                )
-                dbViewmodel.insertLogReport(logreport)
+               GlobalVariable.saveLogreport("Error on dispatch, ${e.message}")
             }
 
 
@@ -150,6 +133,7 @@ class DispatchActivity : AppCompatActivity() {
         }
 
         _binding.btnclose.setOnClickListener {
+            GlobalVariable.saveLogreport("Dispatch was closed")
             finish()
         }
     }

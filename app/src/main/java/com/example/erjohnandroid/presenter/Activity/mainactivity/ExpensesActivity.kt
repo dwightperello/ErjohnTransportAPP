@@ -88,6 +88,7 @@ class ExpensesActivity : AppCompatActivity() {
                 dbViewmodel.updaterExprenses(GlobalVariable.ingressoRefId,stringcount.toDouble(),expensestype!!)
             }
            // expenses.add(method)
+            GlobalVariable.saveLogreport("Added Expenses, ${expensestype}")
 
 
             dbViewmodel.getTripcost()

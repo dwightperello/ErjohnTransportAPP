@@ -59,7 +59,7 @@ class ticketdetailsActivity : AppCompatActivity() {
         initPrinter()
 
         _binding.btnprintticketdetails.setOnClickListener {
-            //printText("Erjohn & Almark Transit Corp ")
+            GlobalVariable.saveLogreport("Ticket detials printed")
             printText()
 
         }

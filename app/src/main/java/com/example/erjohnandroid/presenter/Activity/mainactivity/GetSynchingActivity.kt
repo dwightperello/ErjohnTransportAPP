@@ -610,11 +610,13 @@ class GetSynchingActivity : AppCompatActivity() {
 
             externalViewmodel.inserticketnu(method)
             externalViewmodel.insertSavedDispatched(methodSavedDispatch)
+            GlobalVariable.saveLogreportlogin("Data successfully saved")
             finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
 
         }catch (e:java.lang.Exception){
             Log.e("erro",e.localizedMessage)
+            GlobalVariable.saveLogreport("Error on data synching, ${e.message}")
         }
 
 

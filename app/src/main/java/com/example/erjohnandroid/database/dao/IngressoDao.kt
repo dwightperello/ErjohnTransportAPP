@@ -20,4 +20,7 @@ interface IngressoDao {
 
     @Query("DELETE FROM Ingresso")
     fun truncateingresso()
+
+    @Query("SELECT COUNT(DISTINCT ingressoRefId) FROM Ingresso")
+    fun countDistinctRefIDs(): Int
 }

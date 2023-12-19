@@ -147,14 +147,7 @@ class InspectionActivity : AppCompatActivity() {
 
         _binding.btnclose.setOnClickListener {
             val formattedDateTime = getdate()
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Inspection Cancelled",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-            dbViewmodel.insertLogReport(logreport)
+            GlobalVariable.saveLogreport("Inspection closed")
             super.onBackPressed()
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
@@ -227,34 +220,16 @@ class InspectionActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId
 
             )
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Inspection Made in ${origin?.name}",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
+            GlobalVariable.saveLogreport("insepction saved on ${origin?.name}")
 
             try {
                 _binding.btninspectionsave.isEnabled=false
                 printText()
                 dbViewmodel.insertInspectionReportBulk(method)
-                dbViewmodel.insertLogReport(logreport)
-//                onBackPressed()
-//                overridePendingTransition(
-//                    R.anim.screenslideleft, R.anim.screen_slide_out_right,
-//                );
-               // finish()
+
             }catch (e:java.lang.Exception){
                 Toast(this).showCustomToast("Error saving--"+e.localizedMessage,this)
-                var logreport= LogReport(
-                    LogReportId=0,
-                    dateTimeStamp= formattedDateTime,
-                    deviceName=GlobalVariable.deviceName!!,
-                    description = "error ${e.message}",
-                    ingressoRefId = GlobalVariable.ingressoRefId
-                )
-                dbViewmodel.insertLogReport(logreport)
+                GlobalVariable.saveLogreport("Error saving on inspection. ${e.message}")
             }
 
 

@@ -17,6 +17,7 @@ import com.example.erjohnandroid.util.ResultState
 import com.example.erjohnandroid.util.showCustomToast
 import com.example.erjohnandroid.util.startActivityWithAnimation
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SycnhLogin : BasedActivity() {
@@ -65,6 +66,8 @@ class SycnhLogin : BasedActivity() {
 
                 GlobalVariable.token= state.data.token
                 hideProgressDialog()
+
+               // GlobalVariable.saveLogreport("Login for synching success")
                 startActivityWithAnimation<SynchActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
                 finish()
             }
@@ -72,6 +75,7 @@ class SycnhLogin : BasedActivity() {
                 hideProgressDialog()
                 Toast(this).showCustomToast(state.exception.toString(),this)
 
+              // GlobalVariable.saveLogreport("error login, ${state.exception.message} ")
             }
             else -> {}
         }

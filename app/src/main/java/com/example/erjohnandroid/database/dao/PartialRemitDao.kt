@@ -14,6 +14,9 @@ interface PartialRemitDao {
     @Query("SELECT * FROM PartialRemit where ingressoRefId = :refid")
     fun getPartialRemit(refid:Int): List<PartialRemitTable>
 
+    @Query("SELECT SUM(AmountRemited) FROM PartialRemit where ingressoRefId = :refid")
+    suspend fun sumAllAmountRemited(refid:Int): Double
+
     @Query("DELETE FROM PartialRemit")
     fun truncatepartial()
 }

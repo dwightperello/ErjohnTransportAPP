@@ -52,6 +52,7 @@ class SharedLoginActivity : AppCompatActivity() {
             pin = _binding.etPin.text.toString()
             if(pin.isNullOrEmpty()){
                 Toast(this).showCustomToast("ENTER PIN",this)
+                GlobalVariable.saveLogreport("enter pin error")
                 return@setOnClickListener
             }
 
@@ -85,7 +86,10 @@ class SharedLoginActivity : AppCompatActivity() {
                         finish()
                     } else{
                         Toast(this).showCustomToast("Check Pin",this)
-                       // insertLogerror()
+                       // if(GlobalVariable.deviceName.isNullOrEmpty())
+                        GlobalVariable.saveLogreportlogin("pin invalid during dispatch")
+                        //else  GlobalVariable.saveLogreport("pin invalid during dispatch")
+
                     }
                 }
                 else if(activity==9){
@@ -102,7 +106,7 @@ class SharedLoginActivity : AppCompatActivity() {
                         }
                     } else{
                         Toast(this).showCustomToast("Check Pin",this)
-                       // insertLogerror()
+                        GlobalVariable.saveLogreport("pin invalid")
                     }
                 }
                 else if(activity==4) {
@@ -125,7 +129,7 @@ class SharedLoginActivity : AppCompatActivity() {
                         }
                     } else{
                         Toast(this).showCustomToast("Check Pin",this)
-                       // insertLogerror()
+                        GlobalVariable.saveLogreport("pin invalid")
                     }
                 }
                 else if(activity==5) {
@@ -135,7 +139,7 @@ class SharedLoginActivity : AppCompatActivity() {
                         finish()
                     } else {
                         Toast(this).showCustomToast("Check Pin",this)
-                       // insertLogerror()
+                        GlobalVariable.saveLogreport("pin invalid")
                     }
                 }
                 else if(activity==12){
@@ -152,7 +156,7 @@ class SharedLoginActivity : AppCompatActivity() {
                         }
                     } else {
                         Toast(this).showCustomToast("Check Pin",this)
-                      //  insertLogerror()
+                        GlobalVariable.saveLogreport("pin invalid")
                     }
                 }
 
@@ -164,14 +168,13 @@ class SharedLoginActivity : AppCompatActivity() {
                         finish()
                     }else{
                         _binding.etPin.setText("")
-                        // Toast.makeText(this,"NO DATA FOUND", Toast.LENGTH_LONG).show()
                         Toast(this).showCustomToast("NO DATA FOUND",this)
-                       // insertLogerror()
+                        GlobalVariable.saveLogreport("no data found")
                     }
                 }else
                 {
                     Toast(this).showCustomToast("No user found",this)
-                  //  insertLogerror()
+                    GlobalVariable.saveLogreportlogin("No user found")
                 }
               //  Toast(this).showCustomToast("CHECK PIN",this)
 
@@ -179,7 +182,7 @@ class SharedLoginActivity : AppCompatActivity() {
         }catch (e:java.lang.Exception){
 
             Toast(this).showCustomToast("NO EMPLOYEE FOUND",this)
-           // insertLogerror()
+            GlobalVariable.saveLogreportlogin("No employee found")
         }
 
     }
@@ -189,17 +192,7 @@ class SharedLoginActivity : AppCompatActivity() {
         return dateFormat.format(currentDate)
     }
 
-    private fun insertLogerror(){
-        val formattedDateTime= getCurrentDateInFormat()
-        var logreport= LogReport(
-            LogReportId=0,
-            dateTimeStamp= formattedDateTime,
-            deviceName=GlobalVariable.deviceName!!,
-            description = "Error on Login",
-            ingressoRefId = GlobalVariable.ingressoRefId
-        )
-        dbViewmodel.insertLogReport(logreport)
-    }
+
     private fun computeWindowSizeClasses() {
         try {
             val layout: LinearLayout = findViewById(R.id.mainLinear)

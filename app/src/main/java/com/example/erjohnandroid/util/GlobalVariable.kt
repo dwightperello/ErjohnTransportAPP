@@ -2,12 +2,15 @@ package com.example.erjohnandroid.util
 
 import com.example.erjohnandroid.database.Model.*
 import com.paymaya.sdk.android.checkout.models.Item
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 object GlobalVariable {
-   const val API_BASE_URL="http://10.0.0.9:8084/api/"
+   //const val API_BASE_URL="http://10.0.0.9:8084/api/"
    //const val API_BASE_URL="http://192.168.0.100:8084/api/"
     // const val API_BASE_URL="http://192.168.1.70:8085/api/"
-   //  const val API_BASE_URL="http://192.168.0.102:8085/api/"
+   const val API_BASE_URL="http://192.168.0.102:8085/api/"
    //const val API_BASE_URL="http://bfh6183-001-site1.ctempurl.com/api/"
 
     var token:String?= null
@@ -77,7 +80,43 @@ object GlobalVariable {
     var exceedAmount:Double=0.0
     var specialexceedAmount=0.0
 
+    var arrayLogReport:ArrayList<LogReport> = arrayListOf()
 
 
+ val saveLogreport:(String) ->Unit ={message->
+        val formattedDateTime = getCurrentDateInFormat()
+
+        var logreport = LogReport(
+         LogReportId=0,
+         dateTimeStamp= formattedDateTime,
+         deviceName=GlobalVariable.deviceName!!,
+         description = "${message}",
+         ingressoRefId = GlobalVariable.ingressoRefId
+        )
+
+       GlobalVariable.arrayLogReport.add(logreport)
+
+    }
+
+ val saveLogreportlogin:(String) ->Unit ={message->
+  val formattedDateTime = getCurrentDateInFormat()
+
+  var logreport = LogReport(
+   LogReportId=0,
+   dateTimeStamp= formattedDateTime,
+   deviceName="no device name yet, retrieving",
+   description = "${message}",
+   ingressoRefId = 0
+  )
+
+  GlobalVariable.arrayLogReport.add(logreport)
+
+ }
+
+   private fun getCurrentDateInFormat(): String {
+     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+     val currentDate = Date()
+     return dateFormat.format(currentDate)
+    }
 
 }

@@ -4,7 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presenter.Activity.mainactivity.MainActivity">
+    tools:context=".presenter.Activity.mainactivity.MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+       android:visibility="gone"
+        android:id="@+id/ln_readysync"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5">
+        <TextView
+            android:textSize="@dimen/_15sdp"
+            android:id="@+id/txtsyncnow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="@color/red_connectify"
+            android:text="PLEASE SYNCH"></TextView>
+    </LinearLayout>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="11"
+       >
+
 
     <LinearLayout
         android:layout_width="0dp"
@@ -284,6 +310,7 @@
         </LinearLayout>
 
     </LinearLayout>
+   </LinearLayout>
 
 
 </LinearLayout>

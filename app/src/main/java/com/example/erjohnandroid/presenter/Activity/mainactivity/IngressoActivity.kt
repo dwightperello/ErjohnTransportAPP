@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -98,11 +99,14 @@ class IngressoActivity : AppCompatActivity() {
 
 
 
-
     var EXPENSES_ACTIVITY=1
     var WITHOLD=2
     var CANCELLED=0
 
+//    private lateinit var powerManager: PowerManager
+//    private var wakeLock: PowerManager.WakeLock? = null
+
+    //private var wakeLock: PowerManager.WakeLock? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding= ActivityIngressoBinding.inflate(layoutInflater)
@@ -113,6 +117,7 @@ class IngressoActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+
         val window = window
 //        window.decorView.systemUiVisibility = (
 //                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -129,8 +134,9 @@ class IngressoActivity : AppCompatActivity() {
         _binding.btnigresso.isEnabled=true
 
         dbViewmodel.getAllTerminal()
-        dbViewmodel.getPartialRemit()
+
         dbViewmodel.getTotalAmountTrip()
+        dbViewmodel.getTotalPartialremit(GlobalVariable.ingressoRefId)
 
         _binding.txtdrivername.text=GlobalVariable.driver
         _binding.txtconductorname.text=GlobalVariable.conductor
@@ -149,8 +155,9 @@ class IngressoActivity : AppCompatActivity() {
 //                Toast(this).showCustomToast("CHECK INPUT AMOUNT",this)
 //                return@setOnClickListener
 //            }
-           // manualticket= arrayListOf()
+            manualticket= arrayListOf()
             manualticket.add(manual.toDouble())
+            totalAmountGross -=previousmanualticket
 
             totalAmountGross += manual.toDouble()
 
@@ -173,6 +180,8 @@ class IngressoActivity : AppCompatActivity() {
             }
             totalamount -= commisionamount!!.toDouble()
             totalamount -= partial
+            previousmanualticket = manual.toDouble()
+            Log.d("partial",totalamount.toString())
             val remit = decimalVat.format(totalamount)
             _binding.txtnetcollection.text="${remit}"
         }
@@ -293,6 +302,8 @@ class IngressoActivity : AppCompatActivity() {
                 Toast(this).showCustomToast("PLEASE COMPUTE FINAL REMIT",this)
                 return@setOnClickListener
             }
+            dbViewmodel.insertLogreportbulk(GlobalVariable.arrayLogReport)
+
             val formattedDateTime = getCurrentDateInFormat()
             var manualticketamount:Double=0.0
             canceledTickectamount=0.0
@@ -373,6 +384,7 @@ class IngressoActivity : AppCompatActivity() {
                // dbViewmodel.truncatetables()
             }catch (e:java.lang.Exception){
                 Log.e("erro",e.message.toString())
+                GlobalVariable.saveLogreport("error on ingresso, ${e.message}")
             }
         }
 
@@ -384,30 +396,16 @@ class IngressoActivity : AppCompatActivity() {
             showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
         }
 
-        try {
-            val formattedDateTime = getCurrentDateInFormat()
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Start Ingresso",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-            dbViewmodel.insertLogReport(logreport)
-        }catch (e:java.lang.Exception){
-            Log.e("error",e.message.toString())
-        }
-
     }
 
     override fun onStart() {
         super.onStart()
-        dbViewmodel.totaltripamount.observe(this, Observer {
+        dbViewmodel.totaltripamount.observeOnce(this, Observer {
             state-> ProcessTotal(state)
         })
 
-        dbViewmodel.partialremit.observe(this, Observer {
-            state->ProcessPartialremit(state)
+        dbViewmodel.patialremitsum.observe(this, Observer{
+            state ->ProcessPartialremitTotal(state)
         })
 
         dbViewmodel.terminals.observe(this,Observer{
@@ -440,9 +438,9 @@ class IngressoActivity : AppCompatActivity() {
     }
 
 
-//    override fun onBackPressed() {
-//       showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
-//    }
+    override fun onBackPressed() {
+       showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -525,7 +523,10 @@ class IngressoActivity : AppCompatActivity() {
                 _binding.viewdriverbonus.isVisible=true
                 calculateBonus(totalamount)
             }
-
+            dbViewmodel.getPartialRemit()
+            dbViewmodel.partialremit.observeOnce(this, Observer {
+                    state->ProcessPartialremit(state)
+            })
         }
     }
 
@@ -541,16 +542,17 @@ class IngressoActivity : AppCompatActivity() {
 //        }else totalwitholding=0.0
 //    }
     var partial:Double=0.0
-    val ProcessPartialremit:(state:List<PartialRemitTable>) ->Unit={
+    val ProcessPartialremitTotal:(state:Double) ->Unit={
 
         val decimalVat = DecimalFormat("#.00")
 
-        if(it!=null) {
+        if(it > 0.0) {
 
-            it.forEach {
-                partial+= it.AmountRemited!!
-                AllPartialRemit.add(it)
-            }
+            partial= it
+//            it.forEach {
+//                partial+= it.AmountRemited!!
+//                AllPartialRemit.add(it)
+//            }
 
 
             val ans = decimalVat.format(partial)
@@ -561,6 +563,32 @@ class IngressoActivity : AppCompatActivity() {
 
             val remit = decimalVat.format(totalamount)
             _binding.txtnetcollection.text="${remit}"
+        }
+    }
+
+
+
+
+    val ProcessPartialremit:(state:List<PartialRemitTable>) ->Unit={
+
+        val decimalVat = DecimalFormat("#.00")
+
+        if(it!=null) {
+
+            it.forEach {
+               // partial+= it.AmountRemited!!
+                AllPartialRemit.add(it)
+            }
+
+
+//            val ans = decimalVat.format(partial)
+//
+//            _binding.txtpartialremit.text="${ans}"
+//            totalamount -=partial
+//            totalamount -= commisionamount!!.toDouble()
+//
+//            val remit = decimalVat.format(totalamount)
+//            _binding.txtnetcollection.text="${remit}"
         }
     }
 
@@ -665,13 +693,13 @@ class IngressoActivity : AppCompatActivity() {
     var finalbonusIfAny:String?= "0.0"
     fun calculateBonus(sales: Double) {
        // totalSales += sales
-
+        GlobalVariable.bonusArraylist= arrayListOf()
 
         var bonusamountTotal=0.0
         var bonusEach=0.0
 
         if (sales >= 14000) {
-
+            finalbonusIfAny="0.0"
             val aboveThresholdAmount = (sales - 14000)
             val bonuscount= (aboveThresholdAmount/1000).toInt()
 
@@ -956,6 +984,30 @@ class IngressoActivity : AppCompatActivity() {
     }
 
     val resetALl={
+
+
+//        var bonusArraylist:ArrayList<TripCostTable> = arrayListOf()
+//
+//        var ticketnumid:Int?= 1
+//        var ingressoRefId:Int=0
+//
+//        var isFromDispatch:Boolean=false
+//
+//        var priorWitholdingAmount:Double=0.0
+//
+//        var witholds: java.util.ArrayList<TripWitholdingTable> = arrayListOf()
+//        var expenses:ArrayList<TripCostTable> = arrayListOf()
+//
+//
+//        var discountAmount:Double=0.0
+//        var basefair:Double=0.0
+//        var exceedAmount:Double=0.0
+//        var specialexceedAmount=0.0
+//
+//        var arrayLogReport:ArrayList<LogReport> = arrayListOf()
+
+
+
         GlobalVariable.employeeName=null
         inspectorname=null
         cashiername=null
@@ -969,9 +1021,11 @@ class IngressoActivity : AppCompatActivity() {
         GlobalVariable.witholds= arrayListOf()
         GlobalVariable.expenses= arrayListOf()
         tripreverse=1
+        partial =0.0
 
         GlobalVariable.AllWitholding= arrayListOf()
         GlobalVariable.AllTripCost= arrayListOf()
+        GlobalVariable.arrayLogReport= arrayListOf()
 
         val sharedPrefs = applicationContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
@@ -1001,6 +1055,15 @@ class IngressoActivity : AppCompatActivity() {
         _binding.btnExpenses.isEnabled=true
         _binding.btnWitholding.isEnabled=true
         _binding.btncomputefinalremit.isEnabled=true
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+    override fun onPause() {
+        super.onPause()
 
     }
 
@@ -1440,7 +1503,7 @@ class IngressoActivity : AppCompatActivity() {
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("SALES\n\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${gross}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${_binding.txttotalgross.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Cancelled: ${canceledTickectamount}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Partial Remit: ${_binding.txtpartialremit.text.toString()}\n", "ST", 24, callback)
@@ -1460,9 +1523,9 @@ class IngressoActivity : AppCompatActivity() {
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Benefits\n\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Total Commission: ${_binding.txttotalcommision.text}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Driver Commission: ${_binding.txtdrivercommision.text}\n", "ST", 24, callback)
-                mIPosPrinterService!!.printSpecifiedTypeText("Conductor Commission: ${_binding.txtconductorcommision.text}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Total Salary: ${_binding.txttotalcommision.text}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Driver Salary: ${_binding.txtdrivercommision.text}\n", "ST", 24, callback)
+                mIPosPrinterService!!.printSpecifiedTypeText("Conductor Salary: ${_binding.txtconductorcommision.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver bonus: ${_binding.txtdriverbonus.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor bonus: ${_binding.txtconductorbonus.text}\n", "ST", 24, callback)
 
@@ -1606,5 +1669,14 @@ class IngressoActivity : AppCompatActivity() {
     fun ingressoTerminals(role: TerminalTable) {
         GlobalVariable.terminal= role.name
         Toast(this).showCustomToast("${GlobalVariable.terminal}",this)
+    }
+
+    fun <T> LiveData<T>.observeOnce(observer1: IngressoActivity, observer: Observer<T>) {
+        observeForever(object : Observer<T> {
+            override fun onChanged(value: T) {
+                observer.onChanged(value)
+                removeObserver(this)
+            }
+        })
     }
 }

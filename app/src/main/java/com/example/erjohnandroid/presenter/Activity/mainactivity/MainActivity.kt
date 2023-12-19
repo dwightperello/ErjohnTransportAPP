@@ -107,6 +107,16 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    private fun Processreadyforsycn(state: Int){
+       if (state>0){
+           _binding!!.lnReadysync.isVisible=true
+           _binding!!.txtsyncnow.text = "Trips Pending Synching ${state}"
+       }else{
+           _binding!!.lnReadysync.isVisible=false
+       }
+    }
+
     val initibuttondisable={
         _binding?.btnDispatch?.isVisible=true
         _binding?.btnTicketing?.isEnabled=false
@@ -308,7 +318,10 @@ class MainActivity : AppCompatActivity() {
             initibuttondisable()
         }
 
-
+        roomviewmodel.getreadysynch()
+        roomviewmodel.readysycnh.observe(this, Observer{
+                state -> Processreadyforsycn(state)
+        })
     }
 
     var groupbyreverse:kotlin.collections.Map<Int?,List<TripTicketTable>>?= null

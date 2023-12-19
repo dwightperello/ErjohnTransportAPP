@@ -107,27 +107,13 @@ class PartialRemitActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId,
                 terminal = GlobalVariable.terminal
             )
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Amount Remit ${stringWithoutSpaces.toDouble()}",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-
-            try {
+            GlobalVariable.saveLogreport("Partial remit success, amount ${stringWithoutSpaces.toDouble()}")
+           try {
                 dbViewmodel.insertPartialremit(method)
-                dbViewmodel.insertLogReport(logreport)
+
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
-                var logreport= LogReport(
-                    LogReportId=0,
-                    dateTimeStamp= formattedDateTime,
-                    deviceName=GlobalVariable.deviceName!!,
-                    description = "Error on partial Remit ${e.message}}",
-                    ingressoRefId = GlobalVariable.ingressoRefId
-                )
-                dbViewmodel.insertLogReport(logreport)
+               GlobalVariable.saveLogreport("error on partial remit, ${e.message}")
             }
 
 
@@ -141,14 +127,7 @@ class PartialRemitActivity : AppCompatActivity() {
         _binding.btnclose.setOnClickListener {
             val formattedDateTime = getdate()
             super.onBackPressed()
-            var logreport= LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Partial Remit Cancelled",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
-            dbViewmodel.insertLogReport(logreport)
+            GlobalVariable.saveLogreport("Partial remit closed")
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );

@@ -2,6 +2,7 @@ package com.example.erjohnandroid.presenter.Activity.mainactivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -71,42 +72,31 @@ class ChangeRouteActivity : AppCompatActivity() {
                 ingressoRefId = GlobalVariable.ingressoRefId
             )
 
-            var logreport = LogReport(
-                LogReportId=0,
-                dateTimeStamp= formattedDateTime,
-                deviceName=GlobalVariable.deviceName!!,
-                description = "Change route during operation",
-                ingressoRefId = GlobalVariable.ingressoRefId
-            )
+
 
             try {
                 tripreverse.add(method)
                 dbViewmodel.insertTripReverse(tripreverse)
-                dbViewmodel.insertLogReport(logreport)
                 GlobalVariable.remainingPass=0
                 GlobalVariable.destinationcounter=1
                 GlobalVariable.origincounter=0
                 GlobalVariable.tripreverse = GlobalVariable.tripreverse?.plus(1)
                 externalViewModel.updateSavedDispatched(GlobalVariable.bus!!,GlobalVariable.conductor!!,true,GlobalVariable.employeeName!!,GlobalVariable.driver!!,GlobalVariable.line!!,GlobalVariable.lineid!!,GlobalVariable.deviceName!!,GlobalVariable.tripreverse!!,GlobalVariable.originalTicketnum,GlobalVariable.direction!!,GlobalVariable.ingressoRefId,GlobalVariable.machineName!!,GlobalVariable.permitNumber!!,GlobalVariable.serialNumber!!)
                 GlobalVariable.ReverseTotalAmount=0.0
+                GlobalVariable.saveLogreport("route change")
                 finish()
                 overridePendingTransition(
                     R.anim.screenslideleft, R.anim.screen_slide_out_right,
                 );
             }catch (e:java.lang.Exception){
-                var logreport = LogReport(
-                    LogReportId=0,
-                    dateTimeStamp= formattedDateTime,
-                    deviceName=GlobalVariable.deviceName!!,
-                    description = "Error on change route ${e.message}",
-                    ingressoRefId = GlobalVariable.ingressoRefId
-                )
-                dbViewmodel.insertLogReport(logreport)
+                Log.e("error",e.message.toString())
+                GlobalVariable.saveLogreport("change route error, ${e.message}")
             }
 
         }
 
         _binding!!.btnclose.setOnClickListener {
+            GlobalVariable.saveLogreport("change route closed")
             this.finish()
         }
     }

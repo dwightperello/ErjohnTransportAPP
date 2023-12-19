@@ -25,9 +25,15 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     fun getTicketnumbers():TicketCounterTable{
         return ticketnumberdao.getTicketstart()
     }
-
+    fun getreadyforsynch():Int{
+        return ingressoDao.countDistinctRefIDs()
+    }
   suspend  fun getFares():FareTable{
         return fareDao.getFares()
+    }
+
+    suspend  fun gettotalpartialremit(refid: Int):Double{
+        return partialRemitDao.sumAllAmountRemited(refid)
     }
 
    suspend fun insertFare(entity:FareTable){
@@ -39,6 +45,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
     }
     fun insertticketnum(entity:TicketCounterTable){
         return ticketnumberdao.insertticketnum(entity)
+    }
+
+    fun insertLogreportbulk(entity:List<LogReport>){
+        return logReportDao.insertLogReportBulk(entity)
     }
 
   suspend  fun getAllBusinfo(id:Int):List<BusInfoTableItem>{

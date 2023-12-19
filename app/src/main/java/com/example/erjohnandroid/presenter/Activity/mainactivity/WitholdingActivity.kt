@@ -75,7 +75,7 @@ class WitholdingActivity : AppCompatActivity() {
             if(!containsWithType){
                GlobalVariable.witholds.add(method)
                 dbViewmodel.insertTripwitholdingbulk(method)
-               // Toast(this).showCustomToast("Added witholding ${stringcount.toDouble()}",this)
+                GlobalVariable.saveLogreport("Witholding save, ${witholdingtype} ${stringcount.toDouble()}")
             }else{
                 var prior =GlobalVariable.witholds.find { it.witholdingType==method.witholdingType }
               //  GlobalVariable.priorWitholdingAmount= prior?.amount!!
@@ -83,7 +83,7 @@ class WitholdingActivity : AppCompatActivity() {
                     it.amount= stringcount.toDouble()
                 }
                 dbViewmodel.updateripwitholding(GlobalVariable.ingressoRefId,stringcount.toDouble(),witholdingtype!!)
-               // Toast(this).showCustomToast("Updated witholding ${stringcount.toDouble()}",this)
+                GlobalVariable.saveLogreport("Witholding amount updated, ${witholdingtype} ${stringcount.toDouble()}")
             }
 
 //            if(!witholds.some(method.witholdingType)){
@@ -134,6 +134,7 @@ class WitholdingActivity : AppCompatActivity() {
        // Toast(this).showCustomToast("Updated witholding",this)
         val resultIntent = Intent()
         setResult(Activity.RESULT_OK, resultIntent)
+        GlobalVariable.saveLogreport("Witholding save")
         finish()
         overridePendingTransition(
             R.anim.screenslideleft, R.anim.screen_slide_out_right,

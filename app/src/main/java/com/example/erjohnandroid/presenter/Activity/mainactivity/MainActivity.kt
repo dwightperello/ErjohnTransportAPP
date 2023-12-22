@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         _binding!!.btnIngresso.setOnClickListener {
-           showSimpleDialog(this,"INGRESSO ALERT!", " ARE YOU SURE YOU WAN TO PROCEED TO INGRESSO?, YOU WONT BE ABLE TO CONTINUE TICKETING")
+           showSimpleDialog(this,"INGRESSO WARNING!", "END OF TRIP? HINDI KNA MAARING BUMALIK")
         }
 
         _binding!!.btnPartialremit.setOnClickListener {

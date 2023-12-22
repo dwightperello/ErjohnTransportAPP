@@ -164,8 +164,8 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private var _readysycnh:MutableLiveData<Int> = MutableLiveData()
     val readysycnh:LiveData<Int> = _readysycnh
 
-    private var _patialremitsum:MutableLiveData<Double> = MutableLiveData()
-    val patialremitsum:LiveData<Double> = _patialremitsum
+    private var _patialremitsum:MutableLiveData<Double?> = MutableLiveData()
+    val patialremitsum:LiveData<Double?> = _patialremitsum
 
     //region OTHER METHODS
 

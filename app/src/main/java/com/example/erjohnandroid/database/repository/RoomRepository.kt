@@ -32,7 +32,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return fareDao.getFares()
     }
 
-    suspend  fun gettotalpartialremit(refid: Int):Double{
+    suspend  fun gettotalpartialremit(refid: Int):Double?{
         return partialRemitDao.sumAllAmountRemited(refid)
     }
 

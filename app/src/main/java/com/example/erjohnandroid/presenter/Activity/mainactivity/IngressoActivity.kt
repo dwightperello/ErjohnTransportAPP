@@ -103,6 +103,8 @@ class IngressoActivity : AppCompatActivity() {
     var WITHOLD=2
     var CANCELLED=0
 
+    var isAlreadyFinishIgresso:Boolean=false
+
 //    private lateinit var powerManager: PowerManager
 //    private var wakeLock: PowerManager.WakeLock? = null
 
@@ -136,8 +138,13 @@ class IngressoActivity : AppCompatActivity() {
         dbViewmodel.getAllTerminal()
 
         dbViewmodel.getTotalAmountTrip()
-        dbViewmodel.getTotalPartialremit(GlobalVariable.ingressoRefId)
-
+        dbViewmodel.totaltripamount.observeOnce(this, Observer {
+                state-> ProcessTotal(state)
+        })
+//        dbViewmodel.getTotalPartialremit(GlobalVariable.ingressoRefId)
+//        dbViewmodel.patialremitsum.observeOnce(this, Observer{
+//                state ->ProcessPartialremitTotal(state)
+//        })
         _binding.txtdrivername.text=GlobalVariable.driver
         _binding.txtconductorname.text=GlobalVariable.conductor
 
@@ -347,7 +354,7 @@ class IngressoActivity : AppCompatActivity() {
                 terminal = GlobalVariable.terminal
 
             )
-
+            isAlreadyFinishIgresso=true
             try {
                 dbViewmodel.insertIngersso(method)
                 externalViewModel.updateIsDispathced(false)
@@ -400,13 +407,13 @@ class IngressoActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        dbViewmodel.totaltripamount.observeOnce(this, Observer {
-            state-> ProcessTotal(state)
-        })
+//        dbViewmodel.totaltripamount.observeOnce(this, Observer {
+//            state-> ProcessTotal(state)
+//        })
 
-        dbViewmodel.patialremitsum.observe(this, Observer{
-            state ->ProcessPartialremitTotal(state)
-        })
+//        dbViewmodel.patialremitsum.observe(this, Observer{
+//            state ->ProcessPartialremitTotal(state)
+//        })
 
         dbViewmodel.terminals.observe(this,Observer{
                 state -> ProcessTerminals(state)
@@ -438,8 +445,10 @@ class IngressoActivity : AppCompatActivity() {
     }
 
 
+
     override fun onBackPressed() {
-       showSimpleDialog(this,"FINISH INGRESSO?","YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED")
+        if(!isAlreadyFinishIgresso) Toast(this).showCustomToast("HINDI KAPA TAPOS MAG INGRESSO!!",this)
+        else showSimpleDialog(this,"FINISH INGRESSO?","ARE YOU SURE YOU WANT TO PROCEED? ALL DATA WILL BE DELETED!")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -542,11 +551,12 @@ class IngressoActivity : AppCompatActivity() {
 //        }else totalwitholding=0.0
 //    }
     var partial:Double=0.0
-    val ProcessPartialremitTotal:(state:Double) ->Unit={
+    val ProcessPartialremitTotal:(state:Double?) ->Unit={
 
         val decimalVat = DecimalFormat("#.00")
 
-        if(it > 0.0) {
+
+        if(it !==null && it > 0.0) {
 
             partial= it
 //            it.forEach {
@@ -576,19 +586,19 @@ class IngressoActivity : AppCompatActivity() {
         if(it!=null) {
 
             it.forEach {
-               // partial+= it.AmountRemited!!
+                partial+= it.AmountRemited!!
                 AllPartialRemit.add(it)
             }
 
 
-//            val ans = decimalVat.format(partial)
-//
-//            _binding.txtpartialremit.text="${ans}"
-//            totalamount -=partial
-//            totalamount -= commisionamount!!.toDouble()
-//
-//            val remit = decimalVat.format(totalamount)
-//            _binding.txtnetcollection.text="${remit}"
+            val ans = decimalVat.format(partial)
+
+            _binding.txtpartialremit.text="${ans}"
+            totalamount -=partial
+            totalamount -= commisionamount!!.toDouble()
+
+            val remit = decimalVat.format(totalamount)
+            _binding.txtnetcollection.text="${remit}"
         }
     }
 

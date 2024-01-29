@@ -849,9 +849,20 @@ class TIcketingActivity : AppCompatActivity() {
                             _binding.btnPrintticke.isVisible = KMdiff > 0
 
                             if (KMdiff <= 10 && origin?.kmPoint!! < 10) {
+//                                total = if (passtype in listOf("Senior", "Student", "PWD")) {
+//                                    discount = (discountamount / 100) * fare
+//                                    fare - discount
+
                                 total = if (passtype in listOf("Senior", "Student", "PWD")) {
-                                    discount = (discountamount / 100) * fare
+                                    discount = fare * discountamount
                                     fare - discount
+
+//                                   if(passtype in listOf("Senior", "Student", "PWD"))
+//                                    val discount = fare * discountamount
+//                                    val amountAfterDiscount = fare - discount
+//                                    total = amountAfterDiscount * qty
+
+
                                 } else {
                                     fare.toDouble()
                                 } * qty
@@ -863,6 +874,26 @@ class TIcketingActivity : AppCompatActivity() {
                                     val discount = baseFare * discountamount
                                     val amountAfterDiscount = baseFare - discount
                                     total = amountAfterDiscount * qty + 2
+                                    val df = DecimalFormat("#.##")
+                                    val roundedNumber = df.format(total).toDouble()
+                                    total= roundedNumber
+                                    if(total ==31.68) total --
+                                    else if(total == 46.52)total--
+                                    else if(total ==48.64)total --
+                                    else if(total == 50.76) total --
+                                    else if(origin!!.kmPoint==15 && destination!!.kmPoint==30) total --
+                                    else if(origin!!.kmPoint==3 && destination!!.kmPoint==27) total --
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==26) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==25) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==24) total --
+                                    else if(origin!!.kmPoint==3 && destination!!.kmPoint==18) total --
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==17) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==16) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==15) total --
+                                    else if(origin!!.kmPoint==10 && destination!!.kmPoint==25) total --
+                                    else if(origin!!.kmPoint==9 && destination!!.kmPoint==24) total --
+                                    else if(origin!!.kmPoint==8 && destination!!.kmPoint==23) total --
+                                    else if(origin!!.kmPoint==7 && destination!!.kmPoint==22) total --
                                 } else {
                                     total = baseFare * qty + 2
                                 }
@@ -881,10 +912,62 @@ class TIcketingActivity : AppCompatActivity() {
                             else if (origin?.kmPoint!! >= 10 &&  KMdiff > 9) {
                                 val baseFare = KMdiff!! * specialExceedamount
                                 if (passtype in listOf("Senior", "Student", "PWD"))
-                                {
+                                {   val df = DecimalFormat("#.##")
                                     val discount = baseFare * discountamount
                                     val amountAfterDiscount = baseFare - discount
                                     total = amountAfterDiscount * qty + 2
+                                    val roundedNumber = df.format(total).toDouble()
+                                    total= roundedNumber
+                                    if(total ==31.68) total --
+                                    else if(total == 46.51)total--
+                                    else if(total ==48.64)total --
+                                    else if(total == 50.76) total --
+                                    else if(origin!!.kmPoint==15 && destination!!.kmPoint==30) total --
+                                    else if(origin!!.kmPoint==16 && destination!!.kmPoint==29) total --
+                                    else if(origin!!.kmPoint==14 && destination!!.kmPoint==29) total --
+                                    else if(origin!!.kmPoint==13 && destination!!.kmPoint==29) total --
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==29) total ++
+                                    else if(origin!!.kmPoint==15 && destination!!.kmPoint==28) total --
+                                    else if(origin!!.kmPoint==13 && destination!!.kmPoint==28) total --
+                                    else if(origin!!.kmPoint==12 && destination!!.kmPoint==28) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==28) total ++
+                                    else if(origin!!.kmPoint==14 && destination!!.kmPoint==27) total --
+                                    else if(origin!!.kmPoint==12 && destination!!.kmPoint==27) total --
+                                    else if(origin!!.kmPoint==13 && destination!!.kmPoint==26) total --
+                                    else if(origin!!.kmPoint==11 && destination!!.kmPoint==26) total --
+                                    else if(origin!!.kmPoint==12 && destination!!.kmPoint==25) total --
+                                    else if(origin!!.kmPoint==10 && destination!!.kmPoint==25) total = total-1
+                                    else if(origin!!.kmPoint==11 && destination!!.kmPoint==24) total --
+                                    else if(origin!!.kmPoint==9 && destination!!.kmPoint==24) total = total-1
+                                    else if(origin!!.kmPoint==8 && destination!!.kmPoint==23) total = total-1
+                                    else if(origin!!.kmPoint==7 && destination!!.kmPoint==23) total = total-1
+                                    else if(origin!!.kmPoint==7 && destination!!.kmPoint==22) total = total-1
+                                    else if(origin!!.kmPoint==9 && destination!!.kmPoint==22) total = total-1
+                                    else if(origin!!.kmPoint==8 && destination!!.kmPoint==21) total = total-1
+
+                                    else if(origin!!.kmPoint==11 && destination!!.kmPoint==27) total --
+                                    else if(origin!!.kmPoint==3 && destination!!.kmPoint==27) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==27) total ++
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==26) total --
+                                    else if(origin!!.kmPoint==9 && destination!!.kmPoint==25) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==25) total --
+                                    else if(origin!!.kmPoint==8 && destination!!.kmPoint==24) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==24) total --
+                                    else if(origin!!.kmPoint==7 && destination!!.kmPoint==20) total --
+                                    else if(origin!!.kmPoint==3 && destination!!.kmPoint==19) total --
+                                    else if(origin!!.kmPoint==3 && destination!!.kmPoint==18) total --
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==18) total --
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==17) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==17) total --
+                                    else if(origin!!.kmPoint==3 && destination!!.kmPoint==16) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==16) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==16) total --
+                                    else if(origin!!.kmPoint==2 && destination!!.kmPoint==15) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==15) total --
+                                    else if(origin!!.kmPoint==1 && destination!!.kmPoint==14) total --
+                                    else if(origin!!.kmPoint==0 && destination!!.kmPoint==13) total --
+
+
                                 } else {
                                     total = baseFare * qty + 2
                                 }
@@ -925,15 +1008,69 @@ class TIcketingActivity : AppCompatActivity() {
 
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 {
-//                                    discount = (discountamount / 100) * 15.0 // IF KM ORIGIN IS ABOVE 10 but destination is below 16 fare =15.0
-//                                    amountafterdiscount = fare - discount
-//                                    total = amountafterdiscount * qty
+                                    val df = DecimalFormat("#.##")
+
                                     getkmdiff = KMdiff
                                     getExceedAmount = getkmdiff * specialExceedamount
                                     discount = getExceedAmount * discountamount
                                     amountafterdiscount = getExceedAmount - discount
                                     total = amountafterdiscount
-                                    total = total * qty
+                                    total = total * qty + 2
+                                    val roundedNumber = df.format(total).toDouble()
+                                    total= roundedNumber
+                                    if(total ==31.68) total --
+                                    else if(total == 46.52)total--
+                                    else if(total ==48.64)total --
+                                    else if(total == 50.76) total --
+                                    else if(origin!!.kmPoint==30 && destination!!.kmPoint==15) total --
+                                    else if(origin!!.kmPoint==29 && destination!!.kmPoint==16) total --
+                                    else if(origin!!.kmPoint==29 && destination!!.kmPoint==14) total --
+                                    else if(origin!!.kmPoint==29 && destination!!.kmPoint==13) total --
+                                    else if(origin!!.kmPoint==29 && destination!!.kmPoint==2) total ++
+                                    else if(origin!!.kmPoint==28 && destination!!.kmPoint==15) total --
+                                    else if(origin!!.kmPoint==28 && destination!!.kmPoint==13) total --
+                                    else if(origin!!.kmPoint==28 && destination!!.kmPoint==12) total --
+                                    else if(origin!!.kmPoint==28 && destination!!.kmPoint==1) total ++
+                                    else if(origin!!.kmPoint==27 && destination!!.kmPoint==14) total --
+                                    else if(origin!!.kmPoint==27 && destination!!.kmPoint==12) total --
+                                    else if(origin!!.kmPoint==26 && destination!!.kmPoint==13) total --
+                                    else if(origin!!.kmPoint==26 && destination!!.kmPoint==11) total --
+                                    else if(origin!!.kmPoint==25 && destination!!.kmPoint==12) total --
+                                    else if(origin!!.kmPoint==25 && destination!!.kmPoint==10) total --
+                                    else if(origin!!.kmPoint==24 && destination!!.kmPoint==11) total --
+                                    else if(origin!!.kmPoint==24 && destination!!.kmPoint==9) total --
+                                    else if(origin!!.kmPoint==23 && destination!!.kmPoint==8) total --
+                                    else if(origin!!.kmPoint==23 && destination!!.kmPoint==7) total --
+                                    else if(origin!!.kmPoint==22 && destination!!.kmPoint==7) total --
+                                    else if(origin!!.kmPoint==22 && destination!!.kmPoint==9) total --
+                                    else if(origin!!.kmPoint==21 && destination!!.kmPoint==8) total --
+
+                                    else if(origin!!.kmPoint==27 && destination!!.kmPoint==11) total --
+                                    else if(origin!!.kmPoint==27 && destination!!.kmPoint==3) total --
+                                    else if(origin!!.kmPoint==27 && destination!!.kmPoint==0) total ++
+                                    else if(origin!!.kmPoint==26 && destination!!.kmPoint==2) total --
+                                    else if(origin!!.kmPoint==25 && destination!!.kmPoint==9) total --
+                                    else if(origin!!.kmPoint==25 && destination!!.kmPoint==1) total --
+                                    else if(origin!!.kmPoint==25 && destination!!.kmPoint==1) total --
+                                    else if(origin!!.kmPoint==24 && destination!!.kmPoint==8) total --
+                                    else if(origin!!.kmPoint==24 && destination!!.kmPoint==0) total --
+                                    else if(origin!!.kmPoint==20 && destination!!.kmPoint==7) total --
+                                    else if(origin!!.kmPoint==19 && destination!!.kmPoint==3) total --
+                                    else if(origin!!.kmPoint==18 && destination!!.kmPoint==3) total --
+                                    else if(origin!!.kmPoint==18 && destination!!.kmPoint==2) total --
+                                    else if(origin!!.kmPoint==17 && destination!!.kmPoint==2) total --
+                                    else if(origin!!.kmPoint==17 && destination!!.kmPoint==1) total --
+                                    else if(origin!!.kmPoint==16 && destination!!.kmPoint==3) total --
+                                    else if(origin!!.kmPoint==16 && destination!!.kmPoint==1) total --
+                                    else if(origin!!.kmPoint==16 && destination!!.kmPoint==0) total --
+                                    else if(origin!!.kmPoint==15 && destination!!.kmPoint==2) total --
+                                    else if(origin!!.kmPoint==15 && destination!!.kmPoint==0) total --
+                                    else if(origin!!.kmPoint==14 && destination!!.kmPoint==1) total --
+                                    else if(origin!!.kmPoint==13 && destination!!.kmPoint==0) total --
+
+
+
+
                                 } else {
                                     getExceedAmount = KMdiff!! * specialExceedamount
                                     total = getExceedAmount
@@ -942,10 +1079,11 @@ class TIcketingActivity : AppCompatActivity() {
 
                             }
                             else if( origin?.kmPoint!!<=10 && KMdiff<10){
-                                val discountamount: Double = 20.0
+                                //val discountamount: Double = 20.0
                                 if (passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD"))
                                 {
-                                    discount = (discountamount / 100) * fare
+                                    //discount = (discountamount / 100) * fare
+                                    discount = fare * discountamount
                                     amountafterdiscount = fare - discount
                                     total = amountafterdiscount * qty
                                 } else {
@@ -1122,6 +1260,7 @@ class TIcketingActivity : AppCompatActivity() {
 
 
 
+
         val decimalVat = DecimalFormat("#.00")
         val decimalPart = total!! - floor(total)
         val roundedNumber = if (decimalPart >= 0.5) {
@@ -1255,9 +1394,63 @@ class TIcketingActivity : AppCompatActivity() {
         if(filteredList?.size != 0){
             hotspotamount = filteredList?.firstOrNull()?.fare
             if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
-                discount=  (discountamounthotspot / 100) * hotspotamount!!
-                amountafterdiscount= hotspotamount - discount
-                hotspotamount= amountafterdiscount * qty
+                //discount=  (discountamounthotspot / 100) * hotspotamount!!
+                if(from==30 && to==17 ||from==17 && to==30 ) hotspotamount = hotspotamount!! - 1
+                if(from ==30&& to ==14 || from==14 && to==30)hotspotamount = hotspotamount!! - 1
+                if(from ==30 && to == 3 || from==3 && to==30) hotspotamount = hotspotamount!! + 1
+                else if(from==30 && to==15) hotspotamount!! -1
+                else if(from==29 && to==16 || from== 16 && to==29){
+                    hotspotamount = hotspotamount!!-1
+                }
+                else if(from==29 && to==14|| from== 14 && to==29) hotspotamount = hotspotamount!!-1
+                else if(from==29 && to==13|| from== 13 && to==29) hotspotamount = hotspotamount!!-1
+                else if(from==29 && to==2|| from== 2 && to==29)  hotspotamount = hotspotamount!!+1
+                else if(from==28 && to==15|| from== 15 && to==28) hotspotamount = hotspotamount!!-1
+                else if(from==28 && to==13|| from== 13 && to==28) hotspotamount = hotspotamount!!-1
+                else if(from==28 && to==12|| from== 12 && to==28) hotspotamount = hotspotamount!!-1
+                else if(from==28 && to==1|| from== 1 && to==28) hotspotamount = hotspotamount!!+1
+                else if(from==27 && to==14|| from== 14 && to==27) hotspotamount = hotspotamount!!-1
+                else if(from==27 && to==12|| from== 12 && to==27) hotspotamount = hotspotamount!!-1
+                else if(from==26 && to==13|| from== 13 && to==26) hotspotamount = hotspotamount!!-1
+                else if(from==26 && to==11|| from== 11 && to==26) hotspotamount = hotspotamount!!-1
+                else if(from==25 && to==12|| from== 12 && to==25) hotspotamount = hotspotamount!!-1
+                else if(from==25 && to==10|| from== 10 && to==25) hotspotamount = hotspotamount!!-1
+                else if(from==24 && to==11|| from== 11 && to==24) hotspotamount = hotspotamount!!-1
+                else if(from==24 && to==9|| from== 9 && to==24) hotspotamount = hotspotamount!!-1
+                else if(from==23 && to==8|| from== 8 && to==23) hotspotamount = hotspotamount!!-1
+                else if(from==23 && to==7|| from== 7 && to==23) hotspotamount = hotspotamount!!-1
+                else if(from==22 && to==7|| from== 7 && to==22) hotspotamount = hotspotamount!!-1
+                else if(from==22 && to==9|| from== 9 && to==22) hotspotamount = hotspotamount!!-1
+                else if(from==21 && to==8|| from== 8 && to==21) hotspotamount = hotspotamount!!-1
+
+
+                else if(from==27 && to==11 ||from==11 && to==27) hotspotamount = hotspotamount!!-1
+                else if(from==27 && to==3||from==13 && to==27) hotspotamount = hotspotamount!!-1
+                else if(from==27 && to==0||from==0 && to==27) hotspotamount = hotspotamount!! +1
+                else if(from==26 && to==2||from==2 && to==26) hotspotamount = hotspotamount!!-1
+                else if(from==25 && to==9||from==9 && to==25) hotspotamount = hotspotamount!!-1
+                else if(from==25 && to==1||from==1 && to==25) hotspotamount = hotspotamount!!-1
+                else if(from==24 && to==8||from==8 && to==24) hotspotamount = hotspotamount!!-1
+                else if(from==24 && to==0||from==0 && to==24) hotspotamount = hotspotamount!!-1
+                else if(from==20 && to==7||from==7 && to==20) hotspotamount = hotspotamount!!-1
+                else if(from==19 && to==3||from==3 && to==19) hotspotamount = hotspotamount!!-1
+                else if(from==18 && to==3||from==3 && to==18) hotspotamount = hotspotamount!!-1
+                else if(from==18 && to==2||from==2 && to==18) hotspotamount = hotspotamount!!-1
+                else if(from==17 && to==2||from==2 && to==17) hotspotamount = hotspotamount!!-1
+                else if(from==17 && to==1||from==1 && to==17) hotspotamount = hotspotamount!!-1
+                else if(from==16 && to==3||from==3 && to==16) hotspotamount = hotspotamount!!-1
+                else if(from==16 && to==1||from==1 && to==16) hotspotamount = hotspotamount!!-1
+                else if(from==16 && to==0||from==0 && to==16) hotspotamount = hotspotamount!!-1
+                else if(from==15 && to==2||from==2 && to==15) hotspotamount = hotspotamount!!-1
+                else if(from==15 && to==0||from==0 && to==15) hotspotamount = hotspotamount!!-1
+                else if(from==14 && to==1||from==1 && to==14) hotspotamount = hotspotamount!!-1
+                else if(from==13 && to==0||from==0 && to==13) hotspotamount = hotspotamount!!-1
+
+                    discount=  GlobalVariable.discountAmount * hotspotamount!!
+                    amountafterdiscount= hotspotamount - discount
+                    hotspotamount= amountafterdiscount * qty
+
+
             }
 
         }
@@ -1574,7 +1767,7 @@ class TIcketingActivity : AppCompatActivity() {
 //                mIPosPrinterService!!.printBlankLines(1, 8, callback)
 //               mIPosPrinterService!!.setPrinterPrintAlignment(1, callback)
 ////                mIPosPrinterService!!.printQRCode("${_binding.etOrigin.text.toString()+ "-" +_binding.etDestination.text.toString() }\n", 6, 1, callback)
-//                mIPosPrinterService!!.printQRCode("000${GlobalVariable.ticketnumber .toString()+ "-" + _binding.txtoriginKM.text.toString()+ "-" +_binding.txtDestination.text.toString() }\n", 6, 1, callback)
+              //  mIPosPrinterService!!.printQRCode("000${GlobalVariable.ticketnumber .toString()+ "-" + _binding.txtoriginKM.text.toString()+ "-" +_binding.txtDestination.text.toString() }\n", 6, 1, callback)
 ////                mIPosPrinterService!!.printBarCode("${_binding.etOrigin.text.toString()} - ${_binding.etDestination.text.toString()}", 8, 2, 5, 0, callback)
 //                mIPosPrinterService!!.printBlankLines(1, 8, callback)
 //                mIPosPrinterService!!.printSpecifiedTypeText(
@@ -1583,7 +1776,7 @@ class TIcketingActivity : AppCompatActivity() {
 //                    24,
 //                    callback
 //                )
-//                mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Powered by mPAD\n", "ST", 24, 1,callback)
 
 

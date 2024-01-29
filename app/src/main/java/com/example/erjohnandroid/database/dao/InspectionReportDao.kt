@@ -18,9 +18,9 @@ interface InspectionReportDao {
     @Query("DELETE FROM InspectionReport")
     fun truncatinspection()
 
-    @Query ("SELECT * FROM TripTickets WHERE KmDestination >= :searchkm and tripReverse = :tripreverse and passengerType != 'Baggage'")
+    @Query ("SELECT * FROM TripTickets WHERE KmDestination > :searchkm and tripReverse = :tripreverse and passengerType != 'Baggage'")
     fun getTripticketsAfterInspection(searchkm: Int,tripreverse:Int ): List<TripTicketTable>
 
-    @Query ("SELECT * FROM TripTickets WHERE KmDestination <= :searchkm and tripReverse = :tripreverse and passengerType != 'Baggage'")
+    @Query ("SELECT * FROM TripTickets WHERE KmDestination < :searchkm and tripReverse = :tripreverse and passengerType != 'Baggage'")
     fun getTripticketsAfterInspectionNorth(searchkm: Int,tripreverse:Int): List<TripTicketTable>
 }

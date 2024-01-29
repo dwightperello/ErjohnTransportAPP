@@ -615,7 +615,7 @@ class InspectionActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Inspector: ${GlobalVariable.inspectorname}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Inspector: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Conductor: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Route: ${GlobalVariable.line}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Bus #: BUS ${GlobalVariable.bus}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)

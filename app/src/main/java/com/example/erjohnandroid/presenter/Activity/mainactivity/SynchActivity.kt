@@ -95,11 +95,54 @@ class SynchActivity : AppCompatActivity() {
         }
 
     }
-    private fun getdate():String{
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//    private fun getdate():Date{
+////        val dateFormatone = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+//        val currentDate = Date()
+//////        return dateFormat.format(currentDate)
+////        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+////        return dateFormat.parse(currentDate.toString()) ?: Date()
+//
+//        val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH)
+//        return dateFormat.parse(currentDate.toString()) ?: Date()
+//
+//
+//    }
+    private fun getdate(): String {
+        val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH)
+        val dateFormatone = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Date()
-        return dateFormat.format(currentDate)
+        val date= dateFormat.format(currentDate)
+        return if (date != null) {
+            val date = dateFormat.parse(date) ?: Date()
+            formatToRequiredString(date)
+        } else {
+            // If no date string is provided, use the current date and time
+            val currentDate = Date()
+            formatToRequiredString(currentDate)
+        }
     }
+
+    private fun formatToRequiredString(date: Date): String {
+//        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+//        return dateFormat.format(date)
+        val cal = Calendar.getInstance()
+        cal.time = date
+
+        val hourOfDay = cal.get(Calendar.HOUR_OF_DAY)
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH)
+
+        return if (hourOfDay >= 12) {
+            // Afternoon, use 24-hour time representation
+            dateFormat.format(date)
+        } else {
+            // Morning, use 12-hour time representation with AM/PM
+            val amPmFormat = SimpleDateFormat("a", Locale.ENGLISH)
+            val amPm = amPmFormat.format(date)
+            dateFormat.format(date).replace("AM", amPm).replace("PM", amPm)
+        }
+    }
+
+
     private fun ProcessAllIngressorefid(state: List<Int>?){
         _binding!!.txtPostsynching.append("\nChecking data")
         if(!state.isNullOrEmpty()) {

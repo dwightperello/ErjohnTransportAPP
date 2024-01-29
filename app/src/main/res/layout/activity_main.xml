@@ -284,12 +284,12 @@
                 android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:elevation="@dimen/_10sdp"
+                    android:id="@+id/btnupdateData"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:id="@+id/btnupdateData"
-                    android:background="@drawable/baseline_cloud_circle_24"/>
+                    android:background="@drawable/baseline_cloud_circle_24"
+                    android:elevation="@dimen/_10sdp" />
 
                 <TextView
                     android:textStyle="bold"

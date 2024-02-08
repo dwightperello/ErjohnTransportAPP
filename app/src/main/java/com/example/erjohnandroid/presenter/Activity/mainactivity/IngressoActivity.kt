@@ -1495,6 +1495,9 @@ class IngressoActivity : AppCompatActivity() {
             try {
                 val formattedDateTime = getCurrentDateInFormat()
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Machine: ${GlobalVariable.machineName}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Per: ${GlobalVariable.permitNumber}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Serial: ${GlobalVariable.serialNumber}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Ingresso Details\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Line: ${GlobalVariable.line}\n", "ST", 24, 1,callback)

@@ -36,6 +36,8 @@
     <string name="result_prn_no_detect">Printer label not detected</string>
     <string name="result_unknown_cmd">Unknown error</string>
     <string name="print_text">I\'ve been living with a shadoa cloud above my bed\nI\'ve been lonely for so long\nTrapped in the past, I just can\'t seem to move on</string>
+    <string name="agreesss">Continue</string>
+    <string name="disagree">Cancel</string>
 
 
 </resources>

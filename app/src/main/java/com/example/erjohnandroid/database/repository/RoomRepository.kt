@@ -378,6 +378,8 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         passengerTypeDao.truncatePassengertype()
         witholdingTypeDao.truncatewitholdingType()
         terminal.truncateTerminals()
+        fareDao.truncateFares()
+        mPadUnitsDao.truncateMpadUnits()
         farebykmDao.truncateFarebykm()
     }
 

@@ -13,5 +13,8 @@ interface FareDao {
   suspend  fun insertFare(entity:FareTable)
 
     @Query("Select * from Fares")
-  suspend fun getFares():FareTable
+    suspend fun getFares():FareTable
+
+    @Query("DELETE FROM Fares")
+    fun truncateFares()
 }

@@ -112,4 +112,10 @@ dependencies {
 
     implementation 'com.google.zxing:core:3.4.0'
 
+    //toast design
+    implementation 'io.github.muddz:styleabletoast:2.4.0'
+
+    //DIALOG DEsign
+    implementation 'com.afollestad.material-dialogs:core:3.2.1'
+
 }

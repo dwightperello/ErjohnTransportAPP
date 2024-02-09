@@ -36,6 +36,7 @@ import com.example.erjohnandroid.util.GlobalVariable.linesegment
 import com.example.erjohnandroid.util.GlobalVariable.origincounter
 import com.example.erjohnandroid.util.GlobalVariable.ticketcounter
 import com.example.erjohnandroid.util.GlobalVariable.ticketnumber
+import com.example.erjohnandroid.util.computePitxFare
 import com.example.erjohnandroid.util.showCustomToast
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
@@ -56,26 +57,14 @@ class TIcketingActivity : AppCompatActivity() {
     private val externalViewModel:externalViewModel by viewModels()
 
     private var batteryReceiver: BatteryReceiver? = null
-
-    //private var linesegment:List<LineSegmentTable>?= null
-
-    //private  lateinit var passengerTypeAdapter: PassengerTypeAdapter
-
     private var passtype:String?=null
-
     private var origin:LineSegmentTable?= null
     private var destination:LineSegmentTable?= null
-
     var postTripticket:TripTicketTable?= null
-
     private var qty:Int=1
-
-//    var discountamount:Double=0.20
     val pesoSign = '\u20B1'
     var totalfare:String="0.0"
     var kmdiffprint:Int=0
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,59 +94,38 @@ class TIcketingActivity : AppCompatActivity() {
             GlobalVariable.batLevel="${batteryLevel}%"
         }
 
-        if(linesegment.isNullOrEmpty()) {
-           // dbViewmodel.getLinesegment(GlobalVariable.lineid!!)
-        }
-       // dbViewmodel.getPassengerType()
         dbViewmodel.getLinesegment(GlobalVariable.lineid!!)
         dbViewmodel.getAllfarebykm()
-       // dbViewmodel.getGross()
+
         initView()
-       // passengerTypeAdapter = PassengerTypeAdapter(this)
-
         initPrinter()
-
         initCheckbox()
-
         initBUttons()
 
         _binding.txtpesosign.text= pesoSign.toString()
 
         _binding.btnclose.setOnClickListener {
-            val formattedDateTime = getCurrentDateInFormat()
             GlobalVariable.saveLogreport("Ticketing screen closed")
-
             super.onBackPressed()
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );
         }
-        val formattedDateTime = getCurrentDateInFormat()
         GlobalVariable.saveLogreport("start ticketing")
-
-
-
     }
 
     override fun onStart() {
         super.onStart()
         dbViewmodel.linesegment.observe(this, Observer {
                 state->processLine(state)
-
         })
 
         dbViewmodel.hotspots.observe(this,Observer{
             state -> ProcessHotspot(state)
         })
 
-//        dbViewmodel.passengertype.observe(this, Observer {
-//            state->ProcessPassType(state)
-//        })
-
         dbViewmodel.remnorth.observe(this, Observer {
                 state ->processRemnorth(state)
-
-
         })
 
         dbViewmodel.remsouth.observe(this, Observer {
@@ -189,14 +157,12 @@ class TIcketingActivity : AppCompatActivity() {
 
     private  var dbFarebykm:ArrayList<FareByKm>?= arrayListOf()
     val ProcessFarebykm:(state:kotlin.collections.List<FareByKm>?) ->Unit={
-
         if(it!=null){
            dbFarebykm?.addAll(it)
         }
     }
 
     val ProcessAmountPerReverse:(state: TripAmountPerReverse?) ->Unit={
-
         if(it?.sumamount!=null){
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(it.sumamount)
@@ -209,16 +175,12 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     val ProcessGross:(state: TripGross?) ->Unit={
-
         if(it?.sumamount!=null){
             val decimalVat = DecimalFormat("#.00")
             val ans = decimalVat.format(it.sumamount)
             _binding.txtgross.text = "GROSS: ${ans}"
-           // _binding.txtticketcountperreverse.text= "TICKET COUNT: ${it.ticket_count.toString()}"
-        }else{
-            _binding.txtgross.text = "GROSS: 0.0"
-
         }
+        else _binding.txtgross.text = "GROSS: 0.0"
     }
 
     val initView={
@@ -228,19 +190,15 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
     val initCheckbox:()->Unit={
-
         _binding.cbRegular.setOnClickListener {
             if(_binding.cbSenior.isChecked || _binding.cbStudent.isChecked || _binding.cbPwd.isChecked || _binding.cbBaggage.isChecked){
                 _binding.cbSenior.isChecked=false
                 _binding.cbStudent.isChecked=false
                 _binding.cbPwd.isChecked=false
-
-
                 _binding.etbaggaeamount.isEnabled=false
                 _binding.btnaddbaggage.isEnabled=false
                 _binding.cbBaggage.isChecked=false
                 _binding.etbaggaeamount.setText("")
-
             }
             _binding.cbRegular.isChecked=true
             passtype="Regular"
@@ -303,7 +261,6 @@ class TIcketingActivity : AppCompatActivity() {
                 _binding.txtamount.text="0.0"
                 passtype="Baggage"
                // computeAmount()
-
             }else{
                 _binding.cbRegular.isChecked=true
                 _binding.cbPwd.isChecked=false
@@ -323,7 +280,6 @@ class TIcketingActivity : AppCompatActivity() {
             _binding.txtamount.text = _binding.etbaggaeamount.text.toString()
             hideSoftKeyboard()
             computeAmount()
-
         }
     }
 
@@ -331,11 +287,9 @@ class TIcketingActivity : AppCompatActivity() {
         if(!it.isNullOrEmpty()){
             if(GlobalVariable.direction.equals("South")) {
                 linesegment = it!!
-                //  destinationcounter += 1
             }
             else{
                 linesegment= it?.reversed()
-                //  destinationcounter +=1
             }
             origin= linesegment?.get(origincounter)
             destination=linesegment?.get(destinationcounter)
@@ -354,7 +308,6 @@ class TIcketingActivity : AppCompatActivity() {
             _binding.btnOriginBack.isEnabled=false
             _binding.btnOriginForward.isEnabled=false
         }
-
         dbViewmodel.gethotspots(GlobalVariable.lineid!!)
 
     }
@@ -362,14 +315,7 @@ class TIcketingActivity : AppCompatActivity() {
     val ProcessHotspot:(state: List<HotSpotsTable>?) ->Unit={
         if(!it.isNullOrEmpty()){
             GlobalVariable.hotspot= it
-
-        }else
-        {
-           // Toast(this@TIcketingActivity).showCustomToast("NO HOTSPOT FOUND",this@TIcketingActivity)
         }
-
-
-
     }
 
     val processRemsouth:(state: List<TripTicketTable>?) ->Unit={
@@ -403,20 +349,14 @@ class TIcketingActivity : AppCompatActivity() {
     }
 
 
-
-
     val initBUttons={
         _binding.txtqty.text=qty.toString()
 
         _binding.btnOriginBack.setOnClickListener {
             origincounter -= 1
-
-           // if(origincounter<=0) return@setOnClickListener
             if(origincounter<0){
                 origincounter += 1
-               // return@setOnClickListener
             }
-
 
             origin=linesegment?.get(origincounter)
             _binding.txtoriginKM.text= origin?.kmPoint.toString()
@@ -428,17 +368,13 @@ class TIcketingActivity : AppCompatActivity() {
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
             }
             clearAllSearchFields()
-
-
             computeAmount()
         }
 
         _binding.btnOriginForward.setOnClickListener {
             origincounter += 1
-           // if(origincounter >= linesegment!!.size) return@setOnClickListener
             if(origincounter >= linesegment!!.size){
                 origincounter -= 1
-               // return@setOnClickListener
             }
 
             origin=linesegment?.get(origincounter)
@@ -462,23 +398,18 @@ class TIcketingActivity : AppCompatActivity() {
             else{
                 dbViewmodel.getRemNorth(origin?.kmPoint!!,GlobalVariable.tripreverse!!)
             }
-            clearAllSearchFields()
-            computeAmount()
+                clearAllSearchFields()
+                computeAmount()
         }
 
         _binding.btnDestinationBack.setOnClickListener {
             destinationcounter -= 1
             if(destinationcounter==origincounter) destinationcounter +=1
-//           if(destinationcounter>origincounter){
-//               destinationcounter -= 1
-//               if(destinationcounter==origincounter)
-//                   destinationcounter +=1
-//           }
                 destination=linesegment?.get(destinationcounter)
                 _binding.txtDestination.text= destination?.kmPoint.toString()
                 _binding.etDestination.setText(destination?.name)
-            clearAllSearchFields()
-            computeAmount()
+                clearAllSearchFields()
+                computeAmount()
         }
 
         _binding.btnDestinationForward.setOnClickListener {
@@ -486,8 +417,6 @@ class TIcketingActivity : AppCompatActivity() {
             if(destinationcounter >=linesegment!!.size){
                 destinationcounter -=1
             }
-//            if(destinationcounter >= linesegment!!.size) return@setOnClickListener
-//            destinationcounter += 1
             destination=linesegment?.get(destinationcounter)
             _binding.txtDestination.text= destination?.kmPoint.toString()
             _binding.etDestination.setText(destination?.name)
@@ -525,21 +454,16 @@ class TIcketingActivity : AppCompatActivity() {
                                        before: Int, count: Int) {
                 var originss= _binding.etOriginsearch.text.toString()
                 if(!TextUtils.isDigitsOnly(originss) || originss.isNullOrEmpty()){
-                    //Toast(this@TIcketingActivity).showCustomToast("Search field should only contain numeric or field is empty",this@TIcketingActivity)
-                   // hideSoftKeyboard()
                     hideKeyboard(_binding.etOriginsearch)
                     return
                 }
-
                 var s_origin=  linesegment?.find {
                     it.kmPoint== originss.toInt()
                 }
-
                 val index=  if(s_origin!= null){
                     linesegment?.indexOf(s_origin)!!
                 } else {
                     -1
-
                 }
                 when(index){
                     -1 ->{
@@ -605,19 +529,14 @@ class TIcketingActivity : AppCompatActivity() {
 
        _binding.etDestinationsearch.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(s: Editable) {
+            override fun afterTextChanged(s: Editable) {}
 
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int,
-                                           count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence, start: Int,count: Int, after: Int){}
 
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 var destinationss= _binding.etDestinationsearch.text.toString()
                 if(!TextUtils.isDigitsOnly(destinationss)||destinationss.isNullOrEmpty()){
-                   // Toast(this@TIcketingActivity).showCustomToast("Search field should only contain numeric or field is empty",this@TIcketingActivity)
                     hideKeyboard(_binding.etDestinationsearch)
                     return
                 }
@@ -631,7 +550,6 @@ class TIcketingActivity : AppCompatActivity() {
 
                 } else {
                     -1
-
                 }
 
                 when(index){
@@ -648,9 +566,6 @@ class TIcketingActivity : AppCompatActivity() {
                 _binding.etDestination.setText(destination?.name)
 
                 computeAmount()
-//            _binding.txtDestination.text= s_desitnation?.kmPoint.toString()
-//            _binding.etDestination.setText(s_desitnation?.name)
-               // hideSoftKeyboard()
             }
         })
 
@@ -671,7 +586,6 @@ class TIcketingActivity : AppCompatActivity() {
 
             } else {
                 -1
-
             }
             when(index){
                 -1 ->{
@@ -685,8 +599,6 @@ class TIcketingActivity : AppCompatActivity() {
             _binding.etDestination.setText(destination?.name)
 
             computeAmount()
-//            _binding.txtDestination.text= s_desitnation?.kmPoint.toString()
-//            _binding.etDestination.setText(s_desitnation?.name)
             hideSoftKeyboard()
         }
 
@@ -723,17 +635,15 @@ class TIcketingActivity : AppCompatActivity() {
             }
 
             if(GlobalVariable.direction.equals("South")){
-
                 if(o.toInt()>= d.toInt() ){
                     Toast(this).showCustomToast("SOUTH BOUND, PLEASE CHECK KM",this)
                     _binding.txtamount.text ="0.0"
                     _binding.btnPrintticke.isEnabled=true
                     return@setOnClickListener
                 }
-            }else if(GlobalVariable.direction.equals("North"))
+            }
+            else if(GlobalVariable.direction.equals("North"))
             {
-//                var s= _binding.txtoriginKM.text.toString()
-//                var d = _binding.txtDestination.text.toString()
                 if(d.toInt()>= o.toInt() ){
                     Toast(this).showCustomToast("North BOUND, PLEASE CHECK KM",this)
                     _binding.txtamount.text ="0.0"
@@ -743,18 +653,12 @@ class TIcketingActivity : AppCompatActivity() {
             }
 
             if(!passtype.isNullOrEmpty()) {
-//                ticketnumber +=1
                 ticketcounter +=1
                 _binding.txtticketcount.text="Next ticket: 00${ticketcounter.toString()}"
-                 // var amounttotal = computeAmount()
-
 
                 postTripticket?.titcketNumber= ticketnumber.toString()
                 dbViewmodel.insertTripTicketBulk(postTripticket!!)
                 sdViewmodel.insertTripTicketBulk(postTripticket!!)
-
-
-
             }
             else{
                 Toast(this).showCustomToast("Select passenger type",this)
@@ -771,7 +675,6 @@ class TIcketingActivity : AppCompatActivity() {
                 dbViewmodel.getTripAmountPerReverse(GlobalVariable.tripreverse!!)
                 dbViewmodel.getGross()
 
-           // printText("Erjohn & Almark Transit Corp")
                 printText()
             if(_binding.cbBaggage.isChecked){
                 _binding.cbBaggage.isChecked=false
@@ -780,40 +683,17 @@ class TIcketingActivity : AppCompatActivity() {
 
             }
 
-//            if(passtype.equals("Student") || passtype.equals("Senior")) {
-//                //passengerTypeAdapter.clearSelection()
-//                //passtype=null
-//                resetCheckbox()
-//            }
-           // computeAmount()
-
-
-            if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD") || passtype.equals("Baggage")) {
-                //passengerTypeAdapter.clearSelection()
-                //passtype=null
-                resetCheckbox()
-            }
-            //else computeAmount()
-
+            if(passtype.equals("Student") || passtype.equals("Senior") || passtype.equals("PWD") || passtype.equals("Baggage")) resetCheckbox()
         }
-
-
-
     }
-
-
 
     val resetCheckbox={
         _binding.cbRegular.isChecked=true
-        // passtype="Regular"
         _binding.cbSenior.isChecked=false
         _binding.cbStudent.isChecked=false
         _binding.cbPwd.isChecked=false
         _binding.cbBaggage.isChecked=false
         _binding.etbaggaeamount.setText("")
-        //computeAmount()
-
-
     }
 
     val computeAmount:()->String ={

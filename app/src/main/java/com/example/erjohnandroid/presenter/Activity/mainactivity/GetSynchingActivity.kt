@@ -23,6 +23,7 @@ import com.example.erjohnandroid.printer.printerUtils.BytesUtil
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.ResultState
+import com.example.erjohnandroid.util.showCustomToast
 import com.example.erjohnandroid.util.startActivityWithAnimation
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
@@ -138,14 +139,10 @@ class GetSynchingActivity : AppCompatActivity() {
 
     private fun ProcessLines(state: ResultState<ArrayList<LinesItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                //showCustomProgressDialog()
-                _binding!!.txtGetsynchingtext.text=text
-            }
-            is ResultState.Success->{
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.text=text}
+            is ResultState.Success ->{
 
                 if(state.data!=null) {
-                    val data= state.data
                     state.data.forEach {
                         line?.add(it)
                        it.lineSegments.forEach {
@@ -154,34 +151,28 @@ class GetSynchingActivity : AppCompatActivity() {
 
                     }
 
-                   line?.forEach {
-                       var method= LinesTable(
-                          id = it.id,
-                          name = it.name,
-                          remarks = it.remarks,
-                           tag = it.tag
-                       )
-                       dbline?.add(method)
-
-
-                   }
-
-                    linesegment?.forEach {
-                        var methodsegment= LineSegmentTable(
+                    dbline?.addAll(line?.map { it ->
+                        LinesTable(
                             id = it.id,
-                            kmPoint = it.kmPoint,
-                            lineId = it.lineId,
                             name = it.name,
                             remarks = it.remarks,
-                            tag = it.tag,
-                            LineSegmentid = it.id
-
+                            tag = it.tag
                         )
-                        dblinesegment?.add(methodsegment)
-                    }
+                    }?: emptyList())
 
-                    Log.d("line",dbline?.size.toString())
-                    Log.d("line1",dblinesegment?.size.toString())
+                 dblinesegment?.addAll(linesegment?.map { it ->
+                     LineSegmentTable(
+                         id = it.id,
+                         kmPoint = it.kmPoint,
+                         lineId = it.lineId,
+                         name = it.name,
+                         remarks = it.remarks,
+                         tag = it.tag,
+                         LineSegmentid = it.id
+                     )
+                 }?: emptyList())
+
+
                     viewModel.getCompanies(GlobalVariable.token!!)
 
                 }
@@ -199,89 +190,71 @@ class GetSynchingActivity : AppCompatActivity() {
 
     private fun ProcessCompanies(state: ResultState<ArrayList<CompaniesItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting companies...")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting companies...")}
             is ResultState.Success->{
                 if(state.data!=null) {
-                    state.data.forEach {
-                        var method= CompaniesTable(
+
+                    dbCompany?.addAll(state.data?.map { it ->
+                        CompaniesTable(
                             companyName = it.companyName,
                             id = it.id,
                             remarks = it.remarks,
                             tag = it.tag,
                             CompaniesId = it.id
                         )
-                        dbCompany?.add(method)
-                    }
-                    Log.d("compa",dbCompany?.size.toString())
-                        viewModel.getBusinfo(GlobalVariable.token!!)
+                    }?: emptyList())
+                    viewModel.getBusinfo(GlobalVariable.token!!)
                 }
-
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()}
             else -> {}
         }
-
     }
 
     private fun ProcessBusinfo(state: ResultState<ArrayList<BusInfos>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Bus information....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting Bus information....")}
             is ResultState.Success-> {
                 if (state.data != null) {
-                    state.data.forEach {
-                        var method= BusInfoTableItem(
-                            BusInfoId =it.id,
-                            busNumber = it.busNumber,
-                            id = it.id,
-                            plateNumber = it.plateNumber,
-                            companyId = 2,
-                            busTypeId = 1
+                    dbBusinfo?.addAll(state.data?.map {
+                        it -> BusInfoTableItem(
+                        BusInfoId =it.id,
+                        busNumber = it.busNumber,
+                        id = it.id,
+                        plateNumber = it.plateNumber,
+                        companyId = 2,
+                        busTypeId = 1
                         )
-                        dbBusinfo?.add(method)
-                    }
-                    Log.d("d",dbBusinfo?.size.toString())
-                        viewModel.getCompanyRoles(GlobalVariable.token!!)
-
+                    }?: emptyList())
+                   viewModel.getCompanyRoles(GlobalVariable.token!!)
                 }
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{ Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
+
+
+
+
         }
     }
 
     private fun ProcessCompanyRole(state: ResultState<ArrayList<CompanyRolesItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Employee roles....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting Employee roles....")}
             is ResultState.Success-> {
                 if (state.data != null) {
+                    dbCompanyrole?.addAll(state.data?.map {
+                        it -> CompanyRolesTable(
+                        EmployeeroleId = it.id,
+                        id = it.id,
+                        name = it.name,
+                        tag = it.tag
+                        )
+                    }?: emptyList())
 
-                    state.data.forEach {
-                      var method = CompanyRolesTable(
-                          EmployeeroleId = it.id,
-                          id = it.id,
-                          name = it.name,
-                          tag = it.tag
-                      )
-                        dbCompanyrole?.add(method)
-                    }
-
-                    state.data.forEach {
-                        it.employee.forEach {
-                            var methodemp= EmployeesTable(
+                    state.data?.map { it ->
+                        dbEmployees?.addAll(it.employee?.map { it ->
+                            EmployeesTable(
                                 EmployeeId = it.id,
                                 companyRolesId = it.companyRolesId,
                                 id = it.id,
@@ -289,131 +262,98 @@ class GetSynchingActivity : AppCompatActivity() {
                                 name = it.name,
                                 pin = it.pin
                             )
-                            dbEmployees?.add(methodemp)
-                        }
+                        }?: emptyList())
                     }
-                   Log.d("role",dbCompanyrole?.size.toString())
-                    Log.d("emp",dbEmployees?.size.toString())
-                    viewModel.getExpensesTYpe(GlobalVariable.token!!)
 
+//                    state.data.forEach {
+//                        it.employee.forEach {
+//                            var methodemp= EmployeesTable(
+//                                EmployeeId = it.id,
+//                                companyRolesId = it.companyRolesId,
+//                                id = it.id,
+//                                lastName = it.lastName,
+//                                name = it.name,
+//                                pin = it.pin
+//                            )
+//                            dbEmployees?.add(methodemp)
+//                        }
+//                    }
+                    viewModel.getExpensesTYpe(GlobalVariable.token!!)
                 }
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun ProcessExpensesType(state: ResultState<ArrayList<ExpensesTypesItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Expenses types....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting Expenses types....")}
             is ResultState.Success-> {
-
                 if (state.data != null) {
-                    state.data.forEach {
-                        var method= ExpensesTypeTable(
+                    dbExpensestype?.addAll(state.data?.map { it ->
+                        ExpensesTypeTable(
                             ExpensesTypeId = it.id,
                             id = it.id,
                             name = it.name,
                             tag = it.tag
                         )
-                        dbExpensestype?.add(method)
-                    }
-
+                    }?: emptyList())
                 }
-                Log.d("expetype",dbExpensestype?.size.toString())
                 viewModel.getPassengerType(GlobalVariable.token!!)
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun ProcessPassengertype(state: ResultState<ArrayList<PassengerTypeItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting passenger type....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting passenger type....")}
             is ResultState.Success-> {
-
                 if (state.data != null) {
-                   state.data.forEach {
-                       var method = PassengerTypeTable(
-                           PassengerTypeId = it.id,
-                           discount = it.discount.toDouble(),
-                           id = it.id,
-                           name = it.name,
-                           tag = it.tag,
-
-                       )
-                       dbPassengertype?.add(method)
-                   }
-                    Log.d("passtype",dbPassengertype?.size.toString())
+                    dbPassengertype?.addAll(state.data?.map {
+                        it -> PassengerTypeTable(
+                        PassengerTypeId = it.id,
+                        discount = it.discount.toDouble(),
+                        id = it.id,
+                        name = it.name,
+                        tag = it.tag,
+                        )
+                    }?: emptyList())
                     viewModel.getWitholdingType(GlobalVariable.token!!)
                 }
-
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun PRocesswitholding(state: ResultState<ArrayList<WitholdingTypesItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting witholding type....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting witholding type....")}
             is ResultState.Success-> {
-
-                if (state.data != null) {
-                    state.data.forEach {
-                       var method= WitholdingTypeTable(
-                            WitholdingTypeId = it.id,
-                           id = it.id,
-                           type = it.type
-
-                       )
-                        dbWitholdingtype?.add(method)
-                    }
-                    viewModel.getAllHotspots(GlobalVariable.token!!)
-                    Log.d("withold",dbWitholdingtype?.size.toString())
-                    //InsertDB()
-                }
-
+                dbWitholdingtype?.addAll(state.data?.map { it ->
+                    WitholdingTypeTable(
+                        WitholdingTypeId = it.id,
+                        id = it.id,
+                        type = it.type
+                    )
+                }?: emptyList())
+                viewModel.getAllHotspots(GlobalVariable.token!!)
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun ProcessHotspot(state: ResultState<ArrayList<HotSpotItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Hotspots....")
-            }
+            is ResultState.Loading ->{ _binding!!.txtGetsynchingtext.append("\nGetting Hotspots....")}
             is ResultState.Success-> {
-
                 if (state.data != null) {
-                    Log.d("hsize",state.data.size.toString())
-                    state.data.forEach {
-                        var method= HotSpotsTable(
+                    dbHotspots?.addAll(state.data?.map { it ->
+                        HotSpotsTable(
                             fare = it.fare,
                             id = it.id,
                             lineid = it.lineid,
@@ -424,107 +364,65 @@ class GetSynchingActivity : AppCompatActivity() {
                             pointto = it.pointto,
                             tag = it.tag
                         )
-                        dbHotspots?.add(method)
-                    }
-
-                    Log.d("hotspots",dbWitholdingtype?.size.toString())
-                    //InsertDB()
+                    }?: emptyList())
                     viewModel.getMpadUnits(GlobalVariable.token!!)
                 }
-
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun ProcessMpadUnits(state: ResultState<ArrayList<mPadUnitsItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting MpadUnits....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting MpadUnits....")}
             is ResultState.Success-> {
-
                 if (state.data != null) {
-                    Log.d("hsize",state.data.size.toString())
-                    state.data.forEach {
-                        var method= mPadUnitsTable(
-                            id = it.id,
-                            machineName = it.machineName,
-                            name = it.name,
-                            permit = it.permit,
-                            permitNumber = it.permitNumber,
-                            serialNumber = it.serialNumber,
-                            tag = it.tag
-                        )
-                        dbMpadUnits?.add(method)
-                    }
-
-                    Log.d("hotspots",dbWitholdingtype?.size.toString())
+                   dbMpadUnits?.addAll(state.data?.map { it ->
+                       mPadUnitsTable(
+                           id = it.id,
+                           machineName = it.machineName,
+                           name = it.name,
+                           permit = it.permit,
+                           permitNumber = it.permitNumber,
+                           serialNumber = it.serialNumber,
+                           tag = it.tag
+                       )
+                   }?: emptyList())
                     viewModel.getAllTerminals(GlobalVariable.token!!)
-                    //InsertDB()
                 }
-
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun ProcessTerminals(state: ResultState<ArrayList<TerminalsItem>>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Terminals....")
-            }
+            is ResultState.Loading ->{ _binding!!.txtGetsynchingtext.append("\nGetting Terminals....")}
             is ResultState.Success-> {
-
                 if (state.data != null) {
-                    Log.d("hsize",state.data.size.toString())
-                    state.data.forEach {
-                        var method= TerminalTable(
+                    dbTerminals?.addAll(state.data?.map { it ->
+                        TerminalTable(
                             id = it.id!!,
                             name = it.name!!,
-                            description= it.description ?:"null",
-                            TerminalId= 0
-
+                            description = it.description ?: "null",
+                            TerminalId = 0
                         )
-
-                        dbTerminals?.add(method)
-                    }
-
-                    Log.d("hotspots",dbWitholdingtype?.size.toString())
-
-                    viewModel.getFares(GlobalVariable.token!!,1)
-
-                    //InsertDB()
+                    } ?: emptyList())
+                    viewModel.getFares(GlobalVariable.token!!, 1)
                 }
-
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
 
     private fun ProcessFares(state: ResultState<Fares>?){
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Fare....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting Fare....")}
             is ResultState.Success-> {
-
-                if (state.data != null) {
+                     if (state.data != null) {
                         var method= FareTable(
                             FareId = 0,
                             baseAmount = state.data.baseAmount,
@@ -533,35 +431,12 @@ class GetSynchingActivity : AppCompatActivity() {
                             id = state.data.id,
                             name = state.data.name,
                             specialExceedAmount = state.data.specialExceedAmount
-
                         )
-
-//                    Log.d("hsize",state.data.size.toString())
-//                    state.data.forEach {
-//                        var method= TerminalTable(
-//                            id = it.id!!,
-//                            name = it.name!!,
-//                            description= it.description ?:"null",
-//                            TerminalId= 0
-//
-//                        )
-//
                          dbfare = method
-//                    }
-//
-//                    Log.d("hotspots",dbWitholdingtype?.size.toString())
-
-                    viewModel.getAllFarebykm(GlobalVariable.token!!)
-
-                    //InsertDB()
-                }
-
+                        viewModel.getAllFarebykm(GlobalVariable.token!!)
+                    }
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
@@ -569,11 +444,8 @@ class GetSynchingActivity : AppCompatActivity() {
     private fun processFareByKm(state: ResultState<List<FareByKmItem>>?){
         var increment=0
         when(state){
-            is ResultState.Loading ->{
-                _binding!!.txtGetsynchingtext.append("\nGetting Fare matrix....")
-            }
+            is ResultState.Loading ->{_binding!!.txtGetsynchingtext.append("\nGetting Fare matrix....")}
             is ResultState.Success-> {
-
                 if (state.data != null) {
                     state.data.forEach {
                         increment++
@@ -586,22 +458,13 @@ class GetSynchingActivity : AppCompatActivity() {
                             upperkmlimit = it.upperkmlimit,
                             id = it.id,
                             farekmId = increment
-
                         )
                         dbFarebykm?.add(method)
                     }
-
-
-
                     InsertDB()
                 }
-
             }
-            is ResultState.Error->{
-                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
-
-
-            }
+            is ResultState.Error->{Toast(this).showCustomToast(state.exception.toString(),this)}
             else -> {}
         }
     }
@@ -658,15 +521,13 @@ class GetSynchingActivity : AppCompatActivity() {
             externalViewmodel.inserticketnu(method)
             externalViewmodel.insertSavedDispatched(methodSavedDispatch)
             GlobalVariable.saveLogreportlogin("Data successfully saved")
+            showCustomToast(this, "Fetch Data Success")
             finish()
             startActivityWithAnimation<MainActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
 
         }catch (e:java.lang.Exception){
-            Log.e("erro",e.localizedMessage)
+            Toast(this).showCustomToast("Contact AZ Services - ${e.message.toString()}",this)
             GlobalVariable.saveLogreport("Error on data synching, ${e.message}")
         }
-
-
-
     }
 }

@@ -18,6 +18,8 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.PrimaryKey
+import com.afollestad.materialdialogs.MaterialDialog
+import com.example.erjohnandroid.R
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
 import com.example.erjohnandroid.database.viewmodel.externalViewModel
@@ -77,30 +79,17 @@ class DispatchActivity : AppCompatActivity() {
         GlobalVariable.deviceName=getBluetoothName(this)
         initsearch()
         initCheckbox()
-       // getBluetoothName(this)
         _binding.btnSave.setOnClickListener {
-
-//            val anotherDate = LocalDate.of(2023, 12, 15)
-//            val currentDate = LocalDate.now()
-//            if (currentDate.isEqual(anotherDate)) {
-//                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS TODAY",this)
-//            } else if (currentDate.isAfter(anotherDate)) {
-//                Toast(this).showCustomToast("CONTACT AZ SOLUTIONS",this)
-//                return@setOnClickListener
-//            }
-
             if(GlobalVariable.bus.isNullOrEmpty() ||GlobalVariable.conductor.isNullOrEmpty() ||GlobalVariable.employeeName.isNullOrEmpty() ||GlobalVariable.driver.isNullOrEmpty() ||GlobalVariable.direction.isNullOrEmpty() ||GlobalVariable.line.isNullOrEmpty() ){
-               // Toast.makeText(this ,"PLEASE CHECK ENTRY",Toast.LENGTH_LONG).show()
-                Toast(this).showCustomToast("PLEASE CHECK ENTRY",this)
+                Toast(this).showCustomToast("KULANG ANG ENTRY MO",this)
                 return@setOnClickListener
             }
             var dispatch:ArrayList<mPadAssignmentsTable>?= ArrayList<mPadAssignmentsTable>()
-
             val formattedDateTime = getCurrentDateInFormat()
             var method= mPadAssignmentsTable(
                 busNumber = GlobalVariable.bus,
                 conductorName = GlobalVariable.conductor,
-                dataTimeStamp = formattedDateTime.toString(),
+                dataTimeStamp = getCurrentDateInFormat(),
                 dispatcherName = GlobalVariable.employeeName,
                 driverName = GlobalVariable.driver,
                 line = GlobalVariable.line,
@@ -121,27 +110,32 @@ class DispatchActivity : AppCompatActivity() {
                 finish()
             }catch (e:java.lang.Exception){
                 Log.e("error",e.localizedMessage)
-               GlobalVariable.saveLogreport("Error on dispatch, ${e.message}")
+                Toast(this).showCustomToast("Dispatch Issues - ${e.message.toString()} " ,this)
+                GlobalVariable.saveLogreport("Error on dispatch, ${e.message}")
             }
-
-
-
-          printText()
-
-
-
+              printText()
         }
 
         _binding.btnclose.setOnClickListener {
-            GlobalVariable.saveLogreport("Dispatch was closed")
-            finish()
+            MaterialDialog(this).show {
+                title(text = "Oppps, Cancel Dispatch?")
+                message(text = "You are about to cancel dispatch?\n\nTHis will be saved in the trip Logger")
+                positiveButton(text = "Continue")
+                negativeButton(text = "Cancel")
+                positiveButton(R.string.agreesss) { dialog ->
+                    GlobalVariable.saveLogreport("Dispatch was closed")
+                    finish()
+                }
+                negativeButton(R.string.disagree) { dialog ->}
+            }
+
         }
     }
 
     fun getCurrentDateInFormat(): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Date()
-        return dateFormat.format(currentDate)
+        return dateFormat.format(currentDate).toString()
     }
 
 
@@ -149,31 +143,9 @@ class DispatchActivity : AppCompatActivity() {
 
     fun getBluetoothName(context: Context): String {
         val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-
-        // Check if permission is granted
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.BLUETOOTH
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // If permission is not granted, return an empty string or handle it accordingly
-            // You may consider requesting permission here using requestPermissions if required
-            // This snippet returns an empty string if permission is not granted
-            return "Bluetooth permission not granted"
-        }
-
-        return bluetoothAdapter?.name ?: "Bluetooth is not supported on this device"
-    }
-    fun getDeviceName(): String {
-        val manufacturer = Build.MANUFACTURER
-        val model = Build.MODEL
-        return if (model.startsWith(manufacturer)) {
-            model.capitalize()
-        } else {
-            manufacturer.capitalize() + " " + model
-        }
-    }
-
+        if (ActivityCompat.checkSelfPermission(context,Manifest.permission.BLUETOOTH ) != PackageManager.PERMISSION_GRANTED)
+            {return "Bluetooth permission not granted"}
+            return bluetoothAdapter?.name ?: "Bluetooth is not supported on this device"}
     override fun onStart() {
         super.onStart()
 
@@ -262,8 +234,6 @@ class DispatchActivity : AppCompatActivity() {
 
     private fun ProcessTerminals(state: List<TerminalTable>?){
         if(!state.isNullOrEmpty()){
-           // linelist=state
-
             terminalAdapter = TerminalAdapter(this)
             _binding.rvTerminal.adapter= terminalAdapter
             _binding.rvTerminal.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
@@ -282,19 +252,16 @@ class DispatchActivity : AppCompatActivity() {
         }
     }
 
-
-
     fun Bus(role: BusInfoTableItem) {
         GlobalVariable.bus= role.busNumber.toString()
-       // _binding!!.txtConfirmdispatch.text="BUS #: ${GlobalVariable.bus}"
         _binding!!.txtBus.text=("\nBUS #: ${GlobalVariable.bus}")
-        Toast(this).showCustomToast("${GlobalVariable.bus}",this)
+        showCustomToast(this,"${GlobalVariable.bus}")
     }
 
     fun Driver(role: EmployeesTable) {
         GlobalVariable.driver= role.name
         _binding!!.txtDriver.text=("\n DRIVER NAME: ${GlobalVariable.driver}")
-        Toast(this).showCustomToast("${GlobalVariable.driver}",this)
+        showCustomToast(this,"${GlobalVariable.driver}")
     }
 
     fun Liness(role: LinesTable) {
@@ -318,21 +285,19 @@ class DispatchActivity : AppCompatActivity() {
         }
         _binding!!.txtDirection.text=("\nDIRECTION: ${GlobalVariable.direction}")
         _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
-        Toast(this).showCustomToast("${GlobalVariable.line}",this)
+        showCustomToast(this,"${GlobalVariable.line}")
     }
 
     fun terminals(role: TerminalTable) {
         GlobalVariable.terminal= role.name
-
         _binding!!.txtTerminal.text=("\nTerminal: ${GlobalVariable.terminal}")
-       // _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
-        Toast(this).showCustomToast("${GlobalVariable.terminal}",this)
+        showCustomToast(this,"${GlobalVariable.terminal}")
     }
 
     fun COnductor(role: EmployeesTable) {
         GlobalVariable.conductor= role.name
         _binding!!.txtConductor.text=("\nCONDUCTOR NAME: ${GlobalVariable.conductor}")
-        Toast(this).showCustomToast("${GlobalVariable.conductor}",this)
+        showCustomToast(this,"${GlobalVariable.conductor}")
     }
 
     val initsearch={
@@ -344,7 +309,6 @@ class DispatchActivity : AppCompatActivity() {
 
            override fun onQueryTextChange(newText: String?): Boolean {
                val filtered = conductorList?.filter {
-                  // it.name?.toLowerCase(Locale.getDefault())!!.contains(newText!!)
                    it.name?.toLowerCase(Locale.getDefault())?.startsWith(newText!!.toLowerCase(Locale.getDefault())) == true
                }
                rolesasapter.showCOnductor(filtered!!)
@@ -360,7 +324,6 @@ class DispatchActivity : AppCompatActivity() {
 
            override fun onQueryTextChange(newText: String?): Boolean {
                val filtered = driverList?.filter {
-                  // it.name?.toLowerCase(Locale.getDefault())!!.contains(newText!!)
                    it.name?.toLowerCase(Locale.getDefault())?.startsWith(newText!!.toLowerCase(Locale.getDefault())) == true
                }
                driverAdapter.showDriver(filtered!!)
@@ -402,12 +365,6 @@ class DispatchActivity : AppCompatActivity() {
                 _binding.cbNorth.isChecked=false
                 return@setOnClickListener
             }
-
-//            else{
-//                Toast(this).showCustomToast("South Bound is not allowed",this)
-//                _binding.cbSouth.isChecked=false
-//                return@setOnClickListener
-//            }
 
             if(_binding.cbSouth.isChecked) _binding.cbSouth.isChecked=false
             GlobalVariable.direction="North"
@@ -552,17 +509,7 @@ class DispatchActivity : AppCompatActivity() {
     private val IPosPrinterStatusListener: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
-            if (action == null) {
-//                Log.d(
-//                    com.iposprinter.printertestdemo.IPosPrinterTestDemo.TAG,
-//                    "IPosPrinterStatusListener onReceive action = null"
-//                )
-                return
-            }
- //           Log.d(
-//                com.iposprinter.printertestdemo.IPosPrinterTestDemo.TAG,
-//                "IPosPrinterStatusListener action = $action"
-  //          )
+            if (action == null) return
             if (action == PRINTER_NORMAL_ACTION) {
                 handler!!.sendEmptyMessageDelayed(MSG_IS_NORMAL, 0)
             } else if (action == PRINTER_PAPERLESS_ACTION) {
@@ -589,7 +536,6 @@ class DispatchActivity : AppCompatActivity() {
     private val connectService: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             mIPosPrinterService = IPosPrinterService.Stub.asInterface(service)
-            // setButtonEnable(true)
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -605,18 +551,10 @@ class DispatchActivity : AppCompatActivity() {
         callback = object : IPosPrinterCallback.Stub() {
             @Throws(RemoteException::class)
             override fun onRunResult(isSuccess: Boolean) {
-//                Log.i(
-////                    com.iposprinter.printertestdemo.IPosPrinterTestDemo.TAG,
-////                    "result:$isSuccess\n"
-//                )
             }
 
             @Throws(RemoteException::class)
             override fun onReturnString(value: String) {
-//                Log.i(
-////                    com.iposprinter.printertestdemo.IPosPrinterTestDemo.TAG,
-////                    "result:$value\n"
-//                )
             }
         }
 
@@ -625,13 +563,8 @@ class DispatchActivity : AppCompatActivity() {
         val intent = Intent()
         intent.setPackage("com.iposprinter.iposprinterservice")
         intent.action = "com.iposprinter.iposprinterservice.IPosPrintService"
-        //startService(intent);
-        //startService(intent);
         bindService(intent, connectService, BIND_AUTO_CREATE)
 
-        //注册打印机状态接收器
-
-        //注册打印机状态接收器
         val printerStatusFilter = IntentFilter()
         printerStatusFilter.addAction(PRINTER_NORMAL_ACTION)
         printerStatusFilter.addAction(PRINTER_PAPERLESS_ACTION)
@@ -640,31 +573,20 @@ class DispatchActivity : AppCompatActivity() {
         printerStatusFilter.addAction(PRINTER_THP_NORMALTEMP_ACTION)
         printerStatusFilter.addAction(PRINTER_MOTOR_HIGHTEMP_ACTION)
         printerStatusFilter.addAction(PRINTER_BUSY_ACTION)
-
         registerReceiver(IPosPrinterStatusListener, printerStatusFilter)
     }
 
 
     fun getPrinterStatus(): Int {
-//        Log.i(
-////            com.iposprinter.printertestdemo.IPosPrinterTestDemo.TAG,
-////            "***** printerStatus$printerStatus"
-//        )
         try {
             printerStatus = mIPosPrinterService!!.printerStatus
         } catch (e: RemoteException) {
             e.printStackTrace()
         }
-//        Log.i(
-////            com.iposprinter.printertestdemo.IPosPrinterTestDemo.TAG,
-////            "#### printerStatus$printerStatus"
-//        )
         return printerStatus
     }
 
-    /**
-     * 打印机初始化
-     */
+
     fun printerInit() {
         ThreadPoolManager.getInstance().executeTask(Runnable {
             try {

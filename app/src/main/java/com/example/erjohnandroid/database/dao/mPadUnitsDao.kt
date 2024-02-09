@@ -15,5 +15,8 @@ interface mPadUnitsDao {
     @Query("SELECT * FROM mPadUnits")
     fun getMpadUnits(): List<mPadUnitsTable>
 
+    @Query("DELETE FROM mPadUnits")
+    fun truncateMpadUnits()
+
 
 }

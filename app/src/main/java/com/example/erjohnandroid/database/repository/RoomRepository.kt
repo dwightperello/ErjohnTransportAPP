@@ -17,7 +17,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
                                          private val synchPartialremitdao: Synch_PartialRemitDao,private val synchTripcostdao: Synch_TripcostDao,
                                          private val synchTripwitholdingdao: Synch_TripwitholdingDao,
                                          private val hotSpotDAO: HotSpotDAO,private val mPadUnitsDao: mPadUnitsDao, private val terminal:TerminalDao,private val tripReverseDao: TripReverseDao,private val synchTripreversedao: Synch_TripReverseDao,
-                                         private val logReportDao: LogReportDao,private val synchLogreportdao: Synch_LogReportDao, private val fareDao: FareDao)
+                                         private val logReportDao: LogReportDao,private val synchLogreportdao: Synch_LogReportDao, private val fareDao: FareDao, private  val farebykmDao: farebykmDao)
 {
 
     //region
@@ -59,6 +59,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return  hotSpotDAO.getHotspots(id)
     }
 
+    fun getAllfarebykm():List<FareByKm>{
+        return  farebykmDao.getAllfarebykm()
+    }
+
    suspend fun insertBusinfoBulk(entity:List<BusInfoTableItem>){
         return busInfoDao.insertBusinfoBulk(entity)
     }
@@ -81,6 +85,10 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
 
     fun insertHotspotBulk(entity:List<HotSpotsTable>){
         return hotSpotDAO.insertAllHotSpots(entity)
+    }
+
+    fun insertFareByKm(entity:List<FareByKm>){
+        return farebykmDao.insertfarebykm(entity)
     }
 
     fun getAllCompanies():List<CompaniesTable>{
@@ -370,6 +378,7 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         passengerTypeDao.truncatePassengertype()
         witholdingTypeDao.truncatewitholdingType()
         terminal.truncateTerminals()
+        farebykmDao.truncateFarebykm()
     }
 
     fun insertTripticketBulkTwo(entity:List<TripTicketTable>){

@@ -38,6 +38,9 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
     private  var _allHotspots:MutableLiveData<ResultState<ArrayList<HotSpotItem>>> = MutableLiveData()
     val allHotspots:LiveData<ResultState<ArrayList<HotSpotItem>>> get() = _allHotspots
 
+    private  var _allfarebykm:MutableLiveData<ResultState<ArrayList<FareByKmItem>>> = MutableLiveData()
+    val allfarebykm:LiveData<ResultState<ArrayList<FareByKmItem>>> get() = _allfarebykm
+
     private  var _companies:MutableLiveData<ResultState<ArrayList<CompaniesItem>>> = MutableLiveData()
     val companies:LiveData<ResultState<ArrayList<CompaniesItem>>> get() = _companies
 
@@ -127,6 +130,13 @@ class networkViewModel @Inject constructor (private val networkRepositoryImpl: N
         viewModelScope.launch(Dispatchers.IO) {
             networkRepositoryImpl.getAllHotspots("Bearer ${token}")
                 .onEach { _allHotspots.value=it }.launchIn(viewModelScope)
+        }
+    }
+
+    fun getAllFarebykm(token:String){
+        viewModelScope.launch(Dispatchers.IO) {
+            networkRepositoryImpl.getAllFarebykm("Bearer ${token}")
+                .onEach { _allfarebykm.value=it }.launchIn(viewModelScope)
         }
     }
 

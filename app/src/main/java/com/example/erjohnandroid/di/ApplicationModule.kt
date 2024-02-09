@@ -269,6 +269,12 @@ object ApplicationModule {
         return appdb.getFaredao()
     }
 
+    @Provides
+    @Singleton
+    fun ProvidesFarebykm(appdb: AppDatabase):farebykmDao{
+        return appdb.getFarebykmDao()
+    }
+
 
 
 }

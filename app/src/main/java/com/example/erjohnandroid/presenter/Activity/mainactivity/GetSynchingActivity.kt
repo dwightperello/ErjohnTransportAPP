@@ -111,6 +111,10 @@ class GetSynchingActivity : AppCompatActivity() {
         viewModel.fare.observe(this , Observer {
             state -> ProcessFares(state)
         })
+
+        viewModel.allfarebykm.observe(this, Observer {
+            state -> processFareByKm(state)
+        })
     }
 
     private var linesegment:ArrayList<LineSegment>?= ArrayList<LineSegment>()
@@ -130,6 +134,7 @@ class GetSynchingActivity : AppCompatActivity() {
     private var dbMpadUnits:ArrayList<mPadUnitsTable>?= arrayListOf()
     private var dbTerminals:ArrayList<TerminalTable>?= arrayListOf()
     private var dbfare:FareTable?= null
+    private  var dbFarebykm:ArrayList<FareByKm>?= arrayListOf()
 
     private fun ProcessLines(state: ResultState<ArrayList<LinesItem>>?){
         when(state){
@@ -546,6 +551,46 @@ class GetSynchingActivity : AppCompatActivity() {
 //
 //                    Log.d("hotspots",dbWitholdingtype?.size.toString())
 
+                    viewModel.getAllFarebykm(GlobalVariable.token!!)
+
+                    //InsertDB()
+                }
+
+            }
+            is ResultState.Error->{
+                Toast.makeText(this,"Error!! ${state.exception}",Toast.LENGTH_LONG).show()
+
+
+            }
+            else -> {}
+        }
+    }
+
+    private fun processFareByKm(state: ResultState<List<FareByKmItem>>?){
+        var increment=0
+        when(state){
+            is ResultState.Loading ->{
+                _binding!!.txtGetsynchingtext.append("\nGetting Fare matrix....")
+            }
+            is ResultState.Success-> {
+
+                if (state.data != null) {
+                    state.data.forEach {
+                        increment++
+                        var method= FareByKm(
+                            lineid = it.lineid,
+                            totalkm = it.totalkm,
+                            discountrate = it.discountrate,
+                            amount = it.amount,
+                            lowerkmlimit = it.lowekmlimit,
+                            upperkmlimit = it.upperkmlimit,
+                            id = it.id,
+                            farekmId = increment
+
+                        )
+                        dbFarebykm?.add(method)
+                    }
+
 
 
                     InsertDB()
@@ -560,6 +605,7 @@ class GetSynchingActivity : AppCompatActivity() {
             else -> {}
         }
     }
+
 
     val InsertDB:()-> Unit ={
         try {
@@ -576,6 +622,7 @@ class GetSynchingActivity : AppCompatActivity() {
             dbViewmodel.insertAllHotspots(dbHotspots!!)
             dbViewmodel.insertMpadUnits(dbMpadUnits!!)
             dbViewmodel.insertTerminalsBulk(dbTerminals!!)
+            dbViewmodel.insertAllFarebykm(dbFarebykm!!)
             lifecycleScope.launch {
                 dbViewmodel.insertfare(dbfare!!)
             }

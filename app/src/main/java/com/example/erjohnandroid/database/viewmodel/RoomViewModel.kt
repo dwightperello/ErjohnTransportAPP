@@ -30,6 +30,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     private  var _hotspots:MutableLiveData<List<HotSpotsTable>> = MutableLiveData()
     val hotspots:LiveData<List<HotSpotsTable>> = _hotspots
 
+    private  var _allfarebykm:MutableLiveData<List<FareByKm>> = MutableLiveData()
+    val allfarebykm:LiveData<List<FareByKm>> = _allfarebykm
+
     private var _company:MutableLiveData<List<CompaniesTable>> = MutableLiveData()
     val company:LiveData<List<CompaniesTable>> = _company
 
@@ -201,6 +204,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    fun getAllfarebykm(){
+        viewModelScope.launch() {
+            val records=  repository.getAllfarebykm()
+            _allfarebykm.value=records
+        }
+    }
+
     fun getFare(){
         viewModelScope.launch() {
             val records=  repository.getFares()
@@ -273,6 +283,13 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
     fun insertAllHotspots(entity: List<HotSpotsTable>){
         viewModelScope.launch() {
             val records=  repository.insertHotspotBulk(entity)
+
+        }
+    }
+
+    fun insertAllFarebykm(entity: List<FareByKm>){
+        viewModelScope.launch() {
+            val records=  repository.insertFareByKm(entity)
 
         }
     }

@@ -7,10 +7,10 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object GlobalVariable {
-   //const val API_BASE_URL="http://10.0.0.9:8084/api/"
+   const val API_BASE_URL="http://10.0.0.9:8084/api/"
    //const val API_BASE_URL="http://192.168.0.100:8084/api/"
     // const val API_BASE_URL="http://192.168.1.70:8085/api/"
-   const val API_BASE_URL="http://192.168.0.102:8085/api/"
+   //const val API_BASE_URL="http://192.168.0.102:8085/api/"
    //const val API_BASE_URL="http://bfh6183-001-site1.ctempurl.com/api/"
 
     var token:String?= null

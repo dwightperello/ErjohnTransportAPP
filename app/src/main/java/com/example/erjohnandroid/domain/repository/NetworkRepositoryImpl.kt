@@ -51,6 +51,16 @@ class NetworkRepositoryImpl (private val networkService: NetworkService):Network
         }
     }
 
+    override suspend fun getAllFarebykm(token: String): Flow<ResultState<ArrayList<FareByKmItem>>> = flow {
+        emit(ResultState.Loading)
+        try {
+            val response = networkService.getAllFarebykm(token)
+            emit(ResultState.Success(response))
+        }catch (e:Exception) {
+            emit((ResultState.Error(e)))
+        }
+    }
+
     override suspend fun getCompanies(token: String): Flow<ResultState<ArrayList<CompaniesItem>>> = flow {
         emit(ResultState.Loading)
         try {

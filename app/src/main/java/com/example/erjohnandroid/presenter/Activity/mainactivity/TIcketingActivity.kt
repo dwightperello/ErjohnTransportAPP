@@ -110,6 +110,7 @@ class TIcketingActivity : AppCompatActivity() {
         }
        // dbViewmodel.getPassengerType()
         dbViewmodel.getLinesegment(GlobalVariable.lineid!!)
+        dbViewmodel.getAllfarebykm()
        // dbViewmodel.getGross()
         initView()
        // passengerTypeAdapter = PassengerTypeAdapter(this)
@@ -174,6 +175,9 @@ class TIcketingActivity : AppCompatActivity() {
         dbViewmodel.fare.observe(this, Observer {
                 state -> ProcessFare(state)
         })
+        dbViewmodel.allfarebykm.observe(this,Observer{
+            state -> ProcessFarebykm(state)
+        })
     }
 
     private fun ProcessFare(state: FareTable){
@@ -183,6 +187,13 @@ class TIcketingActivity : AppCompatActivity() {
         GlobalVariable.specialexceedAmount=state.specialExceedAmount
     }
 
+    private  var dbFarebykm:ArrayList<FareByKm>?= arrayListOf()
+    val ProcessFarebykm:(state:kotlin.collections.List<FareByKm>?) ->Unit={
+
+        if(it!=null){
+           dbFarebykm?.addAll(it)
+        }
+    }
 
     val ProcessAmountPerReverse:(state: TripAmountPerReverse?) ->Unit={
 
@@ -1136,7 +1147,6 @@ class TIcketingActivity : AppCompatActivity() {
                             KMdiff= destination?.kmPoint!! - origin?.kmPoint!!
                             kmdiffprint= KMdiff
                             if(KMdiff<=0){
-                                // throw IllegalArgumentException()
                                 _binding.btnPrintticke.isVisible=false
                             }else{
                                 _binding.btnPrintticke.isVisible=true
@@ -1245,13 +1255,7 @@ class TIcketingActivity : AppCompatActivity() {
                                 }
                             }
                         }
-
-
-
-
                     }
-
-
                 }
             }catch (e:Exception){
                 Toast(this).showCustomToast("ERROR on fare Computation: ${e.message}",this)
@@ -1259,7 +1263,10 @@ class TIcketingActivity : AppCompatActivity() {
         }
 
 
-
+        if(GlobalVariable.lineid==7 && KMdiff>12 && passtype in listOf("Senior", "Student", "PWD") || GlobalVariable.lineid==18 && KMdiff>12 && passtype in listOf("Senior", "Student", "PWD")){
+            val filteredList =dbFarebykm?.find { it.totalkm == KMdiff}
+            total= filteredList?.discountrate?.toDouble()
+        }
 
         val decimalVat = DecimalFormat("#.00")
         val decimalPart = total!! - floor(total)

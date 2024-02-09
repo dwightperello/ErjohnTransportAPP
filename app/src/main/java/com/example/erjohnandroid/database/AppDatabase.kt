@@ -12,7 +12,7 @@ import com.example.erjohnandroid.util.Migrations
     CompaniesTable::class,CompanyRolesTable::class,EmployeesTable::class,
     ExpensesTypeTable::class,InspectionReportTable::class,mPadAssignmentsTable::class,PassengerTypeTable::class,
     TripCostTable::class,TripTicketTable::class,TripWitholdingTable::class,WitholdingTypeTable::class,HotSpotsTable::class,TicketCounterTable::class,
-    PartialRemitTable::class,Sycn_TripticketTable::class,Sycnh_InspectionReportTable::class,Synch_mpadAssignmentsTable::class,Synch_partialremitTable::class,Synch_TripCostTable::class,Synch_TripwitholdingTable::class, IngressoTable::class,mPadUnitsTable::class,TerminalTable::class,TripReverseTable::class,Synch_TripReverseTable::class,LogReport::class,Synch_LogReport::class,FareTable::class], version = 3, exportSchema = false)
+    PartialRemitTable::class,Sycn_TripticketTable::class,Sycnh_InspectionReportTable::class,Synch_mpadAssignmentsTable::class,Synch_partialremitTable::class,Synch_TripCostTable::class,Synch_TripwitholdingTable::class, IngressoTable::class,mPadUnitsTable::class,TerminalTable::class,TripReverseTable::class,Synch_TripReverseTable::class,LogReport::class,Synch_LogReport::class,FareTable::class,FareByKm::class], version = 4, exportSchema = false)
 abstract class AppDatabase:RoomDatabase() {
 
     abstract fun getLineDao(): LineDao
@@ -51,6 +51,7 @@ abstract class AppDatabase:RoomDatabase() {
     abstract fun getsynchLogReportDao():Synch_LogReportDao
 
     abstract fun getFaredao():FareDao
+    abstract fun getFarebykmDao():farebykmDao
 
     companion object{
         private  var dbInstance:AppDatabase?= null
@@ -60,8 +61,10 @@ abstract class AppDatabase:RoomDatabase() {
                 dbInstance= Room.databaseBuilder<AppDatabase>(
                     context.applicationContext,AppDatabase::class.java,"ErjohnDB"
                 )
-//                    .addMigrations(Migrations.MIGRATION_1_2)
-//                    .addMigrations(Migrations.MIGRATION_2_3)
+                    .addMigrations(Migrations.MIGRATION_1_2)
+                    .addMigrations(Migrations.MIGRATION_2_3)
+                    .addMigrations(Migrations.MIGRATION_3_4)
+
                     .allowMainThreadQueries()
                     .build()
             }

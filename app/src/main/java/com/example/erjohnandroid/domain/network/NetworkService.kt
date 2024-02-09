@@ -26,6 +26,9 @@ interface NetworkService {
     @GET("Hotspots")
     suspend fun getAllHotspots(@Header("Authorization")token:String):ArrayList<HotSpotItem>
 
+    @GET("Farebykm")
+    suspend fun getAllFarebykm(@Header("Authorization")token:String):ArrayList<FareByKmItem>
+
     @GET("companies")
     suspend fun getCompanies(@Header("Authorization")token:String):ArrayList<CompaniesItem>
 

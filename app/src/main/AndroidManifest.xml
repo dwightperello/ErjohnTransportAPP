@@ -12,10 +12,8 @@
     <uses-permission android:name="android.permission.BATTERY_STATS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <queries>
         <package android:name="net.nyx.printerservice" />
@@ -33,9 +31,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presenter.Activity.mainactivity.ShowWitholdingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar"/>
+        <activity
+            android:name=".presenter.Activity.mainactivity.ShowExpensesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
+            android:name=".presenter.Activity.mainactivity.NewIngressoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
+        <activity
             android:name=".presenter.Activity.mainactivity.ChangeRouteActivity"
-            android:theme="@style/Theme.saving.nobar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
         <activity
             android:name=".presenter.Activity.mainactivity.SycnhLogin"
             android:exported="false"

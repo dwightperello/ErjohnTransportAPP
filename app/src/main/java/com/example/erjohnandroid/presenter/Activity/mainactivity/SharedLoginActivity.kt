@@ -119,7 +119,7 @@ class SharedLoginActivity : AppCompatActivity() {
 
                         if (activity!!.equals(4)) {
                             GlobalVariable.cashiername = state.name
-                            val intent = Intent(this, IngressoActivity::class.java)
+                            val intent = Intent(this, NewIngressoActivity::class.java)
                             startActivityForResult(intent, 3)
                             activity = null
                             finish()

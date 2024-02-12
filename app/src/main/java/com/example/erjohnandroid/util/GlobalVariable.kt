@@ -62,7 +62,10 @@ object GlobalVariable {
 
     var AllWitholding:ArrayList<TripWitholdingTable> = arrayListOf()
     var AllTripCost:ArrayList<TripCostTable> = arrayListOf()
+
     var bonusArraylist:ArrayList<TripCostTable> = arrayListOf()
+
+    var bonus:Double=0.0
 
     var ticketnumid:Int?= 1
     var ingressoRefId:Int=0
@@ -113,7 +116,7 @@ object GlobalVariable {
 
  }
 
-   private fun getCurrentDateInFormat(): String {
+   fun getCurrentDateInFormat(): String {
      val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
      val currentDate = Date()
      return dateFormat.format(currentDate)

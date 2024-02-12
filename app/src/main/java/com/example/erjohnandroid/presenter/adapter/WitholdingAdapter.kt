@@ -9,6 +9,7 @@ import com.example.erjohnandroid.database.Model.WitholdingTypeTable
 import com.example.erjohnandroid.databinding.AdapterExpensesBinding
 import com.example.erjohnandroid.databinding.AdapterWitholdingBinding
 import com.example.erjohnandroid.presenter.Activity.mainactivity.ExpensesActivity
+import com.example.erjohnandroid.presenter.Activity.mainactivity.ShowWitholdingActivity
 import com.example.erjohnandroid.presenter.Activity.mainactivity.WitholdingActivity
 
 class WitholdingAdapter(private val activity: Activity): RecyclerView.Adapter<WitholdingAdapter.ViewHolder>() {
@@ -36,7 +37,7 @@ class WitholdingAdapter(private val activity: Activity): RecyclerView.Adapter<Wi
 
         holder.itemView.setOnClickListener {
 
-            if(activity is WitholdingActivity){
+            if(activity is ShowWitholdingActivity){
                 activity.witholding(role)
             }
 

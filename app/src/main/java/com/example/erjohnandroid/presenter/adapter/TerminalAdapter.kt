@@ -8,10 +8,7 @@ import com.example.erjohnandroid.database.Model.LinesTable
 import com.example.erjohnandroid.database.Model.TerminalTable
 import com.example.erjohnandroid.databinding.AdapterLineBinding
 import com.example.erjohnandroid.databinding.AdapterTerminalsBinding
-import com.example.erjohnandroid.presenter.Activity.mainactivity.DispatchActivity
-import com.example.erjohnandroid.presenter.Activity.mainactivity.IngressoActivity
-import com.example.erjohnandroid.presenter.Activity.mainactivity.PartialRemitActivity
-import com.example.erjohnandroid.presenter.Activity.mainactivity.ReverseActivity
+import com.example.erjohnandroid.presenter.Activity.mainactivity.*
 
 class TerminalAdapter(private val activity: Activity): RecyclerView.Adapter<TerminalAdapter.ViewHolder>() {
     private var terminals:List<TerminalTable> = listOf()
@@ -49,6 +46,9 @@ class TerminalAdapter(private val activity: Activity): RecyclerView.Adapter<Term
                 activity.reverseTerminals(role)
             }
             else if(activity is IngressoActivity){
+                activity.ingressoTerminals(role)
+            }
+            else if(activity is NewIngressoActivity){
                 activity.ingressoTerminals(role)
             }
 

@@ -476,6 +476,22 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
+    val allTripcost:LiveData<List<TripCostTable>> = repository.allTripCosts
+
+    var getTotalTripcost:LiveData<Double> = repository.getTripCost
+
+    fun getTripcosttwo():Double{
+        return repository.gettripcosttwo()
+    }
+
+    fun witholdingTotalTriptwo():Double{
+        return  repository.witholdingTotalTriptwo()
+    }
+
+    val allTripWitholding:LiveData<List<TripWitholdingTable>> = repository.allTripWitholding
+
+    val witholdingTotalAmount:LiveData<Double> = repository.witholdingTotaltrip
+
     fun getTripticket(){
         viewModelScope.launch() {
             val records=  repository.getTripTicket()
@@ -542,6 +558,19 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         viewModelScope.launch() {
             val records=  repository.updateExpenses(refid,amount,costype)
 
+        }
+    }
+
+    fun deleteTripcostItem(id: Int){
+        viewModelScope.launch() {
+            val records=  repository.deleteTripCostItem(id)
+
+        }
+    }
+
+    fun deleteTripWitholdingItem(id: Int){
+        viewModelScope.launch() {
+            val records=  repository.deleteTripWitholdingItem(id)
         }
     }
 

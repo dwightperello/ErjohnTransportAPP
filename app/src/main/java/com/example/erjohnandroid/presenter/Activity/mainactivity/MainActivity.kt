@@ -245,7 +245,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         _binding!!.btnIngresso.setOnClickListener {
-           showSimpleDialog(this,"INGRESSO WARNING!", "END OF TRIP? HINDI KNA MAARING BUMALIK")
+           //showSimpleDialog(this,"", "INGRESSO WARNING!")
+            val intent = Intent(this, SharedLoginActivity::class.java)
+            intent.putExtra("activity", INGRESSO_ACTIVITY)
+            startActivity(intent)
+            overridePendingTransition(
+                R.anim.screenslideleft, R.anim.screen_slide_out_right,
+            );
         }
 
         _binding!!.btnPartialremit.setOnClickListener {

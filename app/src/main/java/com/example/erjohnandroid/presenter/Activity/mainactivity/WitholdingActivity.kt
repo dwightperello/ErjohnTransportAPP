@@ -86,16 +86,6 @@ class WitholdingActivity : AppCompatActivity() {
                 GlobalVariable.saveLogreport("Witholding amount updated, ${witholdingtype} ${stringcount.toDouble()}")
             }
 
-//            if(!witholds.some(method.witholdingType)){
-//                witholds.add(method)
-//                dbViewmodel.insertTripwitholdingbulk(witholds)
-//
-//            }else{
-//               var prior =witholds.find { it==method }
-//                GlobalVariable.priorWitholdingAmount= prior?.amount!!
-//                dbViewmodel.updateripwitholding(GlobalVariable.ingressoRefId,stringcount.toDouble(),witholdingtype!!)
-//            }
-
 
             dbViewmodel.getTripwitholding()
             dbViewmodel.tripwitholding.distinctUntilChanged().observe(this, Observer {

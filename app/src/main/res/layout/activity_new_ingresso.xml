@@ -4,15 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presenter.Activity.mainactivity.IngressoActivity">
-
-
+    tools:context=".presenter.Activity.mainactivity.NewIngressoActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,16 +18,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/posbg"
-                >
+                android:background="@color/posbg">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="TERMINAL"
                     android:textColor="@color/white"
                     android:gravity="center"
-                    android:textSize="@dimen/_15sdp"
-                    />
+                    android:textSize="@dimen/_15sdp"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -49,8 +45,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/posbg"
-                >
+                android:background="@color/red_connectify">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RESET ENTRY"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:textSize="@dimen/_15sdp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp">
+                <Button
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/buttondrawable"
+                    android:id="@+id/btn_reset"
+                    android:textColor="@color/white"
+                    android:text="CLEAR ALL"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/posbg">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,10 +92,9 @@
             </LinearLayout>
 
             <LinearLayout
-
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_3sdp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -74,6 +103,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="3"
                     android:orientation="horizontal">
+
                     <TextView
                         android:textStyle="bold"
                         android:gravity="center"
@@ -110,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15sdp"
-                        android:text="MANUAL TICKET:"/>
+                        android:text="ADD TICKET:"/>
 
                     <androidx.appcompat.widget.AppCompatEditText
 
@@ -156,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="@dimen/_15sdp"
-                        android:text="CANCELLED TICKET:"/>
+                        android:text="CANCELLED:"/>
 
                     <androidx.appcompat.widget.AppCompatEditText
 
@@ -220,16 +250,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/posbg"
-                    >
+                    android:background="@color/posbg">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="DEDUCTIONS"
                         android:textColor="@color/white"
                         android:gravity="center"
-                        android:textSize="@dimen/_15sdp"
-                        />
+                        android:textSize="@dimen/_15sdp"/>
+
                 </LinearLayout>
 
 
@@ -260,7 +290,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/_12sdp"
                         android:id="@+id/txtExpensesText"
-                       />
+                        />
 
                     <Button
                         android:gravity="center"
@@ -278,6 +308,21 @@
 
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_expenses"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                  <androidx.recyclerview.widget.RecyclerView
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:id="@+id/rv_showExpenses"/>
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_marginTop="@dimen/_5sdp"
@@ -320,6 +365,20 @@
                         android:text="ENTER"/>
 
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_witholding"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/rv_showwitholdings"/>
 
                 </LinearLayout>
 
@@ -683,10 +742,8 @@
 
             </LinearLayout>
 
-
         </LinearLayout>
+
     </ScrollView>
-
-
 
 </LinearLayout>

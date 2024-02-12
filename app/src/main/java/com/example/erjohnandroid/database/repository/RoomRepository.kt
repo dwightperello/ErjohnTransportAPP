@@ -1,5 +1,6 @@
 package com.example.erjohnandroid.database.repository
 
+import androidx.lifecycle.LiveData
 import com.example.erjohnandroid.database.Model.*
 import com.example.erjohnandroid.database.Model.convertions.*
 import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
@@ -198,8 +199,31 @@ class RoomRepository @Inject constructor(private val lineDao: LineDao,private va
         return tripCostDao.getTripCost(GlobalVariable.ingressoRefId)
     }
 
+    val allTripCosts:LiveData<List<TripCostTable>> = tripCostDao.getAllTripCost()
+
+    val getTripCost:LiveData<Double> = tripCostDao.getTotalTripCost()
+
+    fun gettripcosttwo():Double{
+        return tripCostDao.getTotalTripCosttwo()
+    }
+
+    fun witholdingTotalTriptwo():Double{
+        return  tripWitholdingDao.witholdingtotalamounttwo()
+    }
+
+    val witholdingTotaltrip:LiveData<Double> = tripWitholdingDao.witholdingtotalamount()
+
+    val allTripWitholding:LiveData<List<TripWitholdingTable>> = tripWitholdingDao.getAllTripWitholding()
     fun inserttripcostBUlk(entity: TripCostTable){
         return tripCostDao.inserTripcostBulk(entity)
+    }
+
+    fun deleteTripCostItem(id:Int){
+        return tripCostDao.deleteTripCostItem(id)
+    }
+
+    fun deleteTripWitholdingItem(id:Int){
+        return tripWitholdingDao.deleteTripCostItem(id)
     }
 
     fun getTripTicket():List<TripTicketTable>{

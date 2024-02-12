@@ -185,7 +185,10 @@ class SynchActivity : AppCompatActivity() {
                     tripwitholding = tripwitholding?.toList(),
                     terminal =ingresso?.terminal ?:"None Selected",
                     tripreverse = tripReverse?.toList(),
-                    logreport =logReport!!.toList()
+                    logreport =logReport!!.toList(),
+                    driverBonus = ingresso?.driverBonus,
+                    conductorBonus = ingresso?.conductorBonus
+
 
                 )
 
@@ -602,7 +605,10 @@ class SynchActivity : AppCompatActivity() {
                   inFault = it.InFault!!,
                   dateTimeStamp = it.DateTimeStamp!!,
                   finalRemit = it.FinalRemit!!,
-                    terminal = it.terminal!!
+                    terminal = it.terminal!!,
+                    driverBonus = it.DriverBonus,
+                    conductorBonus = it.ConductorBonus
+
                 )
             ingresso=method
                 _binding!!.txtPostsynching.append("\n\n FETCH INGRESSO DATA....")

@@ -27,7 +27,9 @@ data class postAllItem(
     val tripwitholding: List<Tripwitholding>?,
     val tripreverse:List<TripReverse>?,
     val logreport: List<LogReports>,
-    val terminal:String
+    val terminal:String,
+    val driverBonus:Double?,
+    val conductorBonus:Double?
 )
 
 data class Inspectionreport(

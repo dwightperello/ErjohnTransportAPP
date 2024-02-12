@@ -20,5 +20,7 @@ data class Ingresso(
     val totalCollection: Double,
     val totalExpenses: Double,
     val totalWitholding: Double,
-    val terminal:String
+    val terminal:String,
+    val driverBonus:Double?,
+    val conductorBonus:Double?
 ):Parcelable

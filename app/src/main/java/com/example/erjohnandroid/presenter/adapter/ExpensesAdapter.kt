@@ -10,6 +10,7 @@ import com.example.erjohnandroid.databinding.AdapterExpensesBinding
 import com.example.erjohnandroid.databinding.AdapterLineBinding
 import com.example.erjohnandroid.presenter.Activity.mainactivity.DispatchActivity
 import com.example.erjohnandroid.presenter.Activity.mainactivity.ExpensesActivity
+import com.example.erjohnandroid.presenter.Activity.mainactivity.ShowExpensesActivity
 
 class ExpensesAdapter(private val activity: Activity): RecyclerView.Adapter<ExpensesAdapter.ViewHolder>() {
 
@@ -36,7 +37,7 @@ class ExpensesAdapter(private val activity: Activity): RecyclerView.Adapter<Expe
 
         holder.itemView.setOnClickListener {
 
-            if(activity is ExpensesActivity){
+            if(activity is ShowExpensesActivity){
                activity.expenses(role)
             }
 

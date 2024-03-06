@@ -31,9 +31,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presenter.Activity.mainactivity.ShowWitholdingActivity"
+            android:name=".presenter.Activity.mainactivity.ViewPartialRemitActivity"
             android:exported="false"
             android:theme="@style/Theme.saving.nobar"/>
+        <activity
+            android:name=".presenter.Activity.mainactivity.ShowWitholdingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.saving.nobar" />
         <activity
             android:name=".presenter.Activity.mainactivity.ShowExpensesActivity"
             android:exported="false"

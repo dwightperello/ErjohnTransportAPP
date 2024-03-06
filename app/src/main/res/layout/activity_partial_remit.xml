@@ -212,16 +212,29 @@
                <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="0dp"
-                   android:layout_weight=".8">
+                   android:layout_weight=".5"
+                   android:orientation="horizontal">
                    <Button
-                       android:layout_marginStart="@dimen/_25sdp"
-                       android:layout_marginEnd="@dimen/_25sdp"
-                       android:layout_width="match_parent"
+                       android:layout_marginStart="@dimen/_10sdp"
+                       android:layout_marginEnd="@dimen/_10sdp"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
                        android:layout_height="wrap_content"
                        android:background="@drawable/ripple_login"
                        android:id="@+id/btn_saveremit"
                        android:textColor="@color/white"
-                       android:text="SAVE REMIT"/>
+                       android:text="SAVE"/>
+
+                   <Button
+                       android:layout_marginStart="@dimen/_10sdp"
+                       android:layout_marginEnd="@dimen/_10sdp"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:layout_height="wrap_content"
+                       android:background="@drawable/ripple_login"
+                       android:id="@+id/btn_viewRemit"
+                       android:textColor="@color/white"
+                       android:text="View remit"/>
                </LinearLayout>
 
 

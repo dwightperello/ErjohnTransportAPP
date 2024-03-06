@@ -3,58 +3,46 @@ package com.example.erjohnandroid.presenter.Activity.mainactivity
 import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
+import android.os.Bundle
+import android.os.IBinder
+import android.os.Message
+import android.os.RemoteException
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.view.drawToBitmap
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.erjohnandroid.R
-import com.example.erjohnandroid.database.Model.InspectionReportTable
-import com.example.erjohnandroid.database.Model.LogReport
 import com.example.erjohnandroid.database.Model.PartialRemitTable
-import com.example.erjohnandroid.database.Model.TerminalTable
-import com.example.erjohnandroid.database.Model.convertions.TripTicketGroupCount
 import com.example.erjohnandroid.database.viewmodel.RoomViewModel
-import com.example.erjohnandroid.databinding.ActivityPartialRemitBinding
-import com.example.erjohnandroid.databinding.ActivityReverseBinding
-import com.example.erjohnandroid.presenter.adapter.ReverseAdapter
+import com.example.erjohnandroid.databinding.ActivityViewPartialRemitBinding
 import com.example.erjohnandroid.presenter.adapter.TerminalAdapter
+import com.example.erjohnandroid.presenter.adapter.ViewPartialRemitAdapter
 import com.example.erjohnandroid.printer.ThreadPoolManager
 import com.example.erjohnandroid.printer.printerUtils.HandlerUtils
 import com.example.erjohnandroid.util.GlobalVariable
-import com.example.erjohnandroid.util.showCustomToast
-import com.example.erjohnandroid.util.startActivityWithAnimation
-import com.google.android.gms.common.internal.GmsLogger
 import com.iposprinter.iposprinterservice.IPosPrinterCallback
 import com.iposprinter.iposprinterservice.IPosPrinterService
 import dagger.hilt.android.AndroidEntryPoint
-import net.nyx.printerservice.print.IPrinterService
-import net.nyx.printerservice.print.PrintTextFormat
-import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.Executors
-import java.util.function.DoubleUnaryOperator
 
 @AndroidEntryPoint
-class PartialRemitActivity : AppCompatActivity() {
-    lateinit var _binding: ActivityPartialRemitBinding
+class ViewPartialRemitActivity : AppCompatActivity() {
+    lateinit var _binding: ActivityViewPartialRemitBinding
     private val dbViewmodel: RoomViewModel by viewModels()
-    private  lateinit var reverseAdapter: ReverseAdapter
-    private lateinit var terminalAdapter: TerminalAdapter
-    var image:Bitmap?=null
+    private lateinit var partialremits: ViewPartialRemitAdapter
+    var partialRemitAmount:Double=0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding= ActivityPartialRemitBinding.inflate(layoutInflater)
+        _binding= ActivityViewPartialRemitBinding.inflate(layoutInflater)
         setContentView(_binding!!.root)
 
         window.setFlags(
@@ -71,154 +59,42 @@ class PartialRemitActivity : AppCompatActivity() {
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
 
-        dbViewmodel.getReverse()
+        dbViewmodel.getPartialRemit()
+        dbViewmodel.partialremit.observe(this, Observer {
+                state->ProcessPartialremit(state)
+        })
 
-        GlobalVariable.terminal= null
-       // bindService()
-        initPrinter()
-        _binding.btnSaveremit.setOnClickListener {
-            if(GlobalVariable.terminal.isNullOrEmpty()){
-                Toast(this).showCustomToast("Select Terminal",this)
-                return@setOnClickListener
-            }
+        _binding.btncloseview.setOnClickListener {
 
-            val signatureBitmap = _binding.inspectionsignature.isSignaturePresent()
-             val text= _binding.etCashremited.text.toString()
-            val total=_binding.txttotalcash.text.toString()
-            val formattedDateTime = getdate()
-            if(!signatureBitmap){
-                Toast(this).showCustomToast("Please sign",this)
-                return@setOnClickListener
-            }
-            image=   _binding.inspectionsignature.drawToBitmap()
-            if(text.isNullOrEmpty() || total.isNullOrEmpty()) {
-                Toast(this).showCustomToast("Enter amount", this)
-                return@setOnClickListener
-            }
-            val stringWithoutSpaces = text.replace(" ", "")
-            val stringcount = total.replace(" ", "")
-
-            var method =  PartialRemitTable(
-                PartialremitId = 0,
-                CashierName = GlobalVariable.cashiername,
-                Amount = stringcount.toDouble(),
-                AmountRemited = stringWithoutSpaces.toDouble(),
-                Line = GlobalVariable.line,
-                DateTimeStamp = formattedDateTime,
-                ingressoRefId = GlobalVariable.ingressoRefId,
-                terminal = GlobalVariable.terminal
-            )
-            GlobalVariable.saveLogreport("Partial remit success, amount ${stringWithoutSpaces.toDouble()}")
-           try {
-                dbViewmodel.insertPartialremit(method)
-
-            }catch (e:java.lang.Exception){
-                Log.e("error",e.localizedMessage)
-               GlobalVariable.saveLogreport("error on partial remit, ${e.message}")
-            }
-
-            showCustomToast(this,"Partial Remit Saved")
-            _binding.inspectionsignature.clear()
-            _binding.etCashremited.getText().clear()
-//            printText()
-//            finish()
-//            overridePendingTransition(
-//                R.anim.screenslideleft, R.anim.screen_slide_out_right,
-//            );
-        }
-
-        _binding.btnclose.setOnClickListener {
-            val formattedDateTime = getdate()
             super.onBackPressed()
-            GlobalVariable.saveLogreport("Partial remit closed")
+            GlobalVariable.saveLogreport("Partial Remit Viewed")
             overridePendingTransition(
                 R.anim.screenslideleft, R.anim.screen_slide_out_right,
             );
             finish()
         }
 
-        _binding.btnViewRemit.setOnClickListener {
-            startActivityWithAnimation<ViewPartialRemitActivity>(R.anim.screenslideright, R.anim.screen_slide_out_left)
+        _binding.btnPrintPartial.setOnClickListener {
+            printText()
+        }
+        initPrinter()
+    }
+
+    val ProcessPartialremit:(state:List<PartialRemitTable>) ->Unit={
+        if(!it.isNullOrEmpty()){
+            partialremits = ViewPartialRemitAdapter(this)
+            _binding.rvViewPartial.adapter= partialremits
+            _binding.rvViewPartial.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+            partialremits.showdremits(it)
+            dbViewmodel.getTotalPartialremit()
+            dbViewmodel.patialremitsum.observe(this,Observer{
+                if (it != null) {
+                    partialRemitAmount= it
+                    _binding.btnPrintPartial.text="Print -- ${partialRemitAmount}"
+                }
+            })
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        dbViewmodel.tripticketjson.observe(this, Observer {
-                state-> ProcesJson(state)
-        })
-
-        dbViewmodel.terminals.observe(this,Observer{
-                state -> ProcessTerminals(state)
-        })
-
-    }
-
-    fun partialTerminals(role: TerminalTable) {
-        GlobalVariable.terminal= role.name
-
-       // _binding!!.txtTerminal.text=("\nTerminal: ${GlobalVariable.terminal}")
-        // _binding!!.txtLine.text=("\nLINE NAME: ${GlobalVariable.line}")
-        Toast(this).showCustomToast("${GlobalVariable.terminal}",this)
-    }
-
-    private fun ProcessTerminals(state: List<TerminalTable>?){
-        if(!state.isNullOrEmpty()){
-            // linelist=state
-           // GlobalVariable.terminalList=state
-            terminalAdapter = TerminalAdapter(this)
-            _binding.rvTerminal.adapter= terminalAdapter
-            _binding.rvTerminal.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
-            terminalAdapter.showterminal(state)
-        }
-    }
-
-    private fun ProcesJson(state: List<TripTicketGroupCount>?){
-        var amount :Double=0.0
-        if(!state.isNullOrEmpty()){
-//            val gson = Gson()
-//            val jsonResult = gson.toJson(state)
-
-
-            reverseAdapter = ReverseAdapter(this)
-            _binding.rvReverse.adapter= reverseAdapter
-            _binding.rvReverse.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
-            reverseAdapter.showreverse(state)
-
-            state.forEach {
-              amount +=  it.sumamount
-            }
-            val decimalVat = DecimalFormat("#.00")
-            val ans = decimalVat.format(amount)
-            _binding.txttotalcash.text=ans.toString()
-            dbViewmodel.getAllTerminal()
-        }
-    }
-
-    fun showmodaltickets(role: TripTicketGroupCount) {
-        val intent = Intent(this, ticketdetailsActivity::class.java)
-        intent.putExtra("key", role.tripReverse)
-        startActivity(intent)
-        overridePendingTransition(
-            R.anim.screenslideleft, R.anim.screen_slide_out_right,
-        );
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        overridePendingTransition(
-            R.anim.screenslideleft, R.anim.screen_slide_out_right,
-        );
-        finish()
-    }
-
-
-    private fun getdate():String{
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val currentDate = Date()
-        return dateFormat.format(currentDate)
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -226,6 +102,7 @@ class PartialRemitActivity : AppCompatActivity() {
         unbindService(connectService)
         handler!!.removeCallbacksAndMessages(null)
     }
+
 
     //region PRINTER TWO
     private val TAG: String? = "IPosPrinterTestDemo"
@@ -300,32 +177,32 @@ class PartialRemitActivity : AppCompatActivity() {
                     //  loopPrint(loopPrintFlag)
                 }
                 MSG_IS_BUSY -> Toast.makeText(
-                    this@PartialRemitActivity,
+                    this@ViewPartialRemitActivity,
                     "BUSY",
                     Toast.LENGTH_SHORT
                 ).show()
                 MSG_PAPER_LESS -> {
                     loopPrintFlag = DEFAULT_LOOP_PRINT
                     Toast.makeText(
-                        this@PartialRemitActivity,
+                        this@ViewPartialRemitActivity,
                         "NO PAPER",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 MSG_PAPER_EXISTS -> Toast.makeText(
-                    this@PartialRemitActivity,
+                    this@ViewPartialRemitActivity,
                     "paper present",
                     Toast.LENGTH_SHORT
                 ).show()
                 MSG_THP_HIGH_TEMP -> Toast.makeText(
-                    this@PartialRemitActivity,
+                    this@ViewPartialRemitActivity,
                     "high temp",
                     Toast.LENGTH_SHORT
                 ).show()
                 MSG_MOTOR_HIGH_TEMP -> {
                     loopPrintFlag = DEFAULT_LOOP_PRINT
                     Toast.makeText(
-                        this@PartialRemitActivity,
+                        this@ViewPartialRemitActivity,
                         "motor hight temp",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -336,7 +213,7 @@ class PartialRemitActivity : AppCompatActivity() {
                 }
                 MSG_MOTOR_HIGH_TEMP_INIT_PRINTER -> printerInit()
                 MSG_CURRENT_TASK_PRINT_COMPLETE -> Toast.makeText(
-                    this@PartialRemitActivity,
+                    this@ViewPartialRemitActivity,
                     "COmpleted",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -484,7 +361,7 @@ class PartialRemitActivity : AppCompatActivity() {
         }
 
         ThreadPoolManager.getInstance().executeTask {
-            val mBitmap: Bitmap = BitmapFactory.decodeStream(bitmapToInputStream(image!!))
+            //val mBitmap: Bitmap = BitmapFactory.decodeStream(bitmapToInputStream(image!!))
             try {
                 val formattedDateTime = getCurrentDateInFormat()
                 mIPosPrinterService!!.PrintSpecFormatText("Erjohn & Almark Transit Corp \n", "ST", 24, 1,callback)
@@ -492,7 +369,7 @@ class PartialRemitActivity : AppCompatActivity() {
                 mIPosPrinterService!!.PrintSpecFormatText("Date: ${formattedDateTime}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Cashier Name: ${GlobalVariable.cashiername}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Bus #: ${GlobalVariable.bus}\n", "ST", 24, 1,callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Terminal: ${GlobalVariable.terminal}\n", "ST", 24, 1,callback)
+               // mIPosPrinterService!!.PrintSpecFormatText("Terminal: ${GlobalVariable.terminal}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Driver: ${GlobalVariable.driver}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.PrintSpecFormatText("Conductor #: ${GlobalVariable.conductor}\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
@@ -502,7 +379,7 @@ class PartialRemitActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-                mIPosPrinterService!!.PrintSpecFormatText("Amount Remited ${_binding.etCashremited.text}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Total Amount Remited ${partialRemitAmount}\n", "ST", 24, 1,callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(
@@ -512,7 +389,7 @@ class PartialRemitActivity : AppCompatActivity() {
                     callback
                 )
 
-               mIPosPrinterService!!.printBlankLines(1, 8, callback)
+                mIPosPrinterService!!.printBlankLines(1, 8, callback)
 //               mIPosPrinterService!!.printBitmap(0, 4,mBitmap , callback)
 //                mIPosPrinterService!!.printBlankLines(1, 8, callback)
 
@@ -543,162 +420,4 @@ class PartialRemitActivity : AppCompatActivity() {
 
 
     //endregion
-
-
-   //region PRINTER
-//    private val TAG: String? = "MainActivity"
-//    var PRN_TEXT: String? = "THIS IS A TEsT PRINT"
-//    var version = arrayOfNulls<String>(1)
-//
-//    private val singleThreadExecutor = Executors.newSingleThreadExecutor()
-//    private val handler = Handler()
-//
-//    private fun bindService() {
-//        try {
-//            val intent = Intent()
-//            intent.setPackage("net.nyx.printerservice")
-//            intent.action = "net.nyx.printerservice.IPrinterService"
-//            bindService(intent, connService, BIND_AUTO_CREATE)
-//        }catch (e:Exception){
-//            Log.e("ere",e.localizedMessage)
-//        }
-//
-//    }
-//
-//    private var printerService: IPrinterService? = null
-//
-//    private val connService = object : ServiceConnection {
-//        override fun onServiceDisconnected(name: ComponentName?) {
-//            //  showLog("printer service disconnected, try reconnect")
-//            printerService = null
-//            // 尝试重新bind
-//            handler.postDelayed({ bindService() }, 5000)
-//        }
-//
-//        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-//            Timber.d("onServiceConnected: $name")
-//            printerService = IPrinterService.Stub.asInterface(service)
-//            getVersion()
-//        }
-//    }
-//
-//
-//    private fun getVersion() {
-//        singleThreadExecutor.submit(Runnable {
-//            try {
-//                val ret = printerService!!.getPrinterVersion(version)
-//                //showLog("Version: " + msg(ret) + "  " + version.get(0))
-//            } catch (e: RemoteException) {
-//                e.printStackTrace()
-//            }
-//        })
-//    }
-//
-//    private fun printText(text: String) {
-//        singleThreadExecutor.submit {
-//            try {
-//                val textFormat = PrintTextFormat()
-//                textFormat.textSize=26
-//                // textFormat.setUnderline(true);
-//                textFormat.ali=1
-//                textFormat.style=1
-//                try {
-//                    var ret = printerService!!.printText(text, textFormat)
-//                    textFormat.textSize=24
-//                    ret = printerService!!.printText("PARTIAL REMIT",textFormat)
-//                    ret = printerService!!.printText("Cashier: ${GlobalVariable.cashiername}",textFormat)
-//                    ret = printerService!!.printText("Amount Remited: ${_binding.etCashremited.text}",textFormat)
-//                    textFormat.style=0
-//                    ret = printerService!!.printText("------------------------------",textFormat)
-////                    textFormat.textSize=22
-////                    textFormat.ali=0
-////                    textFormat.style=0
-////                    textFormat.topPadding=15
-////                    ret = printerService!!.printText("Km Check: ${_binding.etInspectiondestination.text.toString()}",textFormat)
-////                    textFormat.topPadding=0
-////
-////
-////                    ret = printerService!!.printText("Count: ${_binding.etActualcount.text}",textFormat)
-////                    ret = printerService!!.printText("Diff: ${_binding.txtinspectiondifference.text.toString()}",textFormat)
-//
-//                    ret = printerService!!.printBitmap(
- //                       BitmapFactory.decodeStream(bitmapToInputStream(image!!)
-//
-//                        ), 1, 1
-//                    )
-//
-//                    if (ret == 0) {
-//                        paperOut()
-//                    }
-//
-//
-//
-//                }catch (e:java.lang.Exception){
-//                    Log.e("tae",e.localizedMessage)
-//                }
-//
-//                // showLog("Print text: " + msg(ret))
-//
-//            } catch (e: RemoteException) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-//
-//
-//
-//
-//    private fun paperOut() {
-//        singleThreadExecutor.submit {
-//            try {
-//                printerService!!.paperOut(80)
-//            } catch (e: RemoteException) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-//
-////    fun printBitmap(bitmap: Bitmap, scaleWidth: Int, scaleHeight: Int) {
-////        singleThreadExecutor.submit {
-////            try {
-////                val ret = printerService!!.printBitmap(bitmap, scaleWidth, scaleHeight)
-////               // showLog("Print bitmap: " + msg(ret))
-////                if (ret == 0) {
-////                    paperOut()
-////                }
-////            } catch (e: Exception) {
-////                e.printStackTrace()
-////            }
-////        }
-////    }
-//
-//    private fun printBitmap(bitmap: Bitmap) {
-//        singleThreadExecutor.submit {
-//            try {
-//                val ret = printerService!!.printBitmap(
-//                    BitmapFactory.decodeStream(bitmapToInputStream(bitmap)
-//
-//                    ), 1, 1
-//                )
-//                // showLog("Print bitmap: " + msg(ret))
-//
-//
-//                if (ret == 0) {
-//                    paperOut()
-//                }
-//
-//
-//            } catch (e: java.lang.Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-//    fun bitmapToInputStream(bitmap: Bitmap): InputStream {
-//        val outputStream = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-//        return outputStream.toByteArray().inputStream()
-//    }
-//
-//
-  //endregion
 }

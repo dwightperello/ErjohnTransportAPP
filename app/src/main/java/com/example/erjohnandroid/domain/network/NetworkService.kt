@@ -23,7 +23,7 @@ interface NetworkService {
     @GET("mPadUnits")
     suspend fun getMpadUnits(@Header("Authorization")token:String):ArrayList<mPadUnitsItem>
 
-    @GET("Hotspots")
+    @GET("hotspots")
     suspend fun getAllHotspots(@Header("Authorization")token:String):ArrayList<HotSpotItem>
 
     @GET("Farebykm")

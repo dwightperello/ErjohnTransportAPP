@@ -10,6 +10,7 @@ import com.example.erjohnandroid.database.Model.convertions.*
 import com.example.erjohnandroid.database.Model.externalDispatch.TotalAmountAndTicketNumbersPerReverse
 import com.example.erjohnandroid.database.repository.RoomRepository
 import com.example.erjohnandroid.domain.model.response.Employee
+import com.example.erjohnandroid.util.GlobalVariable
 import com.example.erjohnandroid.util.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -183,9 +184,9 @@ class RoomViewModel @Inject constructor(private val repository: RoomRepository):
         }
     }
 
-    fun getTotalPartialremit(refid: Int){
+    fun getTotalPartialremit(){
         viewModelScope.launch() {
-            val records=  repository.gettotalpartialremit(refid)
+            val records=  repository.gettotalpartialremit(GlobalVariable.ingressoRefId)
             _patialremitsum.value=records
         }
     }

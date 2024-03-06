@@ -481,6 +481,7 @@ class NewIngressoActivity : AppCompatActivity() {
     private  val computeALL:(Double)-> Unit ={total->
          costAllTrip=0.0
          witholdingAllTrip=0.0
+        GlobalVariable.bonus=0.0
          commisionReturned= computeCommissions(total)
         _binding.txttotalcommision.text= commisionReturned.totalcommision.toString()
         _binding.txtdrivercommision.text= commisionReturned.drivercommision.toString()
@@ -502,6 +503,9 @@ class NewIngressoActivity : AppCompatActivity() {
     private  val recomputecomputeALL:(Double)-> Unit ={total->
         costAllTrip=0.0
         witholdingAllTrip=0.0
+        GlobalVariable.bonus=0.0
+        _binding.txtdriverbonus.text="0.0"
+        _binding.txtconductorbonus.text="0.0"
         commisionReturned= computeCommissions(total)
         _binding.txttotalcommision.text= commisionReturned.totalcommision.toString()
         _binding.txtdrivercommision.text= commisionReturned.drivercommision.toString()
@@ -1081,7 +1085,7 @@ class NewIngressoActivity : AppCompatActivity() {
                     callback
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("SALES\n\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Cash Collection\n\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Gross: ${_binding.txttotalgross.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Net: ${_binding.txtnetcollection.text.toString()}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Cancelled: ${_binding.etCancelledticket.text.toString()}\n", "ST", 24, callback)
@@ -1101,7 +1105,7 @@ class NewIngressoActivity : AppCompatActivity() {
                 )
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Benefits\n\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Salary\n\n", "ST", 24, 1,callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Total Salary: ${_binding.txttotalcommision.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Driver Salary: ${_binding.txtdrivercommision.text}\n", "ST", 24, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText("Conductor Salary: ${_binding.txtconductorcommision.text}\n", "ST", 24, callback)
@@ -1137,7 +1141,7 @@ class NewIngressoActivity : AppCompatActivity() {
                     callback
                 )
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
-                mIPosPrinterService!!.PrintSpecFormatText("Witholding\n\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Saving Funds\n\n", "ST", 24, 1,callback)
                 GlobalVariable.AllWitholding.forEach {
                     mIPosPrinterService!!.printSpecifiedTypeText("Witholding type: ${it.witholdingType}\n", "ST", 24, callback)
                     mIPosPrinterService!!.printSpecifiedTypeText("Amount: ${it.amount}\n", "ST", 24, callback)

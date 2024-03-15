@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,7 +39,8 @@ class ViewPartialRemitActivity : AppCompatActivity() {
     lateinit var _binding: ActivityViewPartialRemitBinding
     private val dbViewmodel: RoomViewModel by viewModels()
     private lateinit var partialremits: ViewPartialRemitAdapter
-    var partialRemitAmount:Double=0.0
+    var partialRemitAmount:String="0.0"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,13 +88,15 @@ class ViewPartialRemitActivity : AppCompatActivity() {
             _binding.rvViewPartial.adapter= partialremits
             _binding.rvViewPartial.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
             partialremits.showdremits(it)
-            dbViewmodel.getTotalPartialremit()
-            dbViewmodel.patialremitsum.observe(this,Observer{
-                if (it != null) {
-                    partialRemitAmount= it
-                    _binding.btnPrintPartial.text="Print -- ${partialRemitAmount}"
-                }
-            })
+           val a = it.last().AmountRemited!!
+             partialRemitAmount = NumberFormat.getNumberInstance(Locale.US).format(a)
+//            dbViewmodel.getTotalPartialremit()
+//            dbViewmodel.patialremitsum.observe(this,Observer{
+//                if (it != null) {
+//                    partialRemitAmount= it
+//                    _binding.btnPrintPartial.text="Print -- ${partialRemitAmount}"
+//                }
+//            })
         }
     }
 
@@ -379,7 +383,7 @@ class ViewPartialRemitActivity : AppCompatActivity() {
                     24,
                     callback
                 )
-                mIPosPrinterService!!.PrintSpecFormatText("Total Amount Remited ${partialRemitAmount}\n", "ST", 24, 1,callback)
+                mIPosPrinterService!!.PrintSpecFormatText("Amount Remited ${partialRemitAmount}\n", "ST", 24, 1,callback)
 
                 mIPosPrinterService!!.printBlankLines(1, 8, callback)
                 mIPosPrinterService!!.printSpecifiedTypeText(

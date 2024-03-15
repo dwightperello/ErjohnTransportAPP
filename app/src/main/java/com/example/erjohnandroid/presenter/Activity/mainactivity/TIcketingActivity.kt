@@ -1017,10 +1017,25 @@ class TIcketingActivity : AppCompatActivity() {
         if(filteredList?.size != 0){
             hotspotamount = filteredList?.firstOrNull()?.fare
             if(passtype.equals("Senior") || passtype.equals("Student") || passtype.equals("PWD")){
-                discount=  (discountamounthotspot / 100) * hotspotamount!!
-                amountafterdiscount= hotspotamount - discount
-                hotspotamount= amountafterdiscount * qty
+
+                if (GlobalVariable.lineid == 9 || GlobalVariable.lineid==20 ){
+                  if(from ==35 && to == 61 || from == 61 && to ==35) hotspotamount=51.00
+                  else if( from == 35 && to == 55 || from==55 && to ==35) hotspotamount=40.00
+                  else{
+                      discount = (discountamounthotspot / 100) * hotspotamount!!
+                      amountafterdiscount = hotspotamount - discount
+                      hotspotamount = amountafterdiscount * qty
+                  }
+                }
+
+                else {
+                    discount = (discountamounthotspot / 100) * hotspotamount!!
+                    amountafterdiscount = hotspotamount - discount
+                    hotspotamount = amountafterdiscount * qty
+                }
             }
+
+
         }
 
         hotspotamount
